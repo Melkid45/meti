@@ -1,0 +1,67 @@
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access 1 year"
+  ExpiresByType image/jpeg "access 1 year"
+  ExpiresByType image/gif "access 1 year"
+  ExpiresByType image/png "access 1 year"
+  ExpiresByType text/css "access 1 month"
+  ExpiresByType application/pdf "access 1 month"
+  ExpiresByType text/x-javascript "access 1 month"
+  ExpiresByType application/x-shockwave-flash "access 1 month"
+  ExpiresByType image/x-icon "access 1 year"
+  ExpiresDefault "access 2 days"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} (jpg|jpeg|png|gif)$ [NC]
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule .* - [E=HTTP_CACHE_CONTROL:max-age=31536000]
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "max-age=31536000, public"
+  </FilesMatch>
+</IfModule>
+
+FileETag None
+
+ServerSignature Off
+
+
+SetEnvIfNoCase User-Agent "^Yandex" search_bot
+
+SetEnvIfNoCase User-Agent "^Yahoo" search_bot
+
+SetEnvIfNoCase User-Agent "^igdeSpyder" search_bot
+
+SetEnvIfNoCase User-Agent "^Robot" search_bot
+
+SetEnvIfNoCase User-Agent "^Googlebot" search_bot
+
+SetEnvIfNoCase User-Agent "^msnbot" search_bot
+
+SetEnvIfNoCase User-Agent "^Aport" search_bot
+
+SetEnvIfNoCase User-Agent "^Mail" search_bot
+
+SetEnvIfNoCase User-Agent "^bot" search_bot
+
+SetEnvIfNoCase User-Agent "^spider" search_bot
+
+SetEnvIfNoCase User-Agent "^php" search_bot
+
+SetEnvIfNoCase User-Agent "^Parser" search_bot
+
+
+
+Order Allow,Deny
+
+Allow from all
+
+Deny from env=search_bot

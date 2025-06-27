@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+  @@include('html/head.html', {
+    'title': 'METI'
+  })
+  <body>
+
+    <div id="js-preloader"></div>
+
+    <canvas id="js-preloader-canvas"></canvas>
+
+    <span id="js-cursor" class="u-cursor">
+      <span class="u-cursor__dot"></span>
+      <span id="js-cursor-progress" class="u-cursor__preloader-progress">[<span>01%</span>]</span>
+    </span>
+
+    <main id="root" class="lenis-wrapper" role="main">
+      <!-- header BEGIN -->
+      @@include('html/components/header.html', {
+        'el': 'site__header'
+      })
+      <!-- header END -->
+      <!-- intro BEGIN -->
+      <section class="intro">
+        @@include('html/helpers/picture.html', {
+          "resolution": "lg",
+          "name": "intro-hero",
+          "alt": "METI — Универсальный",
+          "width": "1920",
+          "height": "980",
+          "class": "section-bg intro__bg",
+          "useWebp": false
+        })
+        <div class="container intro__container">
+          <div class="intro__content">
+            <h1 class="fs-1 intro__title">
+              <span class="visually-hidden">METI —</span>
+              Ун<span>и</span>верс<span>а</span>льный
+            </h1>
+            <p class="u-suptitle intro__address">[Москва, 22:01]</p>
+            <p class="u-suptitle intro__suptitle">[Hello, world]</p>
+          </div>
+        </div>
+      </section>
+      <!-- intro END -->
+      <!-- about BEGIN -->
+      <section class="about">
+        <div class="container about__container">
+          <div class="row about__row">
+            <div class="row__col--2 about__col about__col--title">
+              <h2 class="u-suptitle about__title">[Привет, это METI]</h2>
+            </div>
+            <div class="row__col--5 about__col about__col--subtitle">
+              <h3 class="about__subtitle">
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">Креативные</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">и эффективные.</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">команда</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">профессионалов</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">уровня</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">сетевых рекламных</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">агентств</span>
+              </h3>
+            </div>
+            <div class="row__col--2 about__col about__col--media">
+              <div class="about__media">
+                @@include('html/helpers/picture.html', {
+                  "resolution": "lg",
+                  "name": "about-hero",
+                  "alt": "[Привет, это METI]",
+                  "width": "497",
+                  "height": "276",
+                  "class": "about__hero",
+                  "useWebp": false
+                })
+              </div>
+            </div>
+            <div class="row__col--4 about__col about__col--content">
+              <div class="u-content about__content">
+                <p data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">Мы объединены общей миссией раскрывать потенциал бренда и человека, создавая среду, благоприятную для развития бизнеса и общества.</p>
+                <p data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">Используя digital-инструменты и&nbsp;креативный капитал нашей команды, мы&nbsp;помогаем компаниям и&nbsp;их&nbsp;руководителям достигать свои&nbsp;бизнес-цели.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- about END -->
+      <!-- footer BEGIN -->
+      @@include('html/components/footer.html', {
+        'el': 'site__footer'
+      })
+      <!-- footer END -->
+    </main>
+
+    @@include('html/modal.html')
+    @@include('html/script.html')
+  </body>
+</html>

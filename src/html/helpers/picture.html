@@ -1,0 +1,65 @@
+<picture class="@@class">
+
+  @@if (resolution.includes('xs')) {
+    @@if (useWebp) {
+    <!-- XS WebP -->
+    <source
+      srcset="@img/@@name-xs.webp 1x, @img/@@name-xs@2x.webp 2x"
+      media="(max-width: 767.98px)"
+      type="image/webp" />
+    }
+    <!-- XS JPG -->
+    <source
+      srcset="@img/@@name-xs.jpg 1x, @img/@@name-xs@2x.jpg 2x"
+      media="(max-width: 767.98px)" />
+  }
+
+  @@if (resolution.includes('sm')) {
+    @@if (useWebp) {
+    <!-- SM WebP -->
+    <source
+      srcset="@img/@@name-sm.webp 1x, @img/@@name-sm@2x.webp 2x"
+      media="(min-width: 768px) and (max-width: 1023.98px)"
+      type="image/webp" />
+    }
+    <!-- SM JPG -->
+    <source
+      srcset="@img/@@name-sm.jpg 1x, @img/@@name-sm@2x.jpg 2x"
+      media="(min-width: 768px) and (max-width: 1023.98px)" />
+  }
+
+  @@if (resolution.includes('md')) {
+    @@if (useWebp) {
+    <!-- MD WebP -->
+    <source
+      srcset="@img/@@name-md.webp 1x, @img/@@name-md@2x.webp 2x"
+      media="(min-width: 1024px) and (max-width: 1439.98px)"
+      type="image/webp" />
+    }
+    <!-- MD JPG -->
+    <source
+      srcset="@img/@@name-md.jpg 1x, @img/@@name-md@2x.jpg 2x"
+      media="(min-width: 1024px) and (max-width: 1439.98px)" />
+  }
+
+  @@if (resolution.includes('lg')) {
+    @@if (useWebp) {
+    <!-- LG WebP -->
+    <source
+      srcset="@img/@@name-lg.webp 1x, @img/@@name-lg@2x.webp 2x"
+      media="(min-width: 1440px)"
+      type="image/webp" />
+    }
+    <!-- LG JPG -->
+    <source
+      srcset="@img/@@name-lg.jpg 1x, @img/@@name-lg@2x.jpg 2x"
+      media="(min-width: 1440px)" />
+  }
+
+  <img
+    src="@img/@@name-lg.jpg"
+    alt="@@alt"
+    width="@@width"
+    height="@@height" />
+
+</picture>

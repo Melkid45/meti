@@ -1,0 +1,74 @@
+$siteResolution: 1px;
+$mainFont: 'Martian Mono';
+$onestFont: 'Onest';
+$chavaFont: 'Chava';
+$mainWeight: 300;
+$lineHeight1: 1;
+$lineHeight2: 1.1;
+$lineHeight3: 1.2;
+$lineHeight4: 1.3;
+$lineHeight5: 1.4;
+$lineHeight6: 1.5;
+$lineHeight7: 1.55;
+$lineHeightDefault: $lineHeight6;
+
+$containerWidthMd: 1248px;
+
+$gap: 20px;
+$gapFluid: 40px;
+
+$whiteColor: #ffffff;
+$whiteLightColor: #f4f4f4;
+$blackColor: #000000;
+$redColor: #F02121;
+$purpleColor: #442CBF;
+$accentColor: $purpleColor;
+
+$bgSite: $blackColor;
+
+$fontFamily: $mainFont, $onestFont, sans-serif, Arial;
+$fontAccent: $onestFont, $mainFont, sans-serif, Arial;
+$fontCode: $chavaFont, $onestFont, sans-serif, Arial;
+$fontColor: $whiteLightColor;
+$fontWeight: $mainWeight;
+
+$transition: all .4s 0ms;
+
+$xl: 1340px;
+$xl-mf: $xl + 1;
+
+$lg: 1199px;
+$lg-mf: $lg + 1;
+
+$md: 991px;
+$md-mf: $md + 1;
+
+$sm: 767px;
+$sm-mf: $sm + 1;
+
+$xs: 576px;
+$xs-mf: $xs + 1;
+
+:root {
+  --fs-default: 16px;
+  --fs-1: 280px;
+  --fs-2: 160px;
+  --fs-3: 80px;
+  --fs-4: 48px;
+  --fs-5: 18px;
+  --fs-6: 16px;
+  --fs-7: 14px;
+  --fs-8: 12px;
+  --fs-9: 10px;
+
+  --gap: 20px;
+  --gap-: -20px;
+  --gap-fluid: 40px;
+  --gap-fluid-: -40px;
+  --gap-container: var(--gap-fluid);
+  --gap-container-: var(--gap-fluid-);
+
+  --vh: 1vh;
+  @media (max-width: $lg) {
+  }
+}

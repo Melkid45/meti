@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <style>
+    #js-preloader-canvas,
+    #js-preloader,
+    #js-cursor-progress {
+      transition: all .4s ease;
+      transition-property: visibility, opacity;
+      will-change: visibility, opacity;
+    }
+    #js-preloader-canvas.is-hide,
+    #js-preloader.is-hide,
+    #js-cursor-progress.is-hide {
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+    #js-preloader,
+    #js-preloader-canvas {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: block;
+      z-index: 9999;
+    }
+    #js-preloader {
+      background: black;
+    }
+    #js-cursor {
+      font-weight: 300;
+      position: fixed;
+      mix-blend-mode: difference;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      user-select: none;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+      z-index: 10000;
+    }
+    .u-cursor__dot {
+      background: #ffffff;
+      width: 20rem;
+      height: 20rem;
+      display: block;
+    }
+    .u-cursor__preloader-progress {
+      margin: 0 0 6rem 10rem;
+      font-size: var(--fs-7);
+      position: absolute;
+      bottom: 100%;
+      left: 100%;
+      white-space: nowrap;
+    }
+  </style>
+  <link rel="stylesheet" href="css/style.min.css??=v=20250627224229">
+  <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
+  <link rel="manifest" href="static/favicon/site.webmanifest">
+  <link rel="mask-icon" href="static/favicon/safari-pinned-tab.svg" color="#f02121">
+  <link rel="shortcut icon" href="static/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#f02121">
+  <meta name="msapplication-config" content="static/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#f02121">
+  <title>METI</title>
+</head>
+  <body>
+
+    <div id="js-preloader"></div>
+
+    <canvas id="js-preloader-canvas"></canvas>
+
+    <span id="js-cursor" class="u-cursor">
+      <span class="u-cursor__dot"></span>
+      <span id="js-cursor-progress" class="u-cursor__preloader-progress">[<span>01%</span>]</span>
+    </span>
+
+    <main id="root" class="lenis-wrapper" role="main">
+      
+      <header class="header site__header">
+  <div class="container header__container">
+    <a href="" class="header__logo logo">
+      <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg" class="logo__img"><path d="M0 0H48.789V50H33.5598V15.6073H32.0091V50H16.7799V15.6073H15.2293V50H0V0Z" fill="currentColor"/><path d="M50.4037 0H99.1927V15.6073H65.6329V17.1964H99.1927V32.8036H65.6329V34.3927H99.1927V50H50.4037V0Z" fill="currentColor"/><path d="M100.807 0H149.596V15.6073H132.816V50H117.587V15.6073H100.807V0Z" fill="currentColor"/><path d="M151.211 0H200V15.6073H183.22V34.3927H200V50H151.211V34.3927H167.991V15.6073H151.211V0Z" fill="currentColor"/></svg>
+    </a>
+    <div class="header__dropdown">
+      <nav class="header__nav" role="navigation">
+        <ul class="header__nav-list">
+          <li class="header__nav-item">
+            <a href="#" class="header__link js-anchor">Агентство</a>
+          </li>
+          <li class="header__nav-item">
+            <a href="#" class="header__link js-anchor">Что мы умеем</a>
+          </li>
+          <li class="header__nav-item">
+            <a href="#" class="header__link js-anchor">Кейсы</a>
+          </li>
+          <li class="header__nav-item">
+            <a href="#" class="header__link js-anchor">Почему мы</a>
+          </li>
+          <li class="header__nav-item">
+            <a href="#" class="header__link js-anchor">Клиенты</a>
+          </li>
+          <li class="header__nav-item">
+            <a href="#" class="header__link js-anchor">Контакты</a>
+          </li>
+          <li class="header__nav-item">
+            <a href="#" class="header__link js-anchor">Презентация</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="header__language-switcher">
+        <a href="/en" class="header__link">En</a>
+      </div>
+    </div>
+  </div>
+</header>
+      
+      
+      <section class="intro">
+        <picture class="intro__bg section-bg">
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <source srcset="images/intro-hero-lg.jpg, images/intro-hero-lg@2x.jpg 2x" media="(min-width: 1440px)">
+  
+
+  <img src="images/intro-hero-lg.jpg" alt="METI — Универсальный" width="1920" height="980">
+
+</picture>
+        <div class="container intro__container">
+          <div class="intro__content">
+            <h1 class="fs-1 intro__title">
+              <span class="visually-hidden">METI —</span>
+              Ун<span>и</span>верс<span>а</span>льный
+            </h1>
+            <p class="u-suptitle intro__address">[Москва, 22:01]</p>
+            <p class="u-suptitle intro__suptitle">[Hello, world]</p>
+          </div>
+        </div>
+      </section>
+      
+      
+      <section class="about">
+        <div class="container about__container">
+          <div class="about__row row">
+            <div class="about__col row__col--2 about__col--title">
+              <h2 class="u-suptitle about__title">[Привет, это METI]</h2>
+            </div>
+            <div class="about__col about__col--subtitle row__col--5">
+              <h3 class="about__subtitle">
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">Креативные</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">и эффективные.</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">команда</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">профессионалов</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">уровня</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">сетевых рекламных</span>
+                <span data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">агентств</span>
+              </h3>
+            </div>
+            <div class="about__col row__col--2 about__col--media">
+              <div class="about__media">
+                <picture class="about__hero">
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <source srcset="images/about-hero-lg.jpg, images/about-hero-lg@2x.jpg 2x" media="(min-width: 1440px)">
+  
+
+  <img src="images/about-hero-lg.jpg" alt="[Привет, это METI]" width="497" height="276">
+
+</picture>
+              </div>
+            </div>
+            <div class="about__col about__col--content row__col--4">
+              <div class="about__content u-content">
+                <p data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">Мы объединены общей миссией раскрывать потенциал бренда и человека, создавая среду, благоприятную для развития бизнеса и общества.</p>
+                <p data-timeline="about" data-animate="fade-up" data-delay="0.2" data-duration="0.8">Используя digital-инструменты и&nbsp;креативный капитал нашей команды, мы&nbsp;помогаем компаниям и&nbsp;их&nbsp;руководителям достигать свои&nbsp;бизнес-цели.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      
+      <footer class="footer site__footer">
+  <div class="container footer__container">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, optio et ut, molestias blanditiis soluta magnam pariatur cupiditate, repellendus porro eligendi! Voluptatibus nam unde quia nobis, tempore tenetur! Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam Tenetur, quibusdam.</p>
+    <p>1</p>
+    <div></div>
+  </div>
+</footer>
+      
+    </main>
+
+    <div class="popup" data-popup="popup-form" data-close-overlay>
+  <div class="popup__wrapper" data-close-overlay>
+    <div class="popup__content popup__content--size-md popup__content--theme-black">
+      <button type="button" class="js-button-close">
+        <svg class="btn-close__icon u-icon">
+          <use xlink:href="images/icons/icons.svg#close"></use>
+        </svg>
+      </button>
+      
+    </div>
+  </div>
+</div>
+    <script src="js/app.min.js??=v=20250627224229"></script>
+  </body>
+</html>

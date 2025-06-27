@@ -1,0 +1,71 @@
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <style>
+    #js-preloader-canvas,
+    #js-preloader,
+    #js-cursor-progress {
+      transition: all .4s ease;
+      transition-property: visibility, opacity;
+      will-change: visibility, opacity;
+    }
+    #js-preloader-canvas.is-hide,
+    #js-preloader.is-hide,
+    #js-cursor-progress.is-hide {
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+    #js-preloader,
+    #js-preloader-canvas {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: block;
+      z-index: 9999;
+    }
+    #js-preloader {
+      background: black;
+    }
+    #js-cursor {
+      font-weight: 300;
+      position: fixed;
+      mix-blend-mode: difference;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      user-select: none;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+      z-index: 10000;
+    }
+    .u-cursor__dot {
+      background: #ffffff;
+      width: 20rem;
+      height: 20rem;
+      display: block;
+    }
+    .u-cursor__preloader-progress {
+      margin: 0 0 6rem 10rem;
+      font-size: var(--fs-7);
+      position: absolute;
+      bottom: 100%;
+      left: 100%;
+      white-space: nowrap;
+    }
+  </style>
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
+  <link rel="manifest" href="static/favicon/site.webmanifest">
+  <link rel="mask-icon" href="static/favicon/safari-pinned-tab.svg" color="#f02121">
+  <link rel="shortcut icon" href="static/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#f02121">
+  <meta name="msapplication-config" content="static/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#f02121">
+  <title>@@title</title>
+</head>
