@@ -21,7 +21,7 @@ $whiteColor: #ffffff;
 $whiteLightColor: #f4f4f4;
 $blackColor: #000000;
 $redColor: #F02121;
-$purpleColor: #442CBF;
+$purpleColor: #3F2BA6;
 $accentColor: $purpleColor;
 
 $bgSite: $blackColor;
@@ -67,6 +67,8 @@ $xs-mf: $xs + 1;
   --gap-fluid-: -40px;
   --gap-container: var(--gap-fluid);
   --gap-container-: var(--gap-fluid-);
+
+  --pixel-tile: 54rem;
 
   --vh: 1vh;
   @media (max-width: $lg) {

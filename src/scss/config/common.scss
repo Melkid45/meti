@@ -16,6 +16,7 @@
     width: 200rem;
     height: 50rem;
     display: block;
+    object-fit: contain;
   }
 }
 
@@ -182,5 +183,79 @@
   &__item {
     margin: 0;
     padding: 0;
+  }
+}
+
+.glsl-effect {
+  display: block;
+  position: relative;
+  vertical-align: top;
+}
+
+.glsl-effect img {
+  width: 100%;
+  height: auto;
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.glsl-effect canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.services-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  &__counter {
+    position: absolute;
+    top: 36rem;
+    left: 0;
+    &:before {
+      content: counter(servicesCounter, decimal-leading-zero);
+    }
+  }
+  &__media {
+    width: 100%;
+    max-width: 760rem;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+    z-index: -1;
+  }
+  &__picture {
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+  &__content {
+  }
+  &__title {
+    margin: 0;
+    text-align: center;
+  }
+  &__footer {
+    width: 100%;
+    position: absolute;
+    bottom: 32rem;
+    left: 0;
+  }
+  &__row {
+  }
+  &__col {
+    &--text {
+      margin-left: auto;
+    }
+  }
+  &__text {
   }
 }

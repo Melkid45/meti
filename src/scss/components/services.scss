@@ -1,0 +1,21 @@
+.services {
+  padding: 0 0 200rem;
+  &__title {
+    margin: 0 0 36rem;
+  }
+  &__list {
+    height: 200vh;
+    counter-reset: servicesCounter;
+    border: 0 solid rgba($whiteLightColor, .16);
+    border-width: 1px 0;
+    position: relative;
+    &-card {
+      background: $bgSite;
+      width: 100%;
+      height: 100vh;
+      counter-increment: servicesCounter;
+      position: sticky;
+      top: 0;
+    }
+  }
+}

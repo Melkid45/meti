@@ -26,19 +26,26 @@ export const webpackConfig = (isMode) => {
         {
           test: /\.m?js$/,
           exclude: /node_modules/,
-
           use: {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env'],
             },
           },
-
           resolve: {
             fullySpecified: false,
           },
         },
+        {
+          test: /\.(glsl|vs|fs|vert|frag)$/,
+          exclude: /node_modules/,
+          use: ['glsl-shader-loader']
+        }
       ],
+    },
+
+    resolve: {
+      extensions: ['.js', '.json', '.glsl'],
     },
   };
 };

@@ -1,0 +1,38 @@
+.portfolio {
+  padding: 200rem 0;
+  &__container {
+  }
+  &__header {
+    margin: 0 0 -30rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__title {
+    margin: 0;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+  &__suptitle {
+    margin: 0;
+  }
+  &__marquee {
+    display: flex;
+    &-wrapper {
+      margin: 0 var(--gap-container-);
+    }
+    &-title {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      user-select: none;
+      &:after {
+        @extend .ff-code, .color-accent;
+        margin: 0 .25ch .1em;
+        content: '/';
+        flex-shrink: 0;
+        font-size: 97%;
+      }
+    }
+  }
+}
