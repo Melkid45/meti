@@ -1,0 +1,14 @@
+.awards {
+  padding: 200rem 0 520rem;
+  &__container {
+  }
+  &__title {
+    margin: 0 0 34rem;
+  }
+  &__list {
+    border-top: 1px solid $borderColor;
+    &-card {
+      border-bottom: 1px solid $borderColor;
+    }
+  }
+}

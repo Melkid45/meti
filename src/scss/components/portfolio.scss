@@ -1,5 +1,5 @@
 .portfolio {
-  padding: 200rem 0;
+  padding: 200rem 0 120rem;
   &__container {
   }
   &__header {
@@ -33,6 +33,22 @@
         flex-shrink: 0;
         font-size: 97%;
       }
+    }
+  }
+  &__list {
+    &-col {
+      align-self: flex-end;
+      &:nth-child(2n + 0) {
+        margin-left: calc(2 * var(--col-width));
+      }
+      &:nth-child(3n + 3) {
+        margin-left: calc(1 * var(--col-width));
+      }
+      &:nth-child(4n + 4) {
+        margin-left: 0;
+      }
+    }
+    &-card {
     }
   }
 }

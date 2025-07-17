@@ -25,7 +25,14 @@ import CustomCursor from './modules/CustomCursor.js';
 import HeaderBtnToggle from './modules/HeaderBtnToggle.js';
 import PopupManager from './modules/PopupManager.js';
 
+// Sketch img effect
 import Sketch from './modules/Sketch.js';
+
+// Inline SVG
+import { InlineSVG } from './modules/InlineSvg.js';
+
+// align
+import GridRhythmAlign from './modules/GridRhythmAlign.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const preloaderCanvas = document.getElementById('js-preloader-canvas');
@@ -39,7 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
       maxPercent: 99,
       fadeDuration: 300,
       fadeOutDuration: 1200,
+      onBeforeDepixelize: () => {
+      }
     });
+
     preloader.init();
   }
 
@@ -57,6 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   AnimateOnScroll();
+
+  InlineSVG.init({
+    svgSelector: 'img.js-inlinesvg',
+    // initClass: 'js-is-inlinesvg-loaded'
+  }, () => {
+  });
+
+  new GridRhythmAlign({ lenis });
 });
 
 window.addEventListener('load', () => {

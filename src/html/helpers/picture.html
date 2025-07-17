@@ -12,9 +12,9 @@
       media="(max-width: 767.98px)"
       type="image/webp" />
     }
-    <!-- XS JPG -->
+    <!-- XS fallback -->
     <source
-      srcset="@img/@@name-xs.jpg 1x, @img/@@name-xs@2x.jpg 2x"
+      srcset="@img/@@name-xs.@@fallbackFormat 1x, @img/@@name-xs@2x.@@fallbackFormat 2x"
       media="(max-width: 767.98px)" />
   }
 
@@ -26,9 +26,9 @@
       media="(min-width: 768px) and (max-width: 1023.98px)"
       type="image/webp" />
     }
-    <!-- SM JPG -->
+    <!-- SM fallback -->
     <source
-      srcset="@img/@@name-sm.jpg 1x, @img/@@name-sm@2x.jpg 2x"
+      srcset="@img/@@name-sm.@@fallbackFormat 1x, @img/@@name-sm@2x.@@fallbackFormat 2x"
       media="(min-width: 768px) and (max-width: 1023.98px)" />
   }
 
@@ -40,9 +40,9 @@
       media="(min-width: 1024px) and (max-width: 1439.98px)"
       type="image/webp" />
     }
-    <!-- MD JPG -->
+    <!-- MD fallback -->
     <source
-      srcset="@img/@@name-md.jpg 1x, @img/@@name-md@2x.jpg 2x"
+      srcset="@img/@@name-md.@@fallbackFormat 1x, @img/@@name-md@2x.@@fallbackFormat 2x"
       media="(min-width: 1024px) and (max-width: 1439.98px)" />
   }
 
@@ -54,14 +54,14 @@
       media="(min-width: 1440px)"
       type="image/webp" />
     }
-    <!-- LG JPG -->
+    <!-- LG fallback -->
     <source
-      srcset="@img/@@name-lg.jpg 1x, @img/@@name-lg@2x.jpg 2x"
+      srcset="@img/@@name-lg.@@fallbackFormat 1x, @img/@@name-lg@2x.@@fallbackFormat 2x"
       media="(min-width: 1440px)" />
   }
 
   <img
-    src="@img/@@name-lg.jpg"
+    src="@img/@@name-lg.@@fallbackFormat"
     alt="@@alt"
     width="@@width"
     height="@@height" />

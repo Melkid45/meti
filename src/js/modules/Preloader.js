@@ -15,6 +15,7 @@ export class Preloader {
   constructor(options = {}) {
     const settings = { ...PreloaderDefaults, ...options };
 
+    this.onBeforeDepixelize = settings.onBeforeDepixelize || null;
     this.squareSize = window.innerWidth < 480 ? settings.squareSizeMobile : settings.squareSizeDesktop;
     this.squareColor = settings.color;
     this.minLoadingTime = settings.minLoadingTime;
@@ -175,7 +176,9 @@ export class Preloader {
       }
     } else {
       if (!this.depixelizeStart) {
-        // Старт депікселізації
+        if (typeof this.onBeforeDepixelize === 'function') {
+          this.onBeforeDepixelize();
+        }
         while (this.availablePositions.length > 0) {
           this.generateSquare(timestamp);
         }

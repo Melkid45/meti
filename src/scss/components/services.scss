@@ -6,7 +6,7 @@
   &__list {
     height: 200vh;
     counter-reset: servicesCounter;
-    border: 0 solid rgba($whiteLightColor, .16);
+    border: 0 solid $borderColor;
     border-width: 1px 0;
     position: relative;
     &-card {

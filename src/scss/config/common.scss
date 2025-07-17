@@ -188,19 +188,21 @@
 
 .glsl-effect {
   display: block;
-  position: relative;
   vertical-align: top;
+  user-select: none;
+  position: relative;
 }
 
 .glsl-effect img {
   width: 100%;
   height: auto;
   display: block;
-  visibility: hidden;
+  // visibility: hidden;
   pointer-events: none;
 }
 
 .glsl-effect canvas {
+  display: none !important;
   position: absolute;
   top: 0;
   left: 0;
@@ -257,5 +259,172 @@
     }
   }
   &__text {
+  }
+}
+
+.box-square {
+  width: var(--pixel-size);
+  height: var(--pixel-size);
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px $borderColor;
+  position: relative;
+  &:before {
+    background: $accentColor;
+    width: 50%;
+    height: 50%;
+    content: '';
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    transform: scale(2);
+    opacity: 0;
+    visibility: hidden;
+    transition: $transition;
+    transition-property: transform, opacity, visibility;
+  }
+}
+
+.case-card,
+.awards-card {
+  &:hover {
+    .box-square {
+      &:before {
+        @media (min-width: $lg-mf) {
+          transform: none;
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+  }
+}
+
+.case-card {
+  position: relative;
+  &__inner {
+  }
+  &__media {
+    margin: 0 0 54rem;
+    position: relative;
+  }
+  &__picture {
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+  &__content {
+  }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-pixel {
+    }
+  }
+  &__title {
+    margin: 0 0 20rem 0;
+    padding-right: .1em;
+    text-transform: uppercase;
+    @include truncate-lines(1);
+  }
+  &__link {
+    @extend %link-cover;
+    transition: $transition;
+    transition-property: opacity;
+    &:hover {
+      text-decoration: none;
+      @media (min-width: $lg-mf) {
+        opacity: .6;
+      }
+    }
+  }
+  &__text {
+    max-width: 74%;
+    @include truncate-lines(2);
+  }
+}
+
+.awards-card {
+  padding: var(--card-gap-lg) 0;
+  position: relative;
+  &:not(:hover) {
+    .awards-card__media {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  &__row {
+  }
+  &__col {
+    &--media {
+      height: 0;
+    }
+    &--content {
+    }
+  }
+  &__media {
+    background: $accentColor;
+    padding: 0 0 122.132796781%;
+    transition: $transition;
+    transition-property: opacity, visibility;
+    position: relative;
+    top: -20rem;
+    z-index: 1;
+  }
+  &__picture {
+    @extend %img-contain;
+    width: 200rem;
+    height: 200rem;
+    margin: -100rem 0 0 -100rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    user-select: none;
+  }
+  &__content {
+    font-size: var(--fs-5);
+  }
+  &__header {
+    margin: 0 0 var(--card-gap-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__title {
+    margin: 0;
+  }
+  &__link {
+    @extend %link-cover;
+    display: block;
+    transition: $transition;
+    &:hover {
+      text-decoration: none;
+      @media (min-width: $lg-mf) {
+        opacity: .6;
+      }
+    }
+  }
+  &__box-square {
+    flex-shrink: 0;
+  }
+  &__nomination {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    li {
+      margin: 0;
+      padding: 0;
+      &:not(:last-child):after {
+        margin: 0 15rem;
+        content: '\002F';
+      }
+    }
   }
 }

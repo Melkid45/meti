@@ -20,8 +20,10 @@ $gapFluid: 40px;
 $whiteColor: #ffffff;
 $whiteLightColor: #f4f4f4;
 $blackColor: #000000;
+$greyDarkColor: #272727;
 $redColor: #F02121;
 $purpleColor: #3F2BA6;
+$borderColor: rgba($whiteLightColor, .16);
 $accentColor: $purpleColor;
 
 $bgSite: $blackColor;
@@ -61,16 +63,55 @@ $xs-mf: $xs + 1;
   --fs-8: 12px;
   --fs-9: 10px;
 
-  --gap: 20px;
-  --gap-: -20px;
-  --gap-fluid: 40px;
-  --gap-fluid-: -40px;
+  --gap: 20rem;
+  --gap-: -20rem;
+  --gap-fluid: 40rem;
+  --gap-fluid-: -40rem;
   --gap-container: var(--gap-fluid);
   --gap-container-: var(--gap-fluid-);
 
-  --pixel-tile: 54rem;
+  --card-gap-lg: var(--gap-fluid);
+  --card-gap-md: var(--gap);
+
+  --pixel-size: 54rem;
+
+  --grid-size: 54rem;
+  --grid-color: #{$greyDarkColor};
+
+  --grid-padding: 40rem;
+
+  --col-count: 7;
+  --col-width: calc(100% / var(--col-count));
 
   --vh: 1vh;
-  @media (max-width: $lg) {
+  @media (min-width: $sm-mf) {
+    --grid-gap: 20rem;
+  }
+  @media (min-width: $md-mf) {
+    --grid-gap: 30rem;
+  }
+  @media (min-width: $lg-mf) {
+    --grid-gap: 40rem;
+  }
+}
+
+:root {
+  --grid-columns: 4;
+  --grid-gap: 20rem;
+  @media (min-width: 480px) {
+    --grid-columns: 6;
+    --grid-gap: 40rem;
+  }
+  @media (min-width: 640px) {
+    --grid-columns: 6;
+    --grid-gap: 40rem;
+  }
+  @media (min-width: 900px) {
+    --grid-columns: 7;
+    --grid-gap: 40rem;
+  }
+  @media (min-width: 1200px) {
+    --grid-columns: 8;
+    --grid-gap: 40rem;
   }
 }

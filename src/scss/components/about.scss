@@ -2,9 +2,9 @@
   padding: 400rem 0 230rem;
   position: relative;
   &__decor {
-    position: absolute;
     color: $accentColor;
     filter: drop-shadow(0 0 1px $accentColor);
+    position: absolute;
     pointer-events: none;
     &--1 {
       width: 490rem;
