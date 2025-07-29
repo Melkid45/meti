@@ -1,10 +1,15 @@
 .header {
   width: 100%;
   padding: 52rem 0;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 998;
+  transition: $transition;
+  will-change: transform;
+  z-index: 10001;
+  &.is-hidden {
+    transform: translateY(-100%);
+  }
   &__container {
     display: flex;
     justify-content: space-between;
@@ -21,11 +26,14 @@
     }
   }
   &__logo {
-    flex-shrink: 0;
   }
   &__dropdown {
     display: flex;
     align-items: center;
+    transition: $transition;
+    transition-duration: 1.4s;
+    transition-delay: .4s;
+    transition-property: visibility, opacity;
   }
   &__nav {
     margin-right: 80rem;
@@ -46,5 +54,22 @@
   &__language-switcher {
     flex-shrink: 0;
     text-transform: uppercase;
+  }
+}
+
+#js-preloader:not(.is-hide) ~ #root {
+  .header__dropdown {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .header__logo {
+  }
+}
+
+
+#js-preloader.is-hide ~ #root {
+  .header__dropdown {
+  }
+  .header__logo {
   }
 }

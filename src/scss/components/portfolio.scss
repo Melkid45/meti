@@ -36,7 +36,9 @@
     }
   }
   &__list {
+    margin-bottom: -100rem;
     &-col {
+      margin-bottom: 100rem;
       align-self: flex-end;
       &:nth-child(2n + 0) {
         margin-left: calc(2 * var(--col-width));

@@ -7,21 +7,25 @@ export default class CustomCursor {
 
     if (!this.cursor || !this.dot) return;
 
-    this.pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    this.xTo = gsap.quickTo(this.cursor, "x", { duration: 0.3, ease: "power3.out" });
+    this.yTo = gsap.quickTo(this.cursor, "y", { duration: 0.3, ease: "power3.out" });
 
-    this.init();
+    this.onMouseMove = (e) => {
+      this.xTo(e.clientX);
+      this.yTo(e.clientY);
+    };
+
+    document.addEventListener('mousemove', this.onMouseMove, { passive: true });
+
+    this.simulateInitialMouseMove();
   }
 
-  init() {
-    document.addEventListener('mousemove', this.onMouseMove.bind(this));
-  }
-
-  onMouseMove(e) {
-    gsap.to(this.cursor, {
-      duration: 0.3,
-      x: e.clientX,
-      y: e.clientY,
-      ease: 'power3.out',
+  simulateInitialMouseMove() {
+    const event = new MouseEvent('mousemove', {
+      clientX: window.innerWidth / 2,
+      clientY: window.innerHeight / 2,
     });
+
+    document.dispatchEvent(event);
   }
 }

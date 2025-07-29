@@ -24,6 +24,7 @@ import { AnimateOnScroll } from './modules/AnimateOnScroll.js';
 import CustomCursor from './modules/CustomCursor.js';
 import HeaderBtnToggle from './modules/HeaderBtnToggle.js';
 import PopupManager from './modules/PopupManager.js';
+import HeaderStickyToggle from './modules/HeaderStickyToggle.js';
 
 // Sketch img effect
 import Sketch from './modules/Sketch.js';
@@ -38,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const preloaderCanvas = document.getElementById('js-preloader-canvas');
   if (preloaderCanvas) {
     const preloader = new Preloader({
-      squareSizeMobile: 40,
-      squareSizeDesktop: 40,
+      squareSizeMobile: 54,
+      squareSizeDesktop: 54,
       color: '#ffffff',
       minLoadingTime: 1200,
       holdFullScreenTime: 1500,
@@ -61,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   new HeaderBtnToggle();
   new PopupManager();
+
+  new HeaderStickyToggle('.js-header-sticky', 100, 100);
 
   document.querySelectorAll('.js-glsl-effect').forEach(container => {
     new Sketch({ dom: container });

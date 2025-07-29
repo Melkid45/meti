@@ -26,7 +26,6 @@
       position: fixed;
       top: 0;
       left: 0;
-      display: block;
       z-index: 9999;
     }
     #js-preloader {
@@ -42,12 +41,12 @@
       user-select: none;
       transform: translate(-50%, -50%);
       will-change: transform;
-      z-index: 100000000;
+      z-index: 10000;
     }
     .u-cursor__dot {
       background: #ffffff;
-      width: 20rem;
-      height: 20rem;
+      width: 27rem;
+      height: 27rem;
       display: block;
     }
     .u-cursor__preloader-progress {
@@ -59,7 +58,7 @@
       white-space: nowrap;
     }
   </style>
-  <link rel="stylesheet" href="css/style.min.css??=v=20250717110717">
+  <link rel="stylesheet" href="css/style.min.css??=v=20250729115052">
   <link rel="icon" type="image/png" href="/static/favicon/favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="/static/favicon/favicon.svg">
   <link rel="shortcut icon" href="/static/favicon/favicon.ico">
@@ -68,11 +67,13 @@
   <link rel="manifest" href="/static/favicon/site.webmanifest">
   <title>METI</title>
 </head>
+
   <body>
 
     <div id="js-preloader"></div>
 
     <canvas id="js-preloader-canvas"></canvas>
+    <canvas id="interactiveGrid"></canvas>
 
     <span id="js-cursor" class="u-cursor">
       <span class="u-cursor__dot"></span>
@@ -82,7 +83,7 @@
     <main id="root" class="lenis-wrapper site" role="main">
       
       
-      <header class="header js-header-scroll site__header">
+      <header class="header js-header-sticky site__header">
   <div class="container header__container">
     <a href="#root" class="js-anchor header__logo logo">
       <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg" class="logo__img"><path d="M0 0H48.789V50H33.5598V15.6073H32.0091V50H16.7799V15.6073H15.2293V50H0V0Z" fill="currentColor"/><path d="M50.4037 0H99.1927V15.6073H65.6329V17.1964H99.1927V32.8036H65.6329V34.3927H99.1927V50H50.4037V0Z" fill="currentColor"/><path d="M100.807 0H149.596V15.6073H132.816V50H117.587V15.6073H100.807V0Z" fill="currentColor"/><path d="M151.211 0H200V15.6073H183.22V34.3927H200V50H151.211V34.3927H167.991V15.6073H151.211V0Z" fill="currentColor"/></svg>
@@ -167,7 +168,7 @@
             <div class="row__col--2 about__col about__col--title">
               <h2 class="u-suptitle about__title">[Привет, это METI]</h2>
             </div>
-            <div class="about__col about__col--subtitle row__col--5">
+            <div class="row__col--5 about__col about__col--subtitle">
               <h3 class="about__subtitle">
                 <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">Креативные</span>
                 <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">и эффективные.</span>
@@ -212,7 +213,7 @@
       
       <section class="services">
         <div class="container services__container">
-          <h2 class="u-suptitle services__title">[Привет, это METI]</h2>
+          <h2 class="u-suptitle services__title">[Что мы умеем]</h2>
           <div class="services__list">
             <article class="services-card services__list-card">
               <p class="u-suptitle services-card__counter"></p>
@@ -282,7 +283,7 @@
             <p class="u-suptitle portfolio__suptitle">[2021 - 2025]</p>
           </div>
           <div class="portfolio__marquee-wrapper">
-            <div class="fs-1 portfolio__marquee u-title">
+            <div class="u-title fs-1 portfolio__marquee">
               <p class="portfolio__marquee-title">Кейсы</p>
               <p class="portfolio__marquee-title">Кейсы</p>
               <p class="portfolio__marquee-title">Кейсы</p>
@@ -445,10 +446,10 @@
       <section class="benefits">
         <div class="container benefits__container">
           <div class="row benefits__row">
-            <div class="benefits__col row__col--7 benefits__col--title">
+            <div class="row__col--7 benefits__col benefits__col--title">
               <h2 class="u-suptitle benefits__title">[Почему мы]</h2>
             </div>
-            <div class="benefits__col row__col--7 benefits__col--subtitle">
+            <div class="row__col--7 benefits__col benefits__col--subtitle">
               <h3 class="benefits__subtitle">
                 <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">Наши клиенты —</span>
                 <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">наши стратегические</span>
@@ -461,7 +462,7 @@
                 <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">его команды</span>
               </h3>
             </div>
-            <div class="benefits__col benefits__col--content row__col--4">
+            <div class="row__col--4 benefits__col benefits__col--content">
               <div class="u-content benefits__content">
                 <p data-timeline="benefits" data-animate="fade-up" data-delay="1.4" data-duration=".48" data-stagger=".2">Не довольствуясь средними результатами, мы каждый день бросаем вызов «хорошему», чтобы сделать «лучшее».</p>
                 <p data-timeline="benefits" data-animate="fade-up" data-delay="1.4" data-duration=".48" data-stagger=".2">Именно такой подход позволяет нам&nbsp;обеспечивать устойчивый рост качества восприятия брендов-партнеров и&nbsp;их бизнес-показателей.</p>
@@ -665,6 +666,121 @@
       </section>
       
       
+      <section class="appeal">
+        <div class="container appeal__container">
+          <h2 class="u-suptitle appeal__title">[Оставьте заявку]</h2>
+          <form action="#" class="appeal__form u-form">
+            <div class="row u-form__row">
+              <div class="u-form__col u-form__col--title row__col--5">
+                <span class="u-title fs-3 u-form__title">Привет, Meti!</span>
+                <div class="u-form__title-wrapper">
+                  <label for="name" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">Меня зовут</span>
+                  </label>
+                  <div class="area-input u-form__input-area">
+                    <input type="text" name="name" id="name" class="area-input__input u-input" required placeholder="Имя">
+                    <div class="area-input__error">
+                      <svg class="u-icon">
+                        <use xlink:href="images/icons/icons.svg#info"></use>
+                      </svg>
+                      <p class="area-input__error-text">Некорректный формат ввода</p>
+                    </div>
+                  </div>
+                  <label for="name" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">.</span>
+                  </label>
+                </div>
+              </div>
+              <div class="u-form__col u-form__col--title row__col--7">
+                <div class="u-form__title-wrapper">
+                  <label for="position" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">Я</span>
+                  </label>
+                  <div class="area-input u-form__input-area">
+                    <input type="text" name="position" id="position" class="area-input__input u-input is-error" required placeholder="Должность" value="! @%#(#%&(">
+                    <div class="area-input__error">
+                      <svg class="u-icon">
+                        <use xlink:href="images/icons/icons.svg#info"></use>
+                      </svg>
+                      <p class="area-input__error-text">Некорректный формат ввода</p>
+                    </div>
+                  </div>
+                  <label for="brand_name" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">Компании</span>
+                  </label>
+                </div>
+              </div>
+              <div class="u-form__col u-form__col--title row__col--6">
+                <div class="u-form__title-wrapper">
+                  <div class="area-input u-form__input-area">
+                    <input type="text" name="brand_name" id="brand_name" class="area-input__input u-input" required placeholder="Наименование бренда">
+                    <div class="area-input__error">
+                      <svg class="u-icon">
+                        <use xlink:href="images/icons/icons.svg#info"></use>
+                      </svg>
+                      <p class="area-input__error-text">Некорректный формат ввода</p>
+                    </div>
+                  </div>
+                  <label for="brand_name" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">.</span>
+                  </label>
+                </div>
+              </div>
+              <div class="u-form__col u-form__col--title row__col--4">
+                <div class="u-form__title-wrapper">
+                  <label for="email" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">Ответьте мне на</span>
+                  </label>
+                </div>
+              </div>
+              <div class="u-form__col u-form__col--title row__col--5">
+                <div class="u-form__title-wrapper">
+                  <div class="area-input u-form__input-area">
+                    <input type="email" name="email" id="email" class="area-input__input u-input" required placeholder="Email">
+                    <div class="area-input__error">
+                      <svg class="u-icon">
+                        <use xlink:href="images/icons/icons.svg#info"></use>
+                      </svg>
+                      <p class="area-input__error-text">Некорректный формат ввода</p>
+                    </div>
+                  </div>
+                  <label for="email" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">,</span>
+                  </label>
+                </div>
+              </div>
+              <div class="u-form__col u-form__col--title row__col--4">
+                <div class="u-form__title-wrapper">
+                  <label for="tel" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">Или позвоните</span>
+                  </label>
+                </div>
+              </div>
+              <div class="u-form__col u-form__col--title row__col--7">
+                <div class="u-form__title-wrapper">
+                  <label for="tel" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">на номер</span>
+                  </label>
+                  <div class="area-input u-form__input-area">
+                    <input type="text" name="tel" id="tel" class="area-input__input u-input js-phone-mask" required placeholder="Телефон">
+                    <div class="area-input__error">
+                      <svg class="u-icon">
+                        <use xlink:href="images/icons/icons.svg#info"></use>
+                      </svg>
+                      <p class="area-input__error-text">Некорректный формат ввода</p>
+                    </div>
+                  </div>
+                  <label for="tel" class="u-form__label">
+                    <span class="u-title fs-3 u-form__title">.</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+      
+      
       <footer class="footer site__footer">
   <div class="container footer__container">
   </div>
@@ -684,6 +800,178 @@
     </div>
   </div>
 </div>
-    <script src="js/app.min.js??=v=20250717110717"></script>
+    <script src="js/app.min.js??=v=20250729115052"></script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('interactiveGrid');
+    const ctx = canvas.getContext('2d');
+
+    const getCssVariable = (name, defaultValue) => {
+        const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        if (value) {
+            const num = parseFloat(value);
+            if (!isNaN(num) && value.endsWith('s')) {
+                return num * 1000;
+            } else if (!isNaN(num) && !value.endsWith('px')) {
+                 return num;
+            } else if (value.endsWith('px')) {
+                return parseFloat(value);
+            }
+            return value;
+        }
+        return defaultValue;
+    };
+
+    const defaults = {
+        SQUARE_SIZE: 50,
+        BORDER_DEFAULT_COLOR: 'rgba(255, 255, 255, 0)',
+        BORDER_HIGHLIGHT_COLOR: 'rgba(0, 255, 255, 0.4)',
+        HIGHLIGHT_START_COLOR: 'rgba(0, 255, 255, 0.2)',
+        HIGHLIGHT_END_COLOR: 'rgba(0, 255, 255, 0)',
+        FADE_OUT_DURATION: 800,
+        HOVER_FADE_IN_SPEED: 0.1,
+        CURSOR_INFLUENCE_RADIUS: 150,
+        NO_MOVE_FADE_DELAY: 2000,
+        NO_MOVE_FADE_DURATION: 1000,
+        RANDOMNESS_FACTOR: 0.6,
+    };
+
+    const SQUARE_SIZE = getCssVariable('--grid-square-size', defaults.SQUARE_SIZE);
+    const BORDER_DEFAULT_COLOR = getCssVariable('--grid-square-border-default-color', defaults.BORDER_DEFAULT_COLOR);
+    const BORDER_HIGHLIGHT_COLOR = getCssVariable('--grid-square-border-highlight-color', defaults.BORDER_HIGHLIGHT_COLOR);
+    const HIGHLIGHT_START_COLOR = getCssVariable('--grid-square-highlight-start-color', defaults.HIGHLIGHT_START_COLOR);
+    const HIGHLIGHT_END_COLOR = getCssVariable('--grid-square-highlight-end-color', defaults.HIGHLIGHT_END_COLOR);
+    const FADE_OUT_DURATION = getCssVariable('--grid-fade-out-duration', defaults.FADE_OUT_DURATION);
+    const HOVER_FADE_IN_SPEED = getCssVariable('--grid-hover-fade-in-speed', defaults.HOVER_FADE_IN_SPEED);
+    const CURSOR_INFLUENCE_RADIUS = getCssVariable('--grid-cursor-influence-radius', defaults.CURSOR_INFLUENCE_RADIUS);
+    const NO_MOVE_FADE_DELAY = getCssVariable('--grid-no-move-fade-delay', defaults.NO_MOVE_FADE_DELAY);
+    const NO_MOVE_FADE_DURATION = getCssVariable('--grid-no-move-fade-duration', defaults.NO_MOVE_FADE_DURATION);
+    const RANDOMNESS_FACTOR = getCssVariable('--grid-randomness-factor', defaults.RANDOMNESS_FACTOR);
+
+
+    let mouseX = -1000;
+    let mouseY = -1000;
+    let lastMouseMoveTime = Date.now();
+    let mouseIsStationary = false;
+
+    let cols, rows;
+    const squares = [];
+
+    const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        cols = Math.ceil(canvas.width / SQUARE_SIZE);
+        rows = Math.ceil(canvas.height / SQUARE_SIZE);
+
+        squares.length = 0;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                squares.push({
+                    x: c * SQUARE_SIZE,
+                    y: r * SQUARE_SIZE,
+                    alpha: 0,
+                    lastActiveTime: 0,
+                    randomOffset: Math.random()
+                });
+            }
+        }
+    };
+
+    canvas.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        lastMouseMoveTime = Date.now();
+        mouseIsStationary = false;
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+        mouseX = -1000;
+        mouseY = -1000;
+        mouseIsStationary = true;
+    });
+
+    const drawSquare = (square) => {
+        const centerX = square.x + SQUARE_SIZE / 2;
+        const centerY = square.y + SQUARE_SIZE / 2;
+        const dist = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
+
+        const effectiveInfluenceRadius = CURSOR_INFLUENCE_RADIUS * (1 - RANDOMNESS_FACTOR + square.randomOffset * RANDOMNESS_FACTOR);
+
+        if (dist < effectiveInfluenceRadius && !mouseIsStationary) {
+            square.lastActiveTime = Date.now();
+            const intensity = 1 - (dist / effectiveInfluenceRadius);
+            square.alpha = Math.min(1, square.alpha + intensity * HOVER_FADE_IN_SPEED);
+        } else {
+            const timeSinceActive = Date.now() - square.lastActiveTime;
+
+            if (mouseIsStationary && (Date.now() - lastMouseMoveTime > NO_MOVE_FADE_DELAY)) {
+                const fadeProgress = (Date.now() - (lastMouseMoveTime + NO_MOVE_FADE_DELAY)) / NO_MOVE_FADE_DURATION;
+                square.alpha = Math.max(0, 1 - fadeProgress);
+            } else if (timeSinceActive < FADE_OUT_DURATION) {
+                square.alpha = Math.max(0, 1 - (timeSinceActive / FADE_OUT_DURATION));
+            } else {
+                square.alpha = 0;
+            }
+        }
+
+        square.alpha = Math.max(0, Math.min(1, square.alpha));
+
+        if (square.alpha > 0) {
+            const startBorderColor = parseRgba(BORDER_HIGHLIGHT_COLOR);
+            const endBorderColor = parseRgba(BORDER_DEFAULT_COLOR);
+
+            const br = startBorderColor.r + (endBorderColor.r - startBorderColor.r) * (1 - square.alpha);
+            const bg = startBorderColor.g + (endBorderColor.g - startBorderColor.g) * (1 - square.alpha);
+            const bb = startBorderColor.b + (endBorderColor.b - startBorderColor.b) * (1 - square.alpha);
+            const ba = startBorderColor.a + (endBorderColor.a - startBorderColor.a) * (1 - square.alpha);
+
+            ctx.strokeStyle = `rgba(${br}, ${bg}, ${bb}, ${ba})`;
+            ctx.strokeRect(square.x, square.y, SQUARE_SIZE, SQUARE_SIZE);
+        }
+
+        if (square.alpha > 0) {
+            const startColor = parseRgba(HIGHLIGHT_START_COLOR);
+            const endColor = parseRgba(HIGHLIGHT_END_COLOR);
+
+            const r = startColor.r + (endColor.r - startColor.r) * (1 - square.alpha);
+            const g = startColor.g + (endColor.g - startColor.g) * (1 - square.alpha);
+            const b = startColor.b + (endColor.b - startColor.b) * (1 - square.alpha);
+            const a = startColor.a + (endColor.a - startColor.a) * (1 - square.alpha);
+
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+            ctx.fillRect(square.x, square.y, SQUARE_SIZE, SQUARE_SIZE);
+        }
+    };
+
+    const parseRgba = (rgba) => {
+        const parts = rgba.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+        if (!parts) return { r: 0, g: 0, b: 0, a: 0 };
+        return {
+            r: parseInt(parts[1]),
+            g: parseInt(parts[2]),
+            b: parseInt(parts[3]),
+            a: parseFloat(parts[4])
+        };
+    };
+
+    const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (Date.now() - lastMouseMoveTime > NO_MOVE_FADE_DELAY && !mouseIsStationary) {
+            mouseIsStationary = true;
+        }
+
+        squares.forEach(drawSquare);
+
+        requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animate();
+});
+    </script>
   </body>
 </html>
