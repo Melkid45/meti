@@ -1,0 +1,38 @@
+<svg width="560" height="120" viewBox="0 0 560 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<foreignObject x="-40" y="-40" width="640" height="200"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(20px);clip-path:url(#bgblur_0_205_2295_clip_path);height:100%;width:100%"></div></foreignObject><g data-figma-bg-blur-radius="40">
+<path d="M400 80H440V40H400V80Z" fill="black"/>
+<path d="M360 40H400V0H360V40Z" fill="black"/>
+<path d="M400 40H440V0H400V40Z" fill="black"/>
+<path d="M440 120H480V80H440V120Z" fill="black"/>
+<path d="M520 120H560V80H520V120Z" fill="black"/>
+<path d="M280 80H320V40H280V80Z" fill="black"/>
+<path d="M240 40H280V0H240V40Z" fill="black"/>
+<path d="M200 120H240V80H200V120Z" fill="black"/>
+<path d="M120 80H160V40H120V80Z" fill="black"/>
+<path d="M120 40H160V0H120V40Z" fill="black"/>
+<path d="M80 120H120V80H80V120Z" fill="black"/>
+<path d="M0 120H40V80H0V120Z" fill="black"/>
+<path d="M40 80H80V40H40V80Z" fill="black"/>
+<path d="M40 80H80V40H40V80Z" fill="black"/>
+<path d="M320 120H360V80H320V120Z" fill="black"/>
+<path d="M480 40H520V0H480V40Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="bgblur_0_205_2295_clip_path" transform="translate(40 40)"><path d="M400 80H440V40H400V80Z"/>
+<path d="M360 40H400V0H360V40Z"/>
+<path d="M400 40H440V0H400V40Z"/>
+<path d="M440 120H480V80H440V120Z"/>
+<path d="M520 120H560V80H520V120Z"/>
+<path d="M280 80H320V40H280V80Z"/>
+<path d="M240 40H280V0H240V40Z"/>
+<path d="M200 120H240V80H200V120Z"/>
+<path d="M120 80H160V40H120V80Z"/>
+<path d="M120 40H160V0H120V40Z"/>
+<path d="M80 120H120V80H80V120Z"/>
+<path d="M0 120H40V80H0V120Z"/>
+<path d="M40 80H80V40H40V80Z"/>
+<path d="M40 80H80V40H40V80Z"/>
+<path d="M320 120H360V80H320V120Z"/>
+<path d="M480 40H520V0H480V40Z"/>
+</clipPath></defs>
+</svg>

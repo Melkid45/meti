@@ -1,10 +1,21 @@
+let lastScrollTop = 0;
+window.addEventListener('scroll', function() {
+  let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+  if (currentScroll > lastScrollTop) {
+    document.querySelector('.header').classList.add('back')
+  } else {
+    document.querySelector('.header').classList.remove('back')
+  }
+  lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+});
+
 class HeaderBtnToggle {
   constructor() {
     this.burgerButton = document.querySelector('.js-header-toggle-open');
     this.closeButton = document.querySelector('.js-header-toggle-close');
     this.body = document.body;
     this.headerNav = document.querySelector('.header__aside');
-    
+
     if (this.burgerButton) {
       this.burgerButton.addEventListener('click', () => this.toggleMenu());
     }
@@ -12,7 +23,7 @@ class HeaderBtnToggle {
       this.closeButton.addEventListener('click', () => this.closeMenu());
     }
   }
-  
+
   toggleMenu() {
     this.burgerButton.classList.toggle('is-active');
     this.body.classList.toggle('is-menu-opened');

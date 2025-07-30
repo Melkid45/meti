@@ -1,48 +1,65 @@
+.header.back{
+  transform: translateY(-70%);
+}
 .header {
   width: 100%;
   padding: 52rem 0;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 998;
+  mix-blend-mode: difference !important;
+  transition: all 0.5s ease;
   &__container {
     display: flex;
     justify-content: space-between;
   }
+
   &__link {
     @extend %area-click;
     transition: $transition;
     transition-property: color;
+
     &:hover {
       text-decoration: none;
+
       @media (min-width: $lg-mf) {
         color: $accentColor;
       }
     }
   }
+
   &__logo {
     flex-shrink: 0;
+
+    svg {}
   }
+
   &__dropdown {
     display: flex;
     align-items: center;
   }
+
   &__nav {
     margin-right: 80rem;
     text-transform: uppercase;
+
     &-list {
       margin: 0;
       padding: 0;
       display: flex;
       list-style-type: none;
     }
+
     &-item {
       margin: 0 41rem;
       padding: 0;
+
     }
-    &-link {
-    }
+
+    &-link {}
   }
+
   &__language-switcher {
     flex-shrink: 0;
     text-transform: uppercase;

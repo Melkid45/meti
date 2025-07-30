@@ -1,31 +1,66 @@
 .portfolio {
   padding: 200rem 0 120rem;
-  &__container {
-  }
+
+  &__container {}
+
   &__header {
     margin: 0 0 -30rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   &__title {
     margin: 0;
     flex-shrink: 0;
     text-transform: uppercase;
   }
+
   &__suptitle {
     margin: 0;
   }
+
   &__marquee {
     display: flex;
+
     &-wrapper {
       margin: 0 var(--gap-container-);
+      overflow: hidden;
+
+      .stroke_container {
+        width: 100%;
+        animation: marquee1 10s infinite linear;
+        white-space: nowrap;
+        display: inline-flex;
+      }
     }
+
+    @keyframes marquee1 {
+      0% {
+        transform: translateX(0%);
+      }
+
+      100% {
+        transform: translateX(-193.2%);
+
+      }
+    }
+
     &-title {
       display: flex;
       flex-shrink: 0;
       align-items: center;
       user-select: none;
+
+      span {
+        font-family: "Chava";
+        font-size: 276px;
+        line-height: 214px;
+        margin-top: -32px;
+        margin-left: -11px;
+        margin-right: 24px;
+      }
+
       &:after {
         @extend .ff-code, .color-accent;
         margin: 0 .25ch .1em;
@@ -35,20 +70,24 @@
       }
     }
   }
+
   &__list {
     &-col {
       align-self: flex-end;
+
       &:nth-child(2n + 0) {
         margin-left: calc(2 * var(--col-width));
       }
+
       &:nth-child(3n + 3) {
         margin-left: calc(1 * var(--col-width));
       }
+
       &:nth-child(4n + 4) {
         margin-left: 0;
       }
     }
-    &-card {
-    }
+
+    &-card {}
   }
 }

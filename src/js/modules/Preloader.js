@@ -3,7 +3,7 @@ import { lenis } from './LenisInit.js';
 export const PreloaderDefaults = {
   squareSizeMobile: 60,
   squareSizeDesktop: 80,
-  color: '#ffffff',
+  color: '#000',
   minLoadingTime: 1200,
   holdFullScreenTime: 1500,
   maxPercent: 99,
@@ -123,7 +123,7 @@ export class Preloader {
         }
       }
 
-      this.ctx.fillStyle = `rgba(0,0,255,${sq.opacity.toFixed(2)})`;
+      this.ctx.fillStyle = `rgba(68,44,191,${sq.opacity.toFixed(2)})`;
       this.ctx.fillRect(sq.x, sq.y, this.squareSize, this.squareSize);
     }
   }

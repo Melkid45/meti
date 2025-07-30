@@ -24,7 +24,11 @@ import { AnimateOnScroll } from './modules/AnimateOnScroll.js';
 import CustomCursor from './modules/CustomCursor.js';
 import HeaderBtnToggle from './modules/HeaderBtnToggle.js';
 import PopupManager from './modules/PopupManager.js';
-
+import Feedback from './modules/FeedbackOnScroll.js';
+import Video from './modules/AnimateOnScrollVideo.js';
+import Intro from './modules/AnimateonScrollIntro.js';
+import About from './modules/AboutCursore.js';
+import Services from './modules/AnimationServices.js';
 // Sketch img effect
 import Sketch from './modules/Sketch.js';
 

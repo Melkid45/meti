@@ -1,560 +1,756 @@
 <!DOCTYPE html>
 <html lang="ru">
-  @@include('html/head.html', {
-    'title': 'METI'
-  })
-  <body>
+@@include('html/head.html', {
+'title': 'METI'
+})
 
-    <div id="js-preloader"></div>
+<body>
 
-    <canvas id="js-preloader-canvas"></canvas>
+  <div id="js-preloader"></div>
 
-    <span id="js-cursor" class="u-cursor">
-      <span class="u-cursor__dot"></span>
-      <span id="js-cursor-progress" class="u-cursor__preloader-progress">[<span>01%</span>]</span>
-    </span>
+  <canvas id="js-preloader-canvas"></canvas>
 
-    <main id="root" class="lenis-wrapper site" role="main">
-      <!-- <div class="site__grid-overlay"></div> -->
-      <!-- header BEGIN -->
-      @@include('html/components/header.html', {
-        'el': 'js-header-scroll site__header'
+  <span id="js-cursor" class="u-cursor">
+    <span class="u-cursor__dot"></span>
+    <span id="js-cursor-progress" class="u-cursor__preloader-progress">[<span>01%</span>]</span>
+  </span>
+  <main id="root" class="lenis-wrapper site" role="main">
+    <!-- <div class="site__grid-overlay"></div> -->
+    <!-- header BEGIN -->
+    @@include('html/components/header.html', {
+    'el': 'js-header-scroll site__header'
+    })
+    <!-- header END -->
+    <!-- intro BEGIN -->
+    <section class="intro">
+      <canvas id="grid-canvas-begin"></canvas>
+      @@include('html/helpers/picture.html', {
+      "resolution": "lg",
+      "name": "intro-hero",
+      "alt": "METI — Универсальный",
+      "width": "1920",
+      "height": "980",
+      "class": "section-bg intro__bg",
+      "useWebp": false,
+      "fallbackFormat": "jpg",
+      "grid": "20",
+      "mouse": ".3",
+      "strength": ".2",
+      "relaxation": ".94"
       })
-      <!-- header END -->
-      <!-- intro BEGIN -->
-      <section class="intro">
-        @@include('html/helpers/picture.html', {
-          "resolution": "lg",
-          "name": "intro-hero",
-          "alt": "METI — Универсальный",
-          "width": "1920",
-          "height": "980",
-          "class": "section-bg intro__bg",
-          "useWebp": false,
-          "fallbackFormat": "jpg",
-          "grid": "20",
-          "mouse": ".3",
-          "strength": ".2",
-          "relaxation": ".94"
-        })
-        <div class="container intro__container">
-          <div class="intro__content">
-            <h1 class="fs-1 intro__title">
-              <span class="visually-hidden">METI —</span>
-              Ун<span>и</span>верс<span>а</span>льный
-            </h1>
-            <p class="u-suptitle intro__address">[Москва, 22:01]</p>
-            <p class="u-suptitle intro__suptitle">[Hello, world]</p>
-          </div>
+      <div class="container intro__container">
+        <div class="intro__content">
+          <h1 class="fs-1 intro__title">
+            <span class="visually-hidden">METI —</span>
+            Ун<span>и</span>верс<span>а</span>льный
+          </h1>
+          <p class="u-suptitle intro__address">[Москва, 22:01]</p>
+          <p class="u-suptitle intro__suptitle">[Hello, world]</p>
         </div>
-      </section>
-      <!-- intro END -->
-      <!-- about BEGIN -->
-      <section class="about">
-        <svg class="u-icon about__decor about__decor--1">
-          <use xlink:href="images/icons/icons.svg#decor-1"></use>
-        </svg>
-        <svg class="u-icon about__decor about__decor--2">
-          <use xlink:href="images/icons/icons.svg#decor-2"></use>
-        </svg>
-        <svg class="u-icon about__decor about__decor--3">
-          <use xlink:href="images/icons/icons.svg#decor-3"></use>
-        </svg>
-        <div class="container about__container">
-          <div class="row about__row">
-            <div class="row__col--2 about__col about__col--title">
-              <h2 class="u-suptitle about__title">[Привет, это METI]</h2>
-            </div>
-            <div class="row__col--5 about__col about__col--subtitle">
-              <h3 class="about__subtitle">
-                <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">Креативные</span>
-                <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">и эффективные.</span>
-                <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">команда</span>
-                <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">профессионалов</span>
-                <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">уровня</span>
-                <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">сетевых рекламных</span>
-                <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">агентств</span>
-              </h3>
-            </div>
-            <div class="row__col--2 about__col about__col--media">
-              <div class="about__media">
-                @@include('html/helpers/picture.html', {
-                  "resolution": "lg",
-                  "name": "about-hero",
-                  "alt": "[Привет, это METI]",
-                  "width": "497",
-                  "height": "276",
-                  "class": "js-glsl-effect glsl-effect",
-                  "useWebp": false,
-                  "fallbackFormat": "jpg",
-                  "grid": "20",
-                  "mouse": ".3",
-                  "strength": ".2",
-                  "relaxation": ".94",
-                })
-              </div>
-            </div>
-            <div class="row__col--4 about__col about__col--content">
-              <div class="u-content about__content">
-                <p data-timeline="about2" data-animate="fade-up" data-delay="1.2" data-duration="0.8" data-stagger=".8">Мы объединены общей миссией раскрывать потенциал бренда и человека, создавая среду, благоприятную для развития бизнеса и общества.</p>
-                <p data-timeline="about2" data-animate="fade-up" data-delay="1.2" data-duration="0.8" data-stagger=".8">Используя digital-инструменты и&nbsp;креативный капитал нашей команды, мы&nbsp;помогаем компаниям и&nbsp;их&nbsp;руководителям достигать свои&nbsp;бизнес-цели.</p>
-              </div>
-            </div>
+      </div>
+    </section>
+    <!-- intro END -->
+    <!-- about BEGIN -->
+
+    <section class="about">
+      <canvas id="gridCanvas"></canvas>
+      <img class="u-icon about__decor about__decor--1" src="images/about/1.png" alt="">
+      <img class="u-icon about__decor about__decor--2" src="images/about/2.png" alt="">
+      <img class="u-icon about__decor about__decor--3" src="images/about/3.png" alt="">
+      <div class="container about__container">
+        <div class="row about__row">
+          <div class="row__col--2 about__col about__col--title">
+            <h2 class="u-suptitle about__title">[Привет, это METI]</h2>
           </div>
-        </div>
-      </section>
-      <!-- about END -->
-      <!-- services BEGIN -->
-      <section class="services">
-        <div class="container services__container">
-          <h2 class="u-suptitle services__title">[Привет, это METI]</h2>
-          <div class="services__list">
-            <article class="services-card services__list-card">
-              <p class="u-suptitle services-card__counter"></p>
-              <div class="services-card__media">
-                <picture class="services-card__picture">
-                  <img src="images/services-card-1.svg" width="760" height="760" alt="Спецпроекты">
-                </picture>
-              </div>
-              <div class="services-card__content">
-                <h3 class="fs-2 services-card__title">Спецпроекты</h3>
-                <div class="services-card__footer">
-                  <div class="row services-card__row">
-                    <div class="row__col--2 services-card__col services-card__col--text">
-                      <div class="u-content services-card__text">
-                        <p>Разрабатываем продукты и проекты с креативным подходом, стратегическим мышлением и тщательным планированием</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="services-card services__list-card">
-              <p class="u-suptitle services-card__counter"></p>
-              <div class="services-card__media">
-                <picture class="services-card__picture">
-                  <img src="images/services-card-2.svg" width="760" height="760" alt="SMM">
-                </picture>
-              </div>
-              <div class="services-card__content">
-                <h3 class="fs-2 services-card__title">SMM</h3>
-                <div class="services-card__footer">
-                  <div class="row services-card__row">
-                    <div class="row__col--2 services-card__col services-card__col--text">
-                      <div class="u-content services-card__text">
-                        <p>Управляем присутствием бренда в&nbsp;социальных сетях, продвигаем, cоздаём контент и&nbsp;взаимодействуем с аудиторией</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-      <!-- services END -->
-      <!-- showreel BEGIN -->
-      <section class="showreel">
-        <div class="container showreel__container">
-          <h2 class="visually-hidden">[Видео о METI]</h2>
-        </div>
-        <div class="showreel__video-wrapper">
-          <video class="showreel__video" muted loop controls autoplay playsinline preload="auto" poster="images/showreel-poster.jpg">
-            <source src="static/videos/showreel.webm" type="video/webm">
-            <source src="static/videos/showreel.mp4" type="video/mp4">
-          </video>
-          <div class="logo showreel__video-logo">
-            <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg" class="logo__img"><path d="M0 0H48.789V50H33.5598V15.6073H32.0091V50H16.7799V15.6073H15.2293V50H0V0Z" fill="currentColor"/><path d="M50.4037 0H99.1927V15.6073H65.6329V17.1964H99.1927V32.8036H65.6329V34.3927H99.1927V50H50.4037V0Z" fill="currentColor"/><path d="M100.807 0H149.596V15.6073H132.816V50H117.587V15.6073H100.807V0Z" fill="currentColor"/><path d="M151.211 0H200V15.6073H183.22V34.3927H200V50H151.211V34.3927H167.991V15.6073H151.211V0Z" fill="currentColor"/></svg>
-          </div>
-        </div>
-      </section>
-      <!-- showreel END -->
-      <!-- portfolio BEGIN -->
-      <section class="portfolio">
-        <div class="container portfolio__container">
-          <div class="portfolio__header">
-            <h2 class="u-suptitle portfolio__title">[Портфолио]</h2>
-            <p class="u-suptitle portfolio__suptitle">[2021 - 2025]</p>
-          </div>
-          <div class="portfolio__marquee-wrapper">
-            <div class="u-title fs-1 portfolio__marquee">
-              <p class="portfolio__marquee-title">Кейсы</p>
-              <p class="portfolio__marquee-title">Кейсы</p>
-              <p class="portfolio__marquee-title">Кейсы</p>
-              <p class="portfolio__marquee-title">Кейсы</p>
-              <p class="portfolio__marquee-title">Кейсы</p>
-              <p class="portfolio__marquee-title">Кейсы</p>
-              <p class="portfolio__marquee-title">Кейсы</p>
-            </div>
-          </div>
-          <div class="row portfolio__list">
-            <div class="row__col--3 portfolio__list-col">
-              <article class="case-card portfolio__list-card">
-                <div class="case-card__inner">
-                  <div class="case-card__media">
-                    @@include('html/helpers/picture.html', {
-                      "resolution": "lg",
-                      "name": "case-card-1",
-                      "alt": "Familia",
-                      "width": "766",
-                      "height": "875",
-                      "class": "case-card__picture",
-                      "useWebp": false,
-                      "fallbackFormat": "jpg",
-                      "grid": "40",
-                      "mouse": ".1",
-                      "strength": ".04",
-                      "relaxation": ".94"
-                    })
-                  </div>
-                  <div class="case-card__content">
-                    <div class="case-card__header">
-                      <h3 class="fs-4 case-card__title">
-                        <a href="#" class="case-card__link">Familia</a>
-                      </h3>
-                      <span class="box-square case-card__header-pixel"></span>
-                    </div>
-                    <div class="u-content case-card__text">
-                      <p>Как делать в день больше миллиона охвата: кейс METI agency и Familia</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </div>
-            <div class="row__col--2 portfolio__list-col">
-              <article class="case-card portfolio__list-card">
-                <div class="case-card__inner">
-                  <div class="case-card__media">
-                    @@include('html/helpers/picture.html', {
-                      "resolution": "lg",
-                      "name": "case-card-2",
-                      "alt": "Zone 51",
-                      "width": "497",
-                      "height": "607",
-                      "class": "case-card__picture",
-                      "useWebp": false,
-                      "fallbackFormat": "jpg",
-                      "grid": "40",
-                      "mouse": ".1",
-                      "strength": ".04",
-                      "relaxation": ".94"
-                    })
-                  </div>
-                  <div class="case-card__content">
-                    <div class="case-card__header">
-                      <h3 class="fs-4 case-card__title">
-                        <a href="#" class="case-card__link">Zone 51</a>
-                      </h3>
-                      <span class="box-square case-card__header-pixel"></span>
-                    </div>
-                    <div class="u-content case-card__text">
-                      <p>Разгон с 0 до 26 000 подписчиков в Telegram</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </div>
-            <div class="row__col--3 portfolio__list-col">
-              <article class="case-card portfolio__list-card">
-                <div class="case-card__inner">
-                  <div class="case-card__media">
-                    @@include('html/helpers/picture.html', {
-                      "resolution": "lg",
-                      "name": "case-card-2",
-                      "alt": "Familia",
-                      "width": "766",
-                      "height": "875",
-                      "class": "case-card__picture",
-                      "useWebp": false,
-                      "fallbackFormat": "jpg",
-                      "grid": "40",
-                      "mouse": ".1",
-                      "strength": ".04",
-                      "relaxation": ".94"
-                    })
-                  </div>
-                  <div class="case-card__content">
-                    <div class="case-card__header">
-                      <h3 class="fs-4 case-card__title">
-                        <a href="#" class="case-card__link">Familia</a>
-                      </h3>
-                      <span class="box-square case-card__header-pixel"></span>
-                    </div>
-                    <div class="u-content case-card__text">
-                      <p>Как делать в день больше миллиона охвата: кейс METI agency и Familia</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </div>
-            <div class="row__col--2 portfolio__list-col">
-              <article class="case-card portfolio__list-card">
-                <div class="case-card__inner">
-                  <div class="case-card__media">
-                    @@include('html/helpers/picture.html', {
-                      "resolution": "lg",
-                      "name": "case-card-1",
-                      "alt": "Zone 51",
-                      "width": "497",
-                      "height": "607",
-                      "class": "case-card__picture",
-                      "useWebp": false,
-                      "fallbackFormat": "jpg",
-                      "grid": "40",
-                      "mouse": ".1",
-                      "strength": ".04",
-                      "relaxation": ".94"
-                    })
-                  </div>
-                  <div class="case-card__content">
-                    <div class="case-card__header">
-                      <h3 class="fs-4 case-card__title">
-                        <a href="#" class="case-card__link">Zone 51</a>
-                      </h3>
-                      <span class="box-square case-card__header-pixel"></span>
-                    </div>
-                    <div class="u-content case-card__text">
-                      <p>Разгон с 0 до 26 000 подписчиков в Telegram</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- portfolio END -->
-      <!-- benefits BEGIN -->
-      <section class="benefits">
-        <div class="container benefits__container">
-          <div class="row benefits__row">
-            <div class="row__col--7 benefits__col benefits__col--title">
-              <h2 class="u-suptitle benefits__title">[Почему мы]</h2>
-            </div>
-            <div class="row__col--7 benefits__col benefits__col--subtitle">
-              <h3 class="benefits__subtitle">
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">Наши клиенты —</span>
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">наши стратегические</span>
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">партнеры. В тесном</span>
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">сотрудничестве</span>
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">мы решаем большой спектр</span>
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">маркетинговых задач,</span>
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">погружаясь</span>
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">в бренд на уровне</span>
-                <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48" data-stagger=".14">его команды</span>
-              </h3>
-            </div>
-            <div class="row__col--4 benefits__col benefits__col--content">
-              <div class="u-content benefits__content">
-                <p data-timeline="benefits" data-animate="fade-up" data-delay="1.4" data-duration=".48" data-stagger=".2">Не довольствуясь средними результатами, мы каждый день бросаем вызов «хорошему», чтобы сделать «лучшее».</p>
-                <p data-timeline="benefits" data-animate="fade-up" data-delay="1.4" data-duration=".48" data-stagger=".2">Именно такой подход позволяет нам&nbsp;обеспечивать устойчивый рост качества восприятия брендов-партнеров и&nbsp;их бизнес-показателей.</p>
-              </div>
-            </div>
-          </div>
-          <svg class="u-icon benefits__decor benefits__decor--1">
-            <use xlink:href="images/icons/icons.svg#decor-4"></use>
-          </svg>
-        </div>
-      </section>
-      <!-- benefits END -->
-      <!-- our-clients BEGIN -->
-      <section class="our-clients">
-        <div class="container our-clients__container">
-          <div class="our-clients__header">
-            <h2 class="u-suptitle our-clients__title">[Клиенты]</h2>
-            <h3 class="fs-2 our-clients__subtitle">
-              <span>Мен<span class="ff-code">я</span>ем</span>
-              <br>
-              <span>м<span class="ff-code">и</span>р</span> <span class="ff-code">с...</span>
+          <div class="row__col--5 about__col about__col--subtitle">
+            <h3 class="about__subtitle">
+              <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7"
+                data-stagger=".12">Креативные</span>
+              <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7" data-stagger=".12">и
+                эффективные.</span>
+              <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7"
+                data-stagger=".12">команда</span>
+              <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7"
+                data-stagger=".12">профессионалов</span>
+              <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7"
+                data-stagger=".12">уровня</span>
+              <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7"
+                data-stagger=".12">сетевых рекламных</span>
+              <span data-timeline="about" data-animate="fade-up" data-delay=".3" data-duration=".7"
+                data-stagger=".12">агентств</span>
             </h3>
           </div>
-          <div class="our-clients__marquee-wrapper">
-            <div class="our-clients__marquee">
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-1.svg" class="js-inlinesvg" width="338" height="126" alt="Familiq">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-2.svg" class="js-inlinesvg" width="338" height="126" alt="Литрес">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-3.svg" class="js-inlinesvg" width="338" height="126" alt="Крошка картошка">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-4.svg" class="js-inlinesvg" width="338" height="126" alt="Додо Пицца">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-5.svg" class="js-inlinesvg" width="338" height="126" alt="OK">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-6.svg" class="js-inlinesvg" width="338" height="126" alt="Spirit.fitness">
-                </picture>
-              </div>
+          <div class="row__col--2 about__col about__col--media">
+            <div class="about__media">
+              @@include('html/helpers/picture.html', {
+              "resolution": "lg",
+              "name": "about-hero",
+              "alt": "[Привет, это METI]",
+              "width": "497",
+              "height": "276",
+              "class": "js-glsl-effect glsl-effect",
+              "useWebp": false,
+              "fallbackFormat": "jpg",
+              "grid": "20",
+              "mouse": ".3",
+              "strength": ".2",
+              "relaxation": ".94",
+              })
             </div>
-            <div class="our-clients__marquee">
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-7.svg" class="js-inlinesvg" width="338" height="126" alt="Crocus Fitness">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-8.svg" class="js-inlinesvg" width="338" height="126" alt="Zone 51">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-9.svg" class="js-inlinesvg" width="338" height="126" alt="ThunderX3">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-10.svg" class="js-inlinesvg" width="338" height="126" alt="Coguar">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-11.svg" class="js-inlinesvg" width="338" height="126" alt="Restore">
-                </picture>
-              </div>
-              <div class="our-clients__marquee-card">
-                <span class="our-clients__marquee-card-overlay"></span>
-                <picture class="our-clients__marquee-logo">
-                  <img src="images/svg/our-clients-logo-12.svg" class="js-inlinesvg" width="338" height="126" alt="Spirit.fitness">
-                </picture>
-              </div>
+          </div>
+          <div class="row__col--4 about__col about__col--content">
+            <div class="u-content about__content">
+              <p data-timeline="about2" data-animate="fade-up" data-delay="1.2" data-duration="0.8" data-stagger=".8">Мы
+                объединены общей миссией раскрывать потенциал бренда и человека, создавая среду, благоприятную для
+                развития бизнеса и общества.</p>
+              <p data-timeline="about2" data-animate="fade-up" data-delay="1.2" data-duration="0.8" data-stagger=".8">
+                Используя digital-инструменты и&nbsp;креативный капитал нашей команды, мы&nbsp;помогаем компаниям
+                и&nbsp;их&nbsp;руководителям достигать свои&nbsp;бизнес-цели.</p>
             </div>
           </div>
         </div>
-        <div class="our-clients__decor-wrapper">
-          <svg class="u-icon our-clients__decor our-clients__decor--1">
-            <use xlink:href="images/icons/icons.svg#decor-5"></use>
-          </svg>
-          <svg class="u-icon our-clients__decor our-clients__decor--2">
-            <use xlink:href="images/icons/icons.svg#decor-3"></use>
-          </svg>
-          <svg class="u-icon our-clients__decor our-clients__decor--3">
-            <use xlink:href="images/icons/icons.svg#decor-2"></use>
-          </svg>
-        </div>
-      </section>
-      <!-- our-clients END -->
-      <!-- awards BEGIN -->
-      <section class="awards">
-        <div class="container awards__container">
-          <h2 class="u-suptitle awards__title">[Наши награды]</h2>
-          <div class="awards__list">
-            <article class="awards-card awards__list-card">
-              <div class="row awards-card__row">
-                <div class="row__col--2 awards-card__col awards-card__col--media">
-                  <div class="awards-card__media">
-                    <picture class="awards-card__picture">
-                      <img src="images/awards-card-1.svg" width="220" height="220" alt="Шорт-лист">
-                    </picture>
-                  </div>
-                </div>
-                <div class="row__col--5 awards-card__col awards-card__col--content">
-                  <div class="awards-card__content">
-                    <header class="awards-card__header">
-                      <h3 class="fs-4 awards-card__title">
-                        <a href="#" class="awards-card__link">Шорт-лист</a>
-                      </h3>
-                      <span class="box-square awards-card__box-square"></span>
-                    </header>
-                    <ul class="awards-card__nomination">
-                      <li>Лучшая компания</li>
-                      <li>Креатив за 2 недели</li>
-                      <li>Tagline Awards 2024</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="awards-card awards__list-card">
-              <div class="row awards-card__row">
-                <div class="row__col--2 awards-card__col awards-card__col--media">
-                  <div class="awards-card__media">
-                    <picture class="awards-card__picture">
-                      <img src="images/awards-card-1.svg" width="220" height="220" alt="Номинация">
-                    </picture>
-                  </div>
-                </div>
-                <div class="row__col--5 awards-card__col awards-card__col--content">
-                  <div class="awards-card__content">
-                    <header class="awards-card__header">
-                      <h3 class="fs-4 awards-card__title">
-                        <a href="#" class="awards-card__link">Номинация</a>
-                      </h3>
-                      <span class="box-square awards-card__box-square"></span>
-                    </header>
-                    <ul class="awards-card__nomination">
-                      <li>Social Media</li>
-                      <li>Таргетированные кампании в соцсетях</li>
-                      <li>Tagline Awards 2024</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="awards-card awards__list-card">
-              <div class="row awards-card__row">
-                <div class="row__col--2 awards-card__col awards-card__col--media">
-                  <div class="awards-card__media">
-                    <picture class="awards-card__picture">
-                      <img src="images/awards-card-1.svg" width="220" height="220" alt="Номинация">
-                    </picture>
-                  </div>
-                </div>
-                <div class="row__col--5 awards-card__col awards-card__col--content">
-                  <div class="awards-card__content">
-                    <header class="awards-card__header">
-                      <h3 class="fs-4 awards-card__title">
-                        <a href="#" class="awards-card__link">Номинация</a>
-                      </h3>
-                      <span class="box-square awards-card__box-square"></span>
-                    </header>
-                    <ul class="awards-card__nomination">
-                      <li>«Сапожник с сапогами»</li>
-                      <li>Коммуникация</li>
-                      <li>Tagline Awards 2024</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </article>
+      </div>
+    </section>
+    <!-- about END -->
+    <!-- services BEGIN -->
+    <section class="services">
+      <div class="container services__container">
+        <h2 class="u-suptitle services__title">[Привет, это METI]</h2>
+        <div class="services__list">
+          <span id="number"></span>
+          <svg id="interactive-grid" width="562" height="562" viewBox="0 0 562 562"></svg>
+          <div class="services__list-titles">
+            <h3>
+              Спе
+              <span>ц</span>
+              пр
+              <span>о</span>
+              ект
+              <span>ы</span>
+            </h3>
+            <h3>
+              S
+              <span>M</span>
+              m
+            </h3>
+            <h3>
+              Ан
+              <span>а</span>
+              лит
+              <span>и</span>
+              ка
+            </h3>
+            <h3>
+              i
+              <span>n</span>
+              fluen
+              <span>c</span>
+              e
+              <br>
+              ma
+              <span>r</span>
+              keti
+              <span>n</span>
+              g
+            </h3>
+            <h3>
+              Ст
+              <span>р</span>
+              атег
+              <span>и</span>
+              и
+            </h3>
+            <h3>
+              К
+              <span>р</span>
+              еат
+              <span>и</span>
+              в
+            </h3>
+            <h3>
+              ви
+              <span>д</span>
+              е
+              <span>о</span>
+              -
+              <br>
+              пр
+              <span>о</span>
+              дак
+              <span>ш</span>
+              н
+            </h3>
+            <h3>
+              Ф
+              <span>о</span>
+              т
+              <span>о</span>
+              -
+              <br>
+              пр
+              <span>о</span>
+              дак
+              <span>ш</span>
+              н
+            </h3>
+            <h3>
+              д
+              <span>и</span>
+              за
+              <span>й</span>
+              н
+              <br>
+              <span>и</span> 
+              б
+              <span>р</span>
+              енд
+              <span>и</span>
+              нг
+            </h3>
+          </div>
+          <div class="services__list-desc">
+            <p>Разрабатываем продукты
+и проекты с креативным подходом, стратегическим мышлением
+и тщательным планированием</p>
+            <p>Управляем присутствием
+бренда в социальных сетях, продвигаем, создаём контент
+и взаимодействуем с аудиторией</p>
+            <p>Собираем и анализируем
+данные о рынке, аудитории
+и эффективности
+коммуникационных кампаний</p>
+            <p>Привлекаем медийных личностей
+и блогерами для продвижения бренда, создания доверия
+и увеличения охвата аудитории</p>
+            <p>Продумываем комплексные стратегии, учитывающие цели бизнеса, целевую аудиторию
+и конкурентную среду</p>
+            <p>Реализуем оригинальные идеи
+и концепции для рекламных кампаний, мероприятий и других коммуникационных активностей</p>
+            <p>Производим видеоконтент
+для рекламы и социальных медиа, корпоративные фильмы,
+от сценария до пост-продакшна</p>
+            <p>Создаём высококачественные фотосессии для рекламных кампаний, каталогов
+и социальных сетей</p>
+            <p>Проектируем визуальную идентичность бренда, включая логотипы, упаковку, и рекламные маркетинговые материалы</p>
           </div>
         </div>
-      </section>
-      <!-- awards END -->
-      <!-- footer BEGIN -->
-      @@include('html/components/footer.html', {
-        'el': 'site__footer'
-      })
-      <!-- footer END -->
-    </main>
+      </div>
+    </section>
+    <!-- services END -->
+    <!-- showreel BEGIN -->
+    <section class="showreel">
+      <div class="container showreel__container">
+        <h2 class="visually-hidden">[Видео о METI]</h2>
+      </div>
+      <div class="showreel__video-wrapper">
+        <video class="showreel__video" muted loop autoplay playsinline preload="auto"
+          poster="images/showreel-poster.jpg">
+          <source src="static/videos/showreel.webm" type="video/webm">
+          <source src="static/videos/showreel.mp4" type="video/mp4">
+        </video>
+        <div class="logo showreel__video-logo">
+          <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg" class="logo__img">
+            <path d="M0 0H48.789V50H33.5598V15.6073H32.0091V50H16.7799V15.6073H15.2293V50H0V0Z" fill="currentColor" />
+            <path d="M50.4037 0H99.1927V15.6073H65.6329V17.1964H99.1927V32.8036H65.6329V34.3927H99.1927V50H50.4037V0Z"
+              fill="currentColor" />
+            <path d="M100.807 0H149.596V15.6073H132.816V50H117.587V15.6073H100.807V0Z" fill="currentColor" />
+            <path d="M151.211 0H200V15.6073H183.22V34.3927H200V50H151.211V34.3927H167.991V15.6073H151.211V0Z"
+              fill="currentColor" />
+          </svg>
+        </div>
+        <div class="showreel__wrap">
+          <canvas id="grid-canvas-video"></canvas>
+        </div>
+      </div>
+    </section>
+    <!-- showreel END -->
+    <!-- portfolio BEGIN -->
 
-    @@include('html/modal.html')
-    @@include('html/script.html')
-  </body>
+    <section class="portfolio">
+      <div class="container portfolio__container">
+        <div class="portfolio__header">
+          <h2 class="u-suptitle portfolio__title">[Портфолио]</h2>
+          <p class="u-suptitle portfolio__suptitle">[2021 - 2025]</p>
+        </div>
+        <div class="portfolio__marquee-wrapper">
+          <div class="u-title fs-1 portfolio__marquee stroke_container">
+            <p class="portfolio__marquee-title">Ке<span>й</span>сы</p>
+            <p class="portfolio__marquee-title">Ке<span>й</span>сы</p>
+            <p class="portfolio__marquee-title">Ке<span>й</span>сы</p>
+            <p class="portfolio__marquee-title">Ке<span>й</span>сы</p>
+            <p class="portfolio__marquee-title">Ке<span>й</span>сы</p>
+            <p class="portfolio__marquee-title">Ке<span>й</span>сы</p>
+            <p class="portfolio__marquee-title">Ке<span>й</span>сы</p>
+          </div>
+        </div>
+        <div class="row portfolio__list">
+          <div class="row__col--3 portfolio__list-col">
+            <article class="case-card portfolio__list-card">
+              <div class="case-card__inner">
+                <div class="case-card__media">
+                  @@include('html/helpers/picture.html', {
+                  "resolution": "lg",
+                  "name": "case-card-1",
+                  "alt": "Familia",
+                  "width": "766",
+                  "height": "875",
+                  "class": "case-card__picture",
+                  "useWebp": false,
+                  "fallbackFormat": "jpg",
+                  "grid": "40",
+                  "mouse": ".1",
+                  "strength": ".04",
+                  "relaxation": ".94"
+                  })
+                </div>
+                <div class="case-card__content">
+                  <div class="case-card__header">
+                    <h3 class="fs-4 case-card__title">
+                      <a href="#" class="case-card__link">Familia</a>
+                    </h3>
+                    <span class="box-square case-card__header-pixel"></span>
+                  </div>
+                  <div class="u-content case-card__text">
+                    <p>Как делать в день больше миллиона охвата: кейс METI agency и Familia</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="row__col--2 portfolio__list-col">
+            <article class="case-card portfolio__list-card">
+              <div class="case-card__inner">
+                <div class="case-card__media">
+                  @@include('html/helpers/picture.html', {
+                  "resolution": "lg",
+                  "name": "case-card-2",
+                  "alt": "Zone 51",
+                  "width": "497",
+                  "height": "607",
+                  "class": "case-card__picture",
+                  "useWebp": false,
+                  "fallbackFormat": "jpg",
+                  "grid": "40",
+                  "mouse": ".1",
+                  "strength": ".04",
+                  "relaxation": ".94"
+                  })
+                </div>
+                <div class="case-card__content">
+                  <div class="case-card__header">
+                    <h3 class="fs-4 case-card__title">
+                      <a href="#" class="case-card__link">Zone 51</a>
+                    </h3>
+                    <span class="box-square case-card__header-pixel"></span>
+                  </div>
+                  <div class="u-content case-card__text">
+                    <p>Разгон с 0 до 26 000 подписчиков в Telegram</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="row__col--3 portfolio__list-col">
+            <article class="case-card portfolio__list-card">
+              <div class="case-card__inner">
+                <div class="case-card__media">
+                  @@include('html/helpers/picture.html', {
+                  "resolution": "lg",
+                  "name": "case-card-2",
+                  "alt": "Familia",
+                  "width": "766",
+                  "height": "875",
+                  "class": "case-card__picture",
+                  "useWebp": false,
+                  "fallbackFormat": "jpg",
+                  "grid": "40",
+                  "mouse": ".1",
+                  "strength": ".04",
+                  "relaxation": ".94"
+                  })
+                </div>
+                <div class="case-card__content">
+                  <div class="case-card__header">
+                    <h3 class="fs-4 case-card__title">
+                      <a href="#" class="case-card__link">Familia</a>
+                    </h3>
+                    <span class="box-square case-card__header-pixel"></span>
+                  </div>
+                  <div class="u-content case-card__text">
+                    <p>Как делать в день больше миллиона охвата: кейс METI agency и Familia</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="row__col--2 portfolio__list-col">
+            <article class="case-card portfolio__list-card">
+              <div class="case-card__inner">
+                <div class="case-card__media">
+                  @@include('html/helpers/picture.html', {
+                  "resolution": "lg",
+                  "name": "case-card-1",
+                  "alt": "Zone 51",
+                  "width": "497",
+                  "height": "607",
+                  "class": "case-card__picture",
+                  "useWebp": false,
+                  "fallbackFormat": "jpg",
+                  "grid": "40",
+                  "mouse": ".1",
+                  "strength": ".04",
+                  "relaxation": ".94"
+                  })
+                </div>
+                <div class="case-card__content">
+                  <div class="case-card__header">
+                    <h3 class="fs-4 case-card__title">
+                      <a href="#" class="case-card__link">Zone 51</a>
+                    </h3>
+                    <span class="box-square case-card__header-pixel"></span>
+                  </div>
+                  <div class="u-content case-card__text">
+                    <p>Разгон с 0 до 26 000 подписчиков в Telegram</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- portfolio END -->
+    <!-- benefits BEGIN -->
+    <section class="benefits">
+      <div class="container benefits__container">
+        <div class="row benefits__row">
+          <div class="row__col--7 benefits__col benefits__col--title">
+            <h2 class="u-suptitle benefits__title">[Почему мы]</h2>
+          </div>
+          <div class="row__col--7 benefits__col benefits__col--subtitle">
+            <h3 class="benefits__subtitle">
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">Наши клиенты —</span>
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">наши стратегические</span>
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">партнеры. В тесном</span>
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">сотрудничестве</span>
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">мы решаем большой спектр</span>
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">маркетинговых задач,</span>
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">погружаясь</span>
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">в бренд на уровне</span>
+              <span data-timeline="benefits" data-animate="fade-up" data-delay=".1" data-duration=".48"
+                data-stagger=".14">его команды</span>
+            </h3>
+          </div>
+          <div class="row__col--4 benefits__col benefits__col--content">
+            <div class="u-content benefits__content">
+              <p data-timeline="benefits" data-animate="fade-up" data-delay="1.4" data-duration=".48" data-stagger=".2">
+                Не довольствуясь средними результатами, мы каждый день бросаем вызов «хорошему», чтобы сделать «лучшее».
+              </p>
+              <p data-timeline="benefits" data-animate="fade-up" data-delay="1.4" data-duration=".48" data-stagger=".2">
+                Именно такой подход позволяет нам&nbsp;обеспечивать устойчивый рост качества восприятия
+                брендов-партнеров и&nbsp;их бизнес-показателей.</p>
+            </div>
+          </div>
+        </div>
+        <svg class="u-icon benefits__decor benefits__decor--1">
+          <use xlink:href="images/icons/icons.svg#decor-4"></use>
+        </svg>
+      </div>
+    </section>
+    <!-- benefits END -->
+    <!-- our-clients BEGIN -->
+    <section class="our-clients">
+      <div class="container our-clients__container">
+        <div class="our-clients__header">
+          <h2 class="u-suptitle our-clients__title">[Клиенты]</h2>
+          <h3 class="fs-2 our-clients__subtitle">
+            <span>Мен<span class="ff-code">я</span>ем</span>
+            <br>
+            <span>м<span class="ff-code">и</span>р</span> <span class="ff-code">с...</span>
+          </h3>
+        </div>
+        <div class="our-clients__marquee-wrapper">
+          <div class="our-clients__marquee">
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-1.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Familiq">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-2.svg" class="js-inlinesvg" width="338" height="126" alt="Литрес">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-3.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Крошка картошка">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-4.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Додо Пицца">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-5.svg" class="js-inlinesvg" width="338" height="126" alt="OK">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-6.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Spirit.fitness">
+              </picture>
+            </div>
+          </div>
+          <div class="our-clients__marquee">
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-7.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Crocus Fitness">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-8.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Zone 51">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-9.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="ThunderX3">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-10.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Coguar">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-11.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Restore">
+              </picture>
+            </div>
+            <div class="our-clients__marquee-card">
+              <span class="our-clients__marquee-card-overlay"></span>
+              <picture class="our-clients__marquee-logo">
+                <img src="images/svg/our-clients-logo-12.svg" class="js-inlinesvg" width="338" height="126"
+                  alt="Spirit.fitness">
+              </picture>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="our-clients__decor-wrapper">
+        <svg class="u-icon our-clients__decor our-clients__decor--1">
+          <use xlink:href="images/icons/icons.svg#decor-5"></use>
+        </svg>
+        <svg class="u-icon our-clients__decor our-clients__decor--2">
+          <use xlink:href="images/icons/icons.svg#decor-3"></use>
+        </svg>
+        <svg class="u-icon our-clients__decor our-clients__decor--3">
+          <use xlink:href="images/icons/icons.svg#decor-2"></use>
+        </svg>
+      </div>
+    </section>
+    <!-- our-clients END -->
+    <!-- awards BEGIN -->
+    <section class="awards">
+      <div class="container awards__container">
+        <h2 class="u-suptitle awards__title">[Наши награды]</h2>
+        <div class="awards__list">
+          <article class="awards-card awards__list-card">
+            <div class="row awards-card__row">
+              <div class="row__col--2 awards-card__col awards-card__col--media">
+                <div class="awards-card__media">
+                  <picture class="awards-card__picture">
+                    <img src="images/awards-card-1.svg" width="220" height="220" alt="Шорт-лист">
+                  </picture>
+                </div>
+              </div>
+              <div class="row__col--5 awards-card__col awards-card__col--content">
+                <div class="awards-card__content">
+                  <header class="awards-card__header">
+                    <h3 class="fs-4 awards-card__title">
+                      <a href="#" class="awards-card__link">Шорт-лист</a>
+                    </h3>
+                    <span class="box-square awards-card__box-square"></span>
+                  </header>
+                  <ul class="awards-card__nomination">
+                    <li>Лучшая компания</li>
+                    <li>Креатив за 2 недели</li>
+                    <li>Tagline Awards 2024</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="awards-card awards__list-card">
+            <div class="row awards-card__row">
+              <div class="row__col--2 awards-card__col awards-card__col--media">
+                <div class="awards-card__media">
+                  <picture class="awards-card__picture">
+                    <img src="images/awards-card-1.svg" width="220" height="220" alt="Номинация">
+                  </picture>
+                </div>
+              </div>
+              <div class="row__col--5 awards-card__col awards-card__col--content">
+                <div class="awards-card__content">
+                  <header class="awards-card__header">
+                    <h3 class="fs-4 awards-card__title">
+                      <a href="#" class="awards-card__link">Номинация</a>
+                    </h3>
+                    <span class="box-square awards-card__box-square"></span>
+                  </header>
+                  <ul class="awards-card__nomination">
+                    <li>Social Media</li>
+                    <li>Таргетированные кампании в соцсетях</li>
+                    <li>Tagline Awards 2024</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="awards-card awards__list-card">
+            <div class="row awards-card__row">
+              <div class="row__col--2 awards-card__col awards-card__col--media">
+                <div class="awards-card__media">
+                  <picture class="awards-card__picture">
+                    <img src="images/awards-card-1.svg" width="220" height="220" alt="Номинация">
+                  </picture>
+                </div>
+              </div>
+              <div class="row__col--5 awards-card__col awards-card__col--content">
+                <div class="awards-card__content">
+                  <header class="awards-card__header">
+                    <h3 class="fs-4 awards-card__title">
+                      <a href="#" class="awards-card__link">Номинация</a>
+                    </h3>
+                    <span class="box-square awards-card__box-square"></span>
+                  </header>
+                  <ul class="awards-card__nomination">
+                    <li>«Сапожник с сапогами»</li>
+                    <li>Коммуникация</li>
+                    <li>Tagline Awards 2024</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="feedback">
+      <div id="feedback_top" class="feedback__top">
+        <canvas id="grid-canvas"></canvas>
+      </div>
+      <div class="feedback__bot">
+        <div class="title">
+          <div class="main__title">
+            <h3>[Контакты]</h3>
+            <h2>
+              об
+              <span>с</span>
+              уд
+              <span>и</span>
+              м
+              <span>?</span>
+            </h2>
+          </div>
+          <div class="contacts">
+            <a href="">
+              +7(916)204-13-95
+            </a>
+            <a href="">
+              сeo@metigroup.ru
+            </a>
+          </div>
+        </div>
+        <img class="main_img" src="./images/feedback/1.png" alt="">
+        <img class="soft_img" src="./images/feedback/2.png" alt="">
+        <div class="form_wrap">
+          <div class="form_wrap-title">
+            <span>[оставьте заявку]</span>
+            <p>Привет, Meti!</p>
+          </div>
+          <form action="" class="feedback__bot-form">
+            <div class="inputs">
+              <div class="wrap">
+                <span>Меня зовут</span>
+                <input placeholder="Имя" type="text">
+                <span>.</span>
+              </div>
+              <div class="wrap">
+                <span>Я</span>
+                <input placeholder="Должность" type="text">
+                <span>компании</span>
+              </div>
+              <div class="wrap">
+                <input placeholder="наименование бренда" type="text">
+                <span>.</span>
+              </div>
+              <div class="wrap">
+                <span>ответьте мне на</span>
+              </div>
+              <div class="wrap">
+                <input placeholder="Email" type="email">
+                <span>,</span>
+              </div>
+              <div class="wrap">
+                <span>или позвоните</span>
+              </div>
+              <div class="wrap">
+                <span>на номер</span>
+                <input placeholder="Телефон" type="tel">
+                <span>.</span>
+              </div>
+            </div>
+            <button>
+              отправить
+            </button>
+            <p>
+              Нажимая на кнопку «Отправить», вы подтверждаете <br>
+              свое согласие на обработку персональных данных
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- awards END -->
+    <!-- footer BEGIN -->
+    @@include('html/components/footer.html', {
+    'el': 'site__footer'
+    })
+    <!-- footer END -->
+  </main>
+
+  @@include('html/modal.html')
+  @@include('html/script.html')
+</body>
+
 </html>
