@@ -24,16 +24,12 @@ import { AnimateOnScroll } from './modules/AnimateOnScroll.js';
 import CustomCursor from './modules/CustomCursor.js';
 import HeaderBtnToggle from './modules/HeaderBtnToggle.js';
 import PopupManager from './modules/PopupManager.js';
-<<<<<<< HEAD
 import Feedback from './modules/FeedbackOnScroll.js';
 import Video from './modules/AnimateOnScrollVideo.js';
 import Intro from './modules/AnimateonScrollIntro.js';
 import About from './modules/AboutCursore.js';
 import Services from './modules/AnimationServices.js';
-=======
 import HeaderStickyToggle from './modules/HeaderStickyToggle.js';
-
->>>>>>> a6354e41a904a0bf61c7875fecdc91fe4fd44613
 // Sketch img effect
 import Sketch from './modules/Sketch.js';
 
