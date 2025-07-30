@@ -1,4 +1,5 @@
 $siteResolution: 1px;
+$siteResolution: .05208333333vw;
 $mainFont: 'Martian Mono';
 $onestFont: 'Onest';
 $chavaFont: 'Chava';
@@ -21,9 +22,12 @@ $whiteColor: #ffffff;
 $whiteLightColor: #f4f4f4;
 $blackColor: #000000;
 $greyDarkColor: #272727;
-$redColor: #F02121;
+$redColor: #C94E4E;
 $purpleColor: #3F2BA6;
+$purpleLightColor: #8A7CD4;
+$purpleMediumColor: #624EC9;
 $borderColor: rgba($whiteLightColor, .16);
+$borderHoverColor: rgba($whiteLightColor, 1);
 $accentColor: $purpleColor;
 
 $bgSite: $blackColor;
@@ -52,16 +56,16 @@ $xs: 576px;
 $xs-mf: $xs + 1;
 
 :root {
-  --fs-default: 16px;
-  --fs-1: 280px;
-  --fs-2: 160px;
-  --fs-3: 80px;
-  --fs-4: 48px;
-  --fs-5: 18px;
-  --fs-6: 16px;
-  --fs-7: 14px;
-  --fs-8: 12px;
-  --fs-9: 10px;
+  --fs-default: 16rem;
+  --fs-1: 280rem;
+  --fs-2: 160rem;
+  --fs-3: 80rem;
+  --fs-4: 48rem;
+  --fs-5: 18rem;
+  --fs-6: 16rem;
+  --fs-7: 14rem;
+  --fs-8: 12rem;
+  --fs-9: 10rem;
 
   --gap: 20rem;
   --gap-: -20rem;
@@ -84,6 +88,22 @@ $xs-mf: $xs + 1;
   --col-width: calc(100% / var(--col-count));
 
   --vh: 1vh;
+
+    --grid-background-color: #000;
+    --grid-square-border-default-color: rgba(255, 255, 255, 0);
+    --grid-square-border-highlight-color: rgba(255, 255, 255, .4);
+    --grid-square-highlight-start-color: rgba(255, 255, 255, 0);
+    --grid-square-highlight-end-color: rgba(255, 255, 255, 0);
+
+    --grid-square-size: var(--pixel-size);
+
+    --grid-fade-out-duration: 0.2s;
+    --grid-hover-fade-in-speed: 0.1;
+    --grid-cursor-influence-radius: 150rem;
+    --grid-no-move-fade-delay: 1s;
+    --grid-no-move-fade-duration: .5s;
+    --grid-randomness-factor: 0.6;
+
   @media (min-width: $sm-mf) {
     --grid-gap: 20rem;
   }

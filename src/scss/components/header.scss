@@ -7,9 +7,18 @@
   position: fixed;
   top: 0;
   left: 0;
+<<<<<<< HEAD
   z-index: 998;
   mix-blend-mode: difference !important;
   transition: all 0.5s ease;
+=======
+  transition: $transition;
+  will-change: transform;
+  z-index: 10001;
+  &.is-hidden {
+    transform: translateY(-100%);
+  }
+>>>>>>> a6354e41a904a0bf61c7875fecdc91fe4fd44613
   &__container {
     display: flex;
     justify-content: space-between;
@@ -30,14 +39,21 @@
   }
 
   &__logo {
+<<<<<<< HEAD
     flex-shrink: 0;
 
     svg {}
+=======
+>>>>>>> a6354e41a904a0bf61c7875fecdc91fe4fd44613
   }
 
   &__dropdown {
     display: flex;
     align-items: center;
+    transition: $transition;
+    transition-duration: 1.4s;
+    transition-delay: .4s;
+    transition-property: visibility, opacity;
   }
 
   &__nav {
@@ -63,5 +79,22 @@
   &__language-switcher {
     flex-shrink: 0;
     text-transform: uppercase;
+  }
+}
+
+#js-preloader:not(.is-hide) ~ #root {
+  .header__dropdown {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .header__logo {
+  }
+}
+
+
+#js-preloader.is-hide ~ #root {
+  .header__dropdown {
+  }
+  .header__logo {
   }
 }
