@@ -1,0 +1,112 @@
+.footer {
+    width: 100%;
+    background: var(--main);
+    padding-bottom: 40px;
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        overflow: hidden;
+
+        &-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+
+            span {
+                font-weight: 300;
+                font-size: 14px;
+                line-height: 20px;
+                letter-spacing: 0%;
+                text-transform: uppercase;
+                color: var(--white);
+            }
+
+            .menus {
+                ul {
+                    display: flex;
+                    align-items: center;
+                    gap: 213px;
+
+                    li {
+                        font-weight: 300;
+                        font-size: 14px;
+                        leading-trim: NONE;
+                        line-height: 20px;
+                        letter-spacing: 0%;
+                        text-align: center;
+                        text-transform: uppercase;
+                        color: var(--white);
+                        list-style: none;
+                    }
+                }
+            }
+        }
+
+        .stroke {
+            font-family: var(--onest);
+            font-weight: 570;
+            font-size: 280px;
+            line-height: 280px;
+            letter-spacing: -4%;
+            text-transform: uppercase;
+            color: var(--white);
+            white-space: nowrap;
+            animation: linear infinite 10s animFooter;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 20px;
+            will-change: transform;
+            perspective: 1000px;
+            -webkit-backface-visibility: hidden;
+            -webkit-transform-style: preserve-3d;
+
+            span {
+                font-family: var(--chava);
+                font-weight: 400;
+                font-size: 275px;
+                line-height: 247px;
+                letter-spacing: 0%;
+                text-transform: uppercase;
+            }
+        }
+
+        &-bottom {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            span {
+                font-weight: 300;
+                font-size: 14px;
+                leading-trim: NONE;
+                line-height: 20px;
+                letter-spacing: 0%;
+                text-transform: uppercase;
+                color: var(--white);
+            }
+
+            p {
+                font-weight: 300;
+                font-size: 14px;
+                line-height: 20px;
+                letter-spacing: 0%;
+                text-align: right;
+                text-transform: uppercase;
+                color: var(--white);
+            }
+        }
+    }
+}
+
+@keyframes animFooter {
+    from {
+        transform: translateX(0%);
+    }
+
+    to {
+        transform: translate(-149.3%);
+    }
+}

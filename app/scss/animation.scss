@@ -1,0 +1,92 @@
+.about__body-right .text__wrap {
+  @for $i from 1 through 7 {
+    span:nth-child(#{$i}) {
+      opacity: 0;
+      transform: translateY(-5%);
+      transition: all 0.5s ease ($i * 0.2s);
+    }
+  }
+}
+.about__body-right .text__wrap span.element-show {
+    opacity: 1;
+    transform: translateY(0%);
+}
+.description__wrap p{
+    opacity: 0;
+    transform: translateY(-10%);
+    transition: all 0.5s ease;
+}
+.description__wrap p.element-show{
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+
+
+.benefits__subtitle {
+  @for $i from 1 through 12 {
+    span:nth-child(#{$i}) {
+      opacity: 0;
+      transform: translateY(-5%);
+      transition: all 0.5s ease ($i * 0.2s);
+    }
+  }
+}
+.benefits__subtitle span.element-show {
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+.benefits__content p{
+    opacity: 0;
+    transform: translateY(-10%);
+    transition: all 0.5s ease;
+}
+.benefits__content p.element-show{
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+
+.client {
+  @for $i from 1 through 3 {
+    .client__decor:nth-child(#{$i}) {
+      opacity: 0;
+      transform: translateY(-15%);
+      transition: all 0.5s ease ($i * 0.2s);
+    }
+  }
+}
+.client .client__decor.element-show{
+    opacity: 1 !important;
+    transform: translateY(0%) !important;
+}
+
+
+.awards__body-block {
+  @for $i from 1 through 4 {
+    .item:nth-child(#{$i}) {
+      opacity: 0;
+      transform: translateY(-5%);
+      transition: all 0.5s ease ($i * 0.2s);
+    }
+  }
+}
+.awards__body-block .item.element-show{
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+.inputs {
+  @for $i from 1 through 7 {
+    .wrap:nth-child(#{$i}) {
+      opacity: 0;
+      transform: translateY(-5%);
+      transition: all 0.5s ease ($i * 0.2s);
+    }
+  }
+}
+.inputs .wrap.element-show{
+    opacity: 1;
+    transform: translateY(0%);
+}
