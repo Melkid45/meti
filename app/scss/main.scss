@@ -1,7 +1,46 @@
+#gridCanvas {
+    pointer-events: none;
+}
+
+.preload-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+    }
+    
+    img {
+        width: 320px;
+        height: 80px;
+        position: absolute;
+        z-index: 10001;
+        will-change: transform; /* Для оптимизации анимации */
+        transform: translateZ(0); /* Аппаратное ускорение */
+    }
+}
+
 .main {
     width: 100%;
     height: 100vh;
     position: relative;
+
+    video {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
 
     canvas {
         width: 100%;
@@ -25,7 +64,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-
+            position: relative;
+            z-index: 1;
             span {
                 font-weight: 300;
                 font-size: 16px;
@@ -141,13 +181,18 @@
                 color: var(--white);
             }
 
-            .canvas-container {
+            .about-parallax {
                 width: 497px;
                 height: 276px;
+                position: relative;
 
-                canvas {
+                #pixelCanvas {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
                     width: 100%;
                     height: 100%;
+                    object-fit: cover;
                 }
             }
         }
@@ -259,11 +304,12 @@
 
             &-desc {
                 position: absolute;
-                bottom: 34px;
-                right: 0px;
-
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: flex-end;
+                justify-content: flex-end;
                 p {
-                    display: none;
                     transition: opacity 0.3s ease;
                     text-align: start;
                     font-weight: 300;
@@ -272,6 +318,9 @@
                     letter-spacing: 0%;
                     color: var(--white);
                     max-width: 448px;
+                    position: absolute;
+                    bottom: 32px;
+                    right: 0;
                 }
             }
 
@@ -281,6 +330,7 @@
                 align-items: center;
                 justify-content: center;
                 width: 100%;
+                height: 100%;
 
                 h3 {
                     font-family: var(--onest);
@@ -290,13 +340,13 @@
                     letter-spacing: -4%;
                     text-transform: uppercase;
                     color: var(--white);
-                    display: none;
-                    transition: opacity 0.3s ease;
                     text-align: center;
                     white-space: nowrap;
                     will-change: contents;
                     font-variant-ligatures: none;
                     font-kerning: none;
+                    position: absolute;
+
                     span {
                         font-family: "Chava";
                         font-weight: 400;
@@ -384,7 +434,7 @@
                 display: flex;
                 align-items: center;
                 gap: 40px;
-                animation: marqueecase 15s infinite linear;
+                animation: marqueecase 20s infinite linear;
                 white-space: nowrap;
                 display: inline-flex;
                 mix-blend-mode: difference !important;
@@ -438,6 +488,35 @@
         .wrap:nth-child(2) {
             justify-content: flex-end;
             gap: 40px;
+        }
+
+        .item {
+            top: 110%;
+            position: absolute;
+        }
+
+        .item1 {
+            left: 40px;
+        }
+
+        .item2 {
+            right: 40px;
+        }
+
+        .item3 {
+            right: 577px;
+        }
+
+        .item4 {
+            right: 40px;
+        }
+
+        .item5 {
+            left: 40px;
+        }
+
+        .item6 {
+            right: 40px;
         }
 
         .wrap {
@@ -791,7 +870,7 @@
     &__stroke {
         display: flex;
         flex-direction: column;
-        gap: 40px;
+        gap: 54px;
         overflow: hidden;
         width: 100%;
 
@@ -968,6 +1047,18 @@
     }
 }
 
+[data-grid="true"] {
+    position: relative;
+    overflow: hidden;
+}
+
+[data-grid="true"]>canvas {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
 .feedback {
     width: 100%;
     position: relative;
@@ -979,7 +1070,11 @@
 
         canvas {
             width: 100%;
-            height: 103vh;
+            height: 100vh;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: pixelated;
+            -ms-interpolation-mode: nearest-neighbor;
         }
     }
 
@@ -1130,7 +1225,9 @@
                         text-transform: uppercase;
                         color: var(--white);
                     }
-
+                    input:hover::placeholder{
+                        color: var(--white);
+                    }
                     input {
                         background: transparent;
                         border: none;
@@ -1144,7 +1241,7 @@
                         text-transform: uppercase;
                         display: flex;
                         align-items: flex-end;
-
+                        transition: all 0.3s ease;
                     }
 
                     input::placeholder {
@@ -1219,7 +1316,8 @@
             button {
                 width: 560px;
                 height: 120px;
-                background: url(../images/dist/btn__back.svg) center no-repeat;
+                background: transparent;
+                position: relative;
                 background-size: cover;
                 display: flex;
                 align-items: center;
@@ -1230,9 +1328,22 @@
                 line-height: 48px;
                 text-align: center;
                 text-transform: uppercase;
-                color: #fff;
+                color: var(--white);
                 border: none;
                 cursor: pointer;
+                z-index: 1;
+                span{
+                    position: relative;
+                    z-index: 1;
+                }
+                .btn_canvas{
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    z-index: 0;
+                    top: 0;
+                    left: 0;
+                }
             }
 
             p {

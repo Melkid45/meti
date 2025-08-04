@@ -91,8 +91,7 @@ function watching() {
     watch(['app/scss/style.scss'], styles);
     watch(['app/scss/*.scss'], styles);
     watch(['app/images/src'], images);
-    watch(['app/js/main.js'], scripts);
-    watch(['app/js/modules/**/*.js'], scripts);
+    watch(['app/js/main.js', 'app/js/modules/**/*.js'], scripts);
     watch(['app/components/*', 'app/pages/*'], pages);
     watch(['app/*.html']).on('change', browserSync.reload);
 }
@@ -118,5 +117,5 @@ exports.pages = pages;
 exports.sprite = sprite;
 exports.watching = watching;
 exports.building = building;
-exports.build = series(building);
+exports.build = series( cleanDist ,building);
 exports.default = parallel(styles, images, scripts, pages, watching);

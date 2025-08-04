@@ -13,11 +13,11 @@
     <title>METI</title>
 </head>
 
-<body>
+<body class="hidden">
     <div class="cursor">
         <div class="preloader__text">
+            <span class="default_text"></span>
             <span id="js-cursor-progress" class="progess_text">[<span>01%</span>]</span>
-            <span class="default_text">123</span>
         </div>
         <svg class="arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -78,19 +78,26 @@
                         </li>
                     </ul>
                 </nav>
+                <button class="burger">
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="10" height="10" fill="#F4F4F4" />
+                        <rect x="20" width="10" height="10" fill="#F4F4F4" />
+                        <rect y="20" width="10" height="10" fill="#F4F4F4" />
+                        <rect x="20" y="20" width="10" height="10" fill="#F4F4F4" />
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
-    <!-- <div id="js-preloader"></div>
-    
-      <canvas id="js-preloader-canvas"></canvas>
-    
-      <span id="js-cursor" class="u-cursor">
-        <span class="u-cursor__dot"></span>
-        <span id="js-cursor-progress" class="u-cursor__preloader-progress">[<span>01%</span>]</span>
-      </span> -->
-    
-    <main class="main" style="background: url(images/dist/main.webp) center no-repeat;background-size: cover;">
+    <div class="preload-container">
+        <canvas class="preload-canvas"></canvas>
+        <img src="images/dist/logo.svg" alt="">
+    </div>
+    <main class="main" data-grid="true">
+        <video loop autoplay playsinline preload="auto">
+            <source src="images/dist/shutterstock_3571757453.mp4" type="video/mp4">
+            <source src="images/dist/shutterstock_3571757453.mov" type="video/mov">
+        </video>
         <canvas id="grid-canvas-begin"></canvas>
         <div class="container">
             <div class="main__body">
@@ -100,14 +107,15 @@
                 </div>
                 <div class="stroke">
                     <h1>
-                        Ун<span>и</span>верс<span>а</span>льны<span>й </span>яз<span>ы</span>к к<span>о</span>ммун<span>и</span>каци<span>и</span> Ун<span>и</span>верс<span>а</span>льны<span>й </span>яз<span>ы</span>к к<span>о</span>ммун<span>и</span>каци<span>и</span>
+                        Ун<span>и</span>верс<span>а</span>льны<span>й </span>яз<span>ы</span>к
+                        к<span>о</span>ммун<span>и</span>каци<span>и</span> Ун<span>и</span>верс<span>а</span>льны<span>й
+                        </span>яз<span>ы</span>к к<span>о</span>ммун<span>и</span>каци<span>и</span>
                     </h1>
                 </div>
             </div>
         </div>
     </main>
-    <section class="about">
-        <canvas id="gridCanvas"></canvas>
+    <section class="about" data-grid="true">
         <img src="images/dist/about/1.svg" alt="" class="about__decor ab_dec1">
         <img src="images/dist/about/2.svg" alt="" class="about__decor ab_dec2">
         <img src="images/dist/about/3.svg" alt="" class="about__decor ab_dec3">
@@ -115,8 +123,8 @@
             <div class="about__body">
                 <div class="about__body-left">
                     <h3>[Привет, это meti]</h3>
-                    <div class="canvas-container">
-                        <canvas id="pixelCanvas"></canvas> 
+                    <div class="about-parallax about-p1">
+                        <canvas id="pixelCanvas"></canvas>
                     </div>
                 </div>
                 <div class="about__body-right">
@@ -125,8 +133,8 @@
                         <span class="element-animation">и эффективные.</span>
                         <span class="element-animation">Команда</span>
                         <span class="element-animation">профессионалов</span>
-                        <span class="element-animation">уровня</span>
-                        <span class="element-animation">сетевых рекламных</span>
+                        <span class="element-animation difference">уровня</span>
+                        <span class="element-animation difference2">сетевых рекламных</span>
                         <span class="element-animation">агентств</span>
                     </div>
                     <div class="description__wrap">
@@ -142,11 +150,14 @@
                             свои бизнес-цели.
                         </p>
                     </div>
+                    <div class="about-parallax about-p2">
+                        <canvas id="pixelCanvas"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <section class="services">
+    <section class="services" data-grid="true">
         <div class="container">
             <div class="services__body">
                 <h3>[Что мы умеем]</h3>
@@ -213,7 +224,7 @@
         <img src="images/dist/showreel_logo.svg" alt="">
         </div>
     </section>
-    <section class="case">
+    <section class="case" data-grid="true">
         <div class="case__main">
             <div class="top">
                 <span>[портфолио]</span>
@@ -239,8 +250,8 @@
             </div>
         </div>
         <div class="case__soft">
-            <div class="wrap">
-                <a href="" class="item big_case">
+            <div class="wrap wrap1">
+                <a href="" class="item big_case item1">
                     <div class="media"
                         style="background: url(images/dist/case/1.png) center no-repeat;background-size: cover;">
                         <div class="grid-portfolio">
@@ -379,7 +390,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="" class="item small_case">
+                <a href="" class="item small_case item2">
                     <div class="media"
                         style="background: url(images/dist/case/2.png) center no-repeat;background-size: cover;">
                         <div class="grid-portfolio">
@@ -519,8 +530,8 @@
                     </div>
                 </a>
             </div>
-            <div class="wrap">
-                <a href="" class="item big_case">
+            <div class="wrap wrap2">
+                <a href="" class="item big_case item3">
                     <div class="media"
                         style="background: url(images/dist/case/1.png) center no-repeat;background-size: cover;">
                         <div class="grid-portfolio">
@@ -659,7 +670,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="" class="item small_case">
+                <a href="" class="item small_case item4">
                     <div class="media"
                         style="background: url(images/dist/case/1.png) center no-repeat;background-size: cover;">
                         <div class="grid-portfolio">
@@ -677,8 +688,8 @@
                     </div>
                 </a>
             </div>
-            <div class="wrap">
-                <a href="" class="item small_case">
+            <div class="wrap wrap3">
+                <a href="" class="item small_case item5">
                     <div class="media"
                         style="background: url(images/dist/case/1.png) center no-repeat;background-size: cover;">
                         <div class="grid-portfolio">
@@ -696,7 +707,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="" class="item big_case">
+                <a href="" class="item big_case item6">
                     <div class="media"
                         style="background: url(images/dist/case/1.png) center no-repeat;background-size: cover;">
                         <div class="grid-portfolio">
@@ -838,7 +849,7 @@
             </div>
         </div>
     </section>
-    <section class="benefits">
+    <section class="benefits" data-grid="true">
         <div class="container benefits__container">
             <div class="row benefits__row">
                 <div class="row__col--7 benefits__col benefits__col--title">
@@ -848,7 +859,7 @@
                     <h3 class="benefits__subtitle">
                         <span class="element-animation">Наши клиенты —</span>
                         <span class="element-animation">наши стратегические</span>
-                        <span class="element-animation">партнеры. В тесном</span>
+                        <span class="element-animation">партнеры. <br> В тесном</span>
                         <span class="element-animation">сотрудничестве</span>
                         <span class="element-animation">мы решаем большой спектр</span>
                         <span class="element-animation">маркетинговых задач,</span>
@@ -872,7 +883,7 @@
             <img class="u-icon benefits__decor benefits__decor--1" src="images/dist/our-client.svg" alt="">
         </div>
     </section>
-    <section class="client">
+    <section class="client" data-grid="true">
         <canvas id="clientGridCanvas"></canvas>
         <img class="client__decor element-animation client__decor1" src="images/dist/client/1.svg" alt="">
         <img class="client__decor element-animation client__decor2" src="images/dist/client/2.svg" alt="">
@@ -964,7 +975,7 @@
             </div>
         </div>
     </section>
-    <section class="awards">
+    <section class="awards" data-grid="true">
         <div class="container">
             <div class="awards__body">
                 <h3>[наши награды]</h3>
@@ -1016,75 +1027,76 @@
         </div>
     </section>
     <section class="feedback">
-          <div id="feedback_top" class="feedback__top">
+        <div id="feedback_top" class="feedback__top">
             <canvas id="feedback-grid-canvas"></canvas>
-          </div>
-          <div class="feedback__bot">
+        </div>
+        <div class="feedback__bot">
             <div class="title">
-              <div class="main__title">
-                <h3>[Контакты]</h3>
-                <h2>
-                  об<span>с</span>уд<span>и</span>м<span>?</span>
-                </h2>
-              </div>
-              <div class="contacts">
-                <a href="tel:+79162041395">
-                  +7(916)204-13-95
-                </a>
-                <a href="mailto:сeo@metigroup.ru">
-                  сeo@metigroup.ru
-                </a>
-              </div>
+                <div class="main__title">
+                    <h3>[Контакты]</h3>
+                    <h2>
+                        об<span>с</span>уд<span>и</span>м<span>?</span>
+                    </h2>
+                </div>
+                <div class="contacts">
+                    <a href="tel:+79162041395">
+                        +7(916)204-13-95
+                    </a>
+                    <a href="mailto:сeo@metigroup.ru">
+                        сeo@metigroup.ru
+                    </a>
+                </div>
             </div>
             <img class="main_img" src="images/dist/feedback/1.svg" alt="">
             <div class="form_wrap">
-              <div class="form_wrap-title">
-                <span>[оставьте заявку]</span>
-                <p>Привет, Meti!</p>
-              </div>
-              <form action="" class="feedback__bot-form">
-                <div class="inputs">
-                  <div class="wrap element-animation">
-                    <span>Меня зовут</span>
-                    <input placeholder="Имя" type="text">
-                    <span>.</span>
-                  </div>
-                  <div class="wrap element-animation">
-                    <span>Я</span>
-                    <input placeholder="Должность" type="text">
-                    <span>компании</span>
-                  </div>
-                  <div class="wrap element-animation">
-                    <input placeholder="наименование бренда" type="text">
-                    <span>.</span>
-                  </div>
-                  <div class="wrap element-animation">
-                    <span>ответьте мне на</span>
-                  </div>
-                  <div class="wrap element-animation">
-                    <input placeholder="Email" type="email">
-                    <span>,</span>
-                  </div>
-                  <div class="wrap element-animation">
-                    <span>или позвоните</span>
-                  </div>
-                  <div class="wrap element-animation">
-                    <span>на номер</span>
-                    <input placeholder="Телефон" type="tel">
-                    <span>.</span>
-                  </div>
+                <div class="form_wrap-title">
+                    <span>[оставьте заявку]</span>
+                    <p>Привет, Meti!</p>
                 </div>
-                <button>
-                  отправить
-                </button>
-                <p>
-                  Нажимая на кнопку «Отправить», вы подтверждаете <br>
-                  свое согласие на обработку персональных данных
-                </p>
-              </form>
+                <form action="" class="feedback__bot-form">
+                    <div class="inputs">
+                        <div class="wrap element-animation">
+                            <span>Меня зовут</span>
+                            <input placeholder="Имя" type="text">
+                            <span>.</span>
+                        </div>
+                        <div class="wrap element-animation">
+                            <span>Я</span>
+                            <input placeholder="Должность" type="text">
+                            <span>компании</span>
+                        </div>
+                        <div class="wrap element-animation">
+                            <input class="brand" placeholder="наименование бренда" type="text">
+                            <span>.</span>
+                        </div>
+                        <div class="wrap element-animation">
+                            <span>ответьте мне на</span>
+                        </div>
+                        <div class="wrap element-animation">
+                            <input placeholder="Email" type="email">
+                            <span>,</span>
+                        </div>
+                        <div class="wrap element-animation">
+                            <span>или позвоните</span>
+                        </div>
+                        <div class="wrap element-animation">
+                            <span>на номер</span>
+                            <input placeholder="Телефон" type="tel">
+                            <span>.</span>
+                        </div>
+                    </div>
+                    <button class="feedback_btn">
+                        <span>отправить</span>
+                        <canvas class="btn_canvas"></canvas>
+                    </button>
+                    <p>
+                        Нажимая на кнопку «Отправить», вы подтверждаете <br>
+                        свое согласие на обработку персональных данных
+                    </p>
+                </form>
             </div>
-          </div>
-        </section>
+        </div>
+    </section>
     <footer class="@@el footer">
       <div class="container footer__container">
         <div class="footer__body">
@@ -1130,6 +1142,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/plugins/debug.addIndicators.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.5.1/SmoothScroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/TextPlugin.min.js"></script>
     <script src="js/main.min.js"></script>
 </body>
 
