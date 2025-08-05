@@ -10,4 +10,6 @@ if (width <= 750){
     $('.about-p2').remove()
     $('.difference').text('уровня')
     $('.difference2').text('сетевых рекламных')
+    $('.header__mobile').remove()
+    $('.muteor').remove()
 }

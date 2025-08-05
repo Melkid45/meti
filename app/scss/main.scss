@@ -9,6 +9,10 @@
     width: 100vw;
     height: 100vh;
     z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     canvas {
         position: absolute;
         top: 0;
@@ -16,15 +20,18 @@
         width: 100%;
         height: 100%;
         z-index: 10000;
+        background: #000;
     }
-    
+
     img {
         width: 320px;
         height: 80px;
         position: absolute;
         z-index: 10001;
-        will-change: transform; /* Для оптимизации анимации */
-        transform: translateZ(0); /* Аппаратное ускорение */
+        will-change: transform;
+        /* Для оптимизации анимации */
+        transform: translateZ(0);
+        /* Аппаратное ускорение */
     }
 }
 
@@ -65,7 +72,8 @@
             justify-content: space-between;
             align-items: center;
             position: relative;
-            z-index: 1;
+            z-index: 0;
+
             span {
                 font-weight: 300;
                 font-size: 16px;
@@ -86,11 +94,15 @@
                 }
 
                 to {
-                    transform: translate(-305.5%);
+                    transform: translate(-325.5%);
                 }
             }
 
-            h1 {
+            .anim_stroke {
+                animation: 10s animTitle linear infinite;
+            }
+
+            div {
                 font-family: var(--onest);
                 font-weight: 570;
                 font-size: 280px;
@@ -99,11 +111,13 @@
                 text-transform: uppercase;
                 color: var(--white);
                 white-space: nowrap;
-                animation: 10s animTitle linear infinite;
                 will-change: transform;
                 perspective: 1000px;
                 -webkit-backface-visibility: hidden;
                 -webkit-transform-style: preserve-3d;
+                display: flex;
+                align-items: center;
+                gap: 150px;
 
                 span {
                     font-family: var(--chava);
@@ -309,6 +323,7 @@
                 display: flex;
                 align-items: flex-end;
                 justify-content: flex-end;
+
                 p {
                     transition: opacity 0.3s ease;
                     text-align: start;
@@ -552,12 +567,19 @@
                 display: flex;
                 flex-direction: column;
                 gap: 54px;
+                z-index: 2;
 
                 .media {
                     width: 100%;
                     position: relative;
                     position: relative;
                     background: transparent;
+
+                    canvas {
+                        width: 100%;
+                        height: 100%;
+
+                    }
 
                     .grid-portfolio {
                         position: absolute;
@@ -1225,9 +1247,11 @@
                         text-transform: uppercase;
                         color: var(--white);
                     }
-                    input:hover::placeholder{
+
+                    input:hover::placeholder {
                         color: var(--white);
                     }
+
                     input {
                         background: transparent;
                         border: none;
@@ -1332,11 +1356,13 @@
                 border: none;
                 cursor: pointer;
                 z-index: 1;
-                span{
+
+                span {
                     position: relative;
                     z-index: 1;
                 }
-                .btn_canvas{
+
+                .btn_canvas {
                     width: 100%;
                     height: 100%;
                     position: absolute;

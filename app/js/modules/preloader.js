@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
         fadeDuration: 2500, // Длительность исчезновения (мс)
         logoMoveDuration: 1000, // Длительность движения логотипа (мс)
         targetLogoPosition: { x: 40, y: 53 }, // Целевая позиция логотипа в rem
-        sizeLogo: {width: 200, height: 50}
+        sizeLogo: { width: 200, height: 50 }
     };
-    if (width <= 750){
+    if (width <= 750) {
         CONFIG.squareSize = 20;
         CONFIG.targetLogoPosition.x = 20;
         CONFIG.targetLogoPosition.y = 20;
@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function animateFade(timestamp) {
         if (!startTime) startTime = timestamp;
+        canvas.style.background = 'transparent';
         const elapsed = timestamp - startTime;
         const progress = Math.min(elapsed / CONFIG.fadeDuration, 1);
         // Анимация логотипа
@@ -130,6 +131,18 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             logoHeader.style.opacity = '1';
         }, 2000);
+        setTimeout(() => {
+            $('.main__body .stroke div p').each(function () {
+                $(this).shuffleLetters({
+                    step: 5,
+                    fps: 120,
+                    text: $(this).text()
+                });
+            })
+        }, 500);
+        setTimeout(() => {
+            $('.main__body .stroke div').addClass('anim_stroke')
+        }, 3500);
         // Анимация прозрачности
         const squaresToFade = Math.floor(progress * grid.length);
         for (let i = 0; i < squaresToFade; i++) {
@@ -183,11 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
             y: centerY / parseFloat(getComputedStyle(document.documentElement).fontSize)
         };
 
-        logo.style.position = 'absolute';
-        logo.style.left = `${initialLogoPosition.x}rem`;
-        logo.style.top = `${initialLogoPosition.y}rem`;
-        logo.style.transition = 'left 1.5s cubic-bezier(0.22, 1, 0.36, 1), top 1.5s cubic-bezier(0.22, 1, 0.36, 1)';
-        progressText.textContent = '00%';
+        // logo.style.position = 'absolute';
+        // logo.style.left = `${initialLogoPosition.x}rem`;
+        // logo.style.top = `${initialLogoPosition.y}rem`;
+        // logo.style.transition = 'left 1.5s cubic-bezier(0.22, 1, 0.36, 1), top 1.5s cubic-bezier(0.22, 1, 0.36, 1)';
+        // progressText.textContent = '00%';
 
         // Запускаем анимацию с задержкой
         setTimeout(() => {

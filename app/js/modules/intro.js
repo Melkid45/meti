@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Функция для конвертации rem в пиксели (1rem = 100vw/1920)
-
 
     const CONFIG = {
-        squareSize: 54,      // 40px = 2.5rem (40/(1920/100))
-        gap: 0,               // 0rem
+        squareSize: 54,
+        gap: 0,
         fillColor: '#000000',
         bgColor: '#F4F4F403', // rgba(244, 244, 244, 0.03)
         animationDuration: 2000,
@@ -23,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let shuffledIndices = [];
     let lastFilledCount = 0;
 
-    // Инициализация сетки с учетом rem
     function initGrid() {
         const container = document.querySelector('.main');
         const width = container.clientWidth;

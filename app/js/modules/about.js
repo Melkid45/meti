@@ -5,10 +5,14 @@ img.src = '../images/dist/about.webp';
 const ABOUTCONFIG = {
     animCanvas: -250,
     StartAnim: "top top",
+    StartAnimPixel: "top top",
+    endAnim: "+=30%"
 }
 if (width <= 750){
     ABOUTCONFIG.animCanvas = -50;
     ABOUTCONFIG.StartAnim = "top center";
+    ABOUTCONFIG.StartAnimPixel = "+=10%";
+    ABOUTCONFIG.endAnim = "+=30%";
 }
 img.onload = function () {
     initCanvas();
@@ -20,7 +24,7 @@ img.onload = function () {
         scrollTrigger: {
             trigger: ".about",
             start: ABOUTCONFIG.StartAnim,
-            end: "bottom bottom",
+            end: "bottom center",
             scrub: 2,
             ease: "sine.inOut"
         }
@@ -32,10 +36,10 @@ img.onload = function () {
     gsap.to(pixelAnimation, {
         scrollTrigger: {
             trigger: ".about",
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 2,
-            ease: "sine.inOut"
+            start: ABOUTCONFIG.StartAnimPixel,
+            end: ABOUTCONFIG.endAnim,
+            scrub: 1,
+            ease: "sine.inOut",
         },
         pixelSize: 1,
         onUpdate: function () {

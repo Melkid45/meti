@@ -38,6 +38,10 @@ class SectionGrid {
       this.settings.offsetX = 27; // -15rem
       this.settings.offsetY = -27; // -29rem
     }
+    if (section.classList.contains('feedback')) {
+      this.settings.offsetX = 27; // -15rem
+      this.settings.offsetY = -24; // -29rem
+    }
     this.init();
   }
 

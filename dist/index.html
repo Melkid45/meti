@@ -82,6 +82,7 @@
                     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="10" height="10" fill="#F4F4F4" />
                         <rect x="20" width="10" height="10" fill="#F4F4F4" />
+                        <rect class="current" x="10" y="10" width="10" height="10" fill="#F4F4F4" />
                         <rect y="20" width="10" height="10" fill="#F4F4F4" />
                         <rect x="20" y="20" width="10" height="10" fill="#F4F4F4" />
                     </svg>
@@ -89,6 +90,28 @@
             </div>
         </div>
     </header>
+    <div class="header__mobile">
+        <nav class="header__mobile-menu">
+            <ul>
+                <li><a href="">Агентство</a></li>
+                <li><a href="">Что мы умеем</a></li>
+                <li><a href="">Кейсы</a></li>
+                <li><a href="">почему мы</a></li>
+                <li><a href="">Клиенты</a></li>
+                <li><a href="">Контакты</a></li>
+            </ul>
+        </nav>
+        <div class="header__mobile-info">
+            <div class="contacts">
+                <a href="">+7 (916) 204-13-95</a>
+                <a href="">сeo@metigroup.ru</a>
+            </div>
+            <div class="soft__info">
+                <a href="">презентация</a>
+                <a href="">english</a>
+            </div>
+        </div>
+    </div>
     <div class="preload-container">
         <canvas class="preload-canvas"></canvas>
         <img src="images/dist/logo.svg" alt="">
@@ -106,11 +129,12 @@
                     <span>[hello, world]</span>
                 </div>
                 <div class="stroke">
-                    <h1>
-                        Ун<span>и</span>верс<span>а</span>льны<span>й </span>яз<span>ы</span>к
-                        к<span>о</span>ммун<span>и</span>каци<span>и</span> Ун<span>и</span>верс<span>а</span>льны<span>й
-                        </span>яз<span>ы</span>к к<span>о</span>ммун<span>и</span>каци<span>и</span>
-                    </h1>
+                    <div>
+                        <p>Ун<span>и</span>верс<span>а</span>льны<span>й </span>яз<span>ы</span>к
+                            к<span>о</span>ммун<span>и</span>каци<span>и</span></p>
+                        <p>Ун<span>и</span>верс<span>а</span>льны<span>й </span>яз<span>ы</span>к
+                            к<span>о</span>ммун<span>и</span>каци<span>и</span></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -216,10 +240,22 @@
         </div>
     </section>
     <section class="showreel">
-        <video class="showreel__video" loop autoplay playsinline preload="auto">
+        <video class="showreel__video" muted loop autoplay playsinline preload="auto">
             <source src="images/dist/showreel.webm" type="video/webm">
             <source src="images/dist/showreel.mp4" type="video/mp4">
         </video>
+        <button class="muteor">
+            <svg class="mute" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M11 22H9V20H7V18H9V6H7V4H9V2H11V22ZM7 18H5V16H7V18ZM15.001 17H13.001V15H15V13H17V15H15.001V17ZM23 17H21V15H23V17ZM5 10H3V14H5V16H1V8H5V10ZM21 15H19V13H21V15ZM19 13H17V11H19V13ZM15.001 9H17V11H15V9H13.001V7H15.001V9ZM21 11H19V9H21V11ZM23 9H21V7H23V9ZM7 8H5V6H7V8Z"
+                    fill="black" />
+            </svg>
+            <svg class="sound" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M11 22H9V20H7V18H9V6H7V4H9V2H11V22ZM19 22H13V20H19V22ZM21 20H19V18H21V20ZM7 18H5V16H7V18ZM17 18H13V16H17V18ZM23 18H21V6H23V18ZM5 10H3V14H5V16H1V8H5V10ZM19 16H17V8H19V16ZM15 14H13V10H15V14ZM7 8H5V6H7V8ZM17 8H13V6H17V8ZM21 6H19V4H21V6ZM19 4H13V2H19V4Z"
+                    fill="black" />
+            </svg>
+        </button>
         <canvas id="grid-canvas-video"></canvas>
         <img src="images/dist/showreel_logo.svg" alt="">
         </div>
@@ -1026,7 +1062,7 @@
             </div>
         </div>
     </section>
-    <section class="feedback">
+    <section class="feedback" data-grid="true">
         <div id="feedback_top" class="feedback__top">
             <canvas id="feedback-grid-canvas"></canvas>
         </div>
