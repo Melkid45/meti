@@ -1,8 +1,8 @@
 ScrollTrigger.normalizeScroll(true);
 gsap.ticker.lagSmoothing(0);
 ScrollTrigger.config({
-  limitCallbacks: true,
-  autoAdjustLag: true
+    limitCallbacks: true,
+    autoAdjustLag: true
 });
 function onEntry(entry) {
     entry.forEach(change => {
@@ -11,7 +11,6 @@ function onEntry(entry) {
         }
     });
 }
-
 let options = { threshold: [0.5] };
 let observer = new IntersectionObserver(onEntry, options);
 let elements = document.querySelectorAll('.element-animation');
@@ -32,11 +31,11 @@ if ($(window).width() > 750) {
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     });
 }
-$('.burger').on('click', function(e){
+$('.burger').on('click', function (e) {
     $('.header__mobile').toggleClass('show')
     $(this).find('.current').toggleClass('show')
 })
-$('.header__mobile-menu ul li').on('click', function(e){
+$('.header__mobile-menu ul li').on('click', function (e) {
     $('.header__mobile').removeClass('show')
     $(this).find('.current').removeClass('show')
 })
