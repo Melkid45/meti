@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Конфигурация
     const CONFIG = {
-        squareSize: 40, // Размер квадрата в rem (2.5rem ≈ 40px при стандартном размере шрифта)
-        fillColor: '#000000', // Цвет заливки
-        initialFillRatio: 0.3, // Процент изначально заполненных квадратов
-        animationDuration: 50, // Длительность анимации одного квадрата (мс)
-        staggerDelay: 2 // Задержка между анимациями квадратов (мс)
+        squareSize: 40,
+        fillColor: '#000000',
+        initialFillRatio: 0.3,
+        animationDuration: 50,
+        staggerDelay: 2
     };
     if (width <= 750){
         CONFIG.squareSize = 20;
@@ -16,29 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let grid = [];
     let isHovered = false;
 
-    // Функция для преобразования rem в px
     function remToPx(rem) {
         return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
     }
 
-    // Инициализация canvas
     function initCanvas() {
-        // Получаем размеры кнопки в px
         const buttonWidth = button.offsetWidth;
         const buttonHeight = button.offsetHeight;
-        
-        // Устанавливаем размеры canvas
         canvas.width = buttonWidth;
         canvas.height = buttonHeight;
-        
-        // Конвертируем размер квадрата из rem в px
         const squareSizePx = remToPx(CONFIG.squareSize);
-        
-        // Рассчитываем количество квадратов
         const cols = Math.ceil(buttonWidth / squareSizePx);
         const rows = Math.ceil(buttonHeight / squareSizePx);
-        
-        // Создаем сетку квадратов
         grid = [];
         for (let y = 0; y < rows; y++) {
             for (let x = 0; x < cols; x++) {
@@ -53,8 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
-        
-        // Сохраняем исходное состояние
         grid.forEach(square => {
             square.initialFilled = square.filled;
         });
@@ -126,14 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
-    // Инициализация
     initCanvas();
-    
-    // Обработчики событий
     button.addEventListener('mouseenter', startHoverAnimation);
     button.addEventListener('mouseleave', startLeaveAnimation);
-    
-    // Обработчик ресайза
     window.addEventListener('resize', initCanvas);
 });

@@ -2,12 +2,8 @@
 
 if (width > 750) {
     $(function () {
-        // Инициализация контроллера
         var controller = new ScrollMagic.Controller();
-
-        // Создаем временную шкалу с плавными анимациями
         var wipeAnimation = new TimelineMax({ smoothChildTiming: true })
-            // Анимация для каждого элемента с задержкой 0.3s
             .fromTo(".item1", 1.5,
                 { y: "0%" },
                 { top: "-110%", opacity: 1, ease: Power2.easeOut }, 0)
@@ -26,12 +22,10 @@ if (width > 750) {
             .fromTo(".item6", 1.5,
                 { y: "0%" },
                 { top: "-110%", opacity: 1, ease: Power2.easeOut }, 1.5)
-
-        // Создаем сцену
         new ScrollMagic.Scene({
             triggerElement: ".case",
             triggerHook: "onLeave",
-            duration: "700%" // Увеличили длительность для плавности
+            duration: "700%"
         })
             .setPin(".case")
             .setTween(wipeAnimation)
@@ -39,20 +33,15 @@ if (width > 750) {
     });
 }else{
     $(function () {
-        // Инициализация контроллера
         var controller = new ScrollMagic.Controller();
-
-        // Создаем временную шкалу с плавными анимациями
         var wipeAnimation = new TimelineMax({ smoothChildTiming: true })
-            // Анимация для каждого элемента с задержкой 0.3s
             .fromTo(".case__soft", 1.5,
                 { y: "105%" },
                 { y: "-450%", opacity: 1, ease: Power2.easeOut }, 0)
-        // Создаем сцену
         new ScrollMagic.Scene({
             triggerElement: ".case",
             triggerHook: "onLeave",
-            duration: "700%" // Увеличили длительность для плавности
+            duration: "700%"
         })
             .setPin(".case")
             .setTween(wipeAnimation)

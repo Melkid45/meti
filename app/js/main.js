@@ -13,8 +13,8 @@ function onEntry(entry) {
 }
 let lastScrollTop = 0
 const lenis = new Lenis({
-    lerp: 0.1, // плавность скролла
-    smoothWheel: true // плавный скролл колесом
+    lerp: 0.1,
+    smoothWheel: true
 })
 if ($(window).width() > 750) {
     lenis.on('scroll', ({ scroll }) => {

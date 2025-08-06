@@ -60,7 +60,7 @@ if (width > 750) {
         },
     }, '.showreel');
 
-    const video = document.querySelector('.showreel__video'); // Кэшируем элемент
+    const video = document.querySelector('.showreel__video');
 
     function toggleVideoPlayback() {
         if (!video) return;

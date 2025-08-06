@@ -6,24 +6,18 @@
             "text": "",
             "callback": function () { }
         }, prop);
-
-        // Функция для получения всех текстовых узлов внутри элемента (рекурсивно)
         function getTextNodes(node) {
             var textNodes = [];
             for (var i = 0; i < node.childNodes.length; i++) {
                 var child = node.childNodes[i];
                 if (child.nodeType === 3) {
-                    // Текстовый узел
                     textNodes.push(child);
                 } else if (child.nodeType === 1) {
-                    // Элемент — рекурсивно
                     textNodes = textNodes.concat(getTextNodes(child));
                 }
             }
             return textNodes;
         }
-
-        // Функция для определения типа символа (буква/цифра/пробел и т.п.)
         function charType(ch) {
             if (ch === " ") return "space";
             if (/[a-z]/.test(ch)) return "lowerLetter";
@@ -32,8 +26,6 @@
             if (/[а-яё]/.test(ch)) return "ruslowerLetter";
             return "symbol";
         }
-
-        // Генерация случайного символа по типу
         function randomChar(type) {
             var pool = "";
 
@@ -60,22 +52,14 @@
                 return true;
             }
             el.data('animated', true);
-
-            // Сохраняем оригинальное содержимое
             var originalHtml = el.html();
             el.data('originalHtml', originalHtml);
-
-            // Оборачиваем содержимое в span.shuffle-wrapper, если еще нет
             if (!el.find('.shuffle-wrapper').length) {
                 el.html('<span class="shuffle-wrapper">' + originalHtml + '</span>');
             }
 
             var wrapper = el.find('.shuffle-wrapper')[0];
-
-            // Получаем все текстовые узлы внутри обёртки
             var textNodes = getTextNodes(wrapper);
-
-            // Формируем массив из всех символов и их типов, из всех текстовых узлов последовательно
             var allChars = [];
             textNodes.forEach((node) => {
                 for (var i = 0; i < node.textContent.length; i++) {
@@ -87,8 +71,6 @@
                     });
                 }
             });
-
-            // Строим массив индексов символов, которые будем менять (т.е. не пробелы)
             var letters = allChars.reduce((acc, c, idx) => {
                 if (c.type !== "space") acc.push(idx);
                 return acc;
@@ -97,16 +79,11 @@
             (function shuffle(start) {
                 if (start > letters.length) {
                     el.data('animated', false);
-                    // Восстанавливаем оригинальное содержимое
                     el.html(originalHtml);
                     options.callback(el);
                     return;
                 }
-
-                // Создаем копию текста для каждого текстового узла
                 var newTexts = textNodes.map(tn => tn.textContent.split(''));
-
-                // Заменяем символы в пределах текущего шага
                 for (var i = Math.max(start, 0); i < letters.length; i++) {
                     var charInfo = allChars[letters[i]];
                     if (i < start + options.step) {
@@ -115,8 +92,6 @@
                         newTexts[textNodes.indexOf(charInfo.node)][charInfo.index] = '';
                     }
                 }
-
-                // Обновляем текст в узлах
                 textNodes.forEach((tn, i) => {
                     tn.textContent = newTexts[i].join('');
                 });
@@ -173,14 +148,10 @@ $(function () {
             svg.appendChild(cell);
         }
     }
-
-    // Заголовки и описания
     const titlesContainer = document.querySelector('.services__body-block-titles');
     const titles = Array.from(titlesContainer.querySelectorAll('h3'));
     const descContainer = document.querySelector('.services__body-block-desc');
     const desc = Array.from(descContainer.querySelectorAll('p'));
-
-    // Сохраняем оригинальное содержимое заголовков
     titles.forEach(title => {
         title.dataset.originalHtml = title.innerHTML;
     });
@@ -191,14 +162,14 @@ $(function () {
     gsap.ticker.lagSmoothing(0);
     ScrollTrigger.normalizeScroll(true);
 
-    const SCENE_DURATION = 3.2;  // Увеличил время для сцены
+    const SCENE_DURATION = 3.2;
 
     const masterTL = gsap.timeline({
         scrollTrigger: {
             id: "services-scroll",
             trigger: ".services",
             start: "top -5.5%",
-            end: `+=${Object.keys(SHAPES).length * SCENE_DURATION * 800}`, // время в мс
+            end: `+=${Object.keys(SHAPES).length * SCENE_DURATION * 800}`,
             scrub: 1,
             pin: true,
             onEnter: () => masterTL.play(),
@@ -223,7 +194,6 @@ $(function () {
 
         masterTL.addLabel(label);
         masterTL.set(shapeCells, { fill: 'transparent' }, label);
-        // Скрываем предыдущие title и desc
         if (prevTitle && prevDesc) {
             masterTL.to([prevTitle, prevDesc], {
                 autoAlpha: 0,
@@ -231,8 +201,6 @@ $(function () {
                 ease: 'power1.inOut'
             }, label);
         }
-
-        // Меняем номер и появление numberElement (0 — 0.4 сек)
         masterTL.call(() => {
             numberElement.innerText = (index + 1).toString().padStart(2, '0');
         }, null, `${label}+=0`);
@@ -244,7 +212,6 @@ $(function () {
             autoAlpha: 1,
             duration: 0.3
         }, `>`);
-        // Анимация заголовка с shuffleLetters (0.4 — 0.8 сек)
         masterTL.to(currentTitle, {
             autoAlpha: 1,
             duration: 0.4,
@@ -266,27 +233,20 @@ $(function () {
             duration: 0.6,
             ease: 'power2.out',
             stagger: {
-                each: 0.025, // Теперь закрашивание тоже будет мозаикой
-                from: 'edges', // Или 'center', 'edges' - как вам больше нравится
+                each: 0.025,
+                from: 'edges',
                 grid: [GRID_SIZE, GRID_SIZE],
             }
-        }, `${label}+=0.5`); // Начинаем раньше (было 0.8)
-
-        // Анимация описания начинается раньше
-
-
-        // Очищение делаем быстрее
+        }, `${label}+=0.5`);
         masterTL.to(shapeCells, {
             fill: 'transparent',
             duration: 0.2,
             ease: 'power2.in',
             stagger: {
-                each: 0.02, // Еще быстрее чем было
+                each: 0.02,
                 from: 'center'
             }
-        }, `${label}+=2.0`); // Было 2.3
-
-        // Пауза на сцену (4.5 сек)
+        }, `${label}+=2.0`); 
         masterTL.addPause(`${label}+=${SCENE_DURATION}`);
     });
 

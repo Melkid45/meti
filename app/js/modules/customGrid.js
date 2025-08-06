@@ -9,38 +9,36 @@ class SectionGrid {
     this.isActive = true;
     this.sectionTop = 0;
 
-    // Конфигурация в rem (1rem = 100vw/1920)
     this.settings = {
-      baseSize: 54,       // 54px = 54rem
+      baseSize: 54, 
       sizeVariation: 0,
       spacing: 0,
-      activationRadius: 120, // 120px = 120rem
+      activationRadius: 120, 
       fadeSpeed: 0.01,
       maxRotation: 0.0,
       rotationSpeed: 0,
       borderColor: { r: 244, g: 244, b: 244, a: 0.24 },
       fillColor: { r: 0, g: 0, b: 0, a: 0 },
-      borderWidth: 1,      // 1px = 1rem
+      borderWidth: 1,     
       offsetX: 0,
       offsetY: 0
     };
 
-    // Кастомные смещения для секции services
     if (section.classList.contains('services')) {
-      this.settings.offsetX = -1; // -15rem
-      this.settings.offsetY = -25; // -29rem
+      this.settings.offsetX = -1;
+      this.settings.offsetY = -25; 
     }
     if (section.classList.contains('client')) {
-      this.settings.offsetX = 0; // -15rem
-      this.settings.offsetY = 11; // -29rem
+      this.settings.offsetX = 0; 
+      this.settings.offsetY = 11; 
     }
     if (section.classList.contains('main')) {
-      this.settings.offsetX = 27; // -15rem
-      this.settings.offsetY = -27; // -29rem
+      this.settings.offsetX = 27;
+      this.settings.offsetY = -27; 
     }
     if (section.classList.contains('feedback')) {
-      this.settings.offsetX = 27; // -15rem
-      this.settings.offsetY = -24; // -29rem
+      this.settings.offsetX = 27;
+      this.settings.offsetY = -24;
     }
     this.init();
   }
@@ -93,8 +91,6 @@ class SectionGrid {
     const baseSizePx = this.remToPx(this.settings.baseSize);
     const offsetXPx = this.remToPx(this.settings.offsetX);
     const offsetYPx = this.remToPx(this.settings.offsetY);
-
-    // Новый алгоритм позиционирования без накопления ошибок
     const startX = (this.rect.width - (this.gridCols * baseSizePx)) / 2 + offsetXPx;
     const startY = (this.rect.height - (this.gridRows * baseSizePx)) / 2 + offsetYPx;
 
@@ -104,7 +100,7 @@ class SectionGrid {
           x: startX + x * baseSizePx,
           y: startY + y * baseSizePx,
           width: baseSizePx,
-          height: baseSizePx, // Гарантируем квадраты
+          height: baseSizePx, 
           rotation: 0,
           targetRotation: 0,
           alpha: 0,
@@ -116,7 +112,6 @@ class SectionGrid {
     }
   }
 
-  // Остальные методы без изменений
   updateMousePosition(x, y) {
     const rect = this.section.getBoundingClientRect();
     this.mouse.x = x - rect.left;
@@ -153,18 +148,14 @@ class SectionGrid {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.imageSmoothingEnabled = false;
-
-    // Сначала фон
     this.ctx.fillStyle = `rgba(${this.settings.fillColor.r}, ${this.settings.fillColor.g}, ${this.settings.fillColor.b}, ${this.settings.fillColor.a})`;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    // Затем ячейки
     for (let cell of this.cellPool) {
       if (cell.alpha <= 0) continue;
 
       const x = Math.floor(cell.x);
       const y = Math.floor(cell.y);
-      const size = cell.width; // Гарантированно ровный размер
+      const size = cell.width;
 
       this.ctx.save();
       this.ctx.translate(
@@ -172,8 +163,6 @@ class SectionGrid {
         y + size / 2
       );
       this.ctx.rotate(cell.rotation);
-
-      // Заливка
       this.ctx.fillStyle = `rgba(
         ${this.settings.fillColor.r}, 
         ${this.settings.fillColor.g}, 
@@ -186,8 +175,6 @@ class SectionGrid {
         size,
         size
       );
-
-      // Border
       this.ctx.strokeStyle = `rgba(
         ${this.settings.borderColor.r}, 
         ${this.settings.borderColor.g}, 
@@ -218,8 +205,6 @@ class SectionGrid {
     this.rafId = requestAnimationFrame(() => this.animate());
   }
 }
-
-// GridSystem остается без изменений
 class GridSystem {
   constructor() {
     this.sectionGrids = [];

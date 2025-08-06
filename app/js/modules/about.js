@@ -18,7 +18,6 @@ img.onload = function () {
     initCanvas();
     window.addEventListener('resize', initCanvas);
 
-    // Параллакс-эффект
     gsap.to(canvas, {
         y: ABOUTCONFIG.animCanvas,
         scrollTrigger: {
@@ -30,7 +29,6 @@ img.onload = function () {
         }
     });
 
-    // Пикселизация (ваш текущий код)
     const pixelAnimation = { pixelSize: 20 };
 
     gsap.to(pixelAnimation, {
