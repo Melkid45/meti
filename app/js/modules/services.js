@@ -198,7 +198,7 @@ $(function () {
             id: "services-scroll",
             trigger: ".services",
             start: "top -5.5%",
-            end: `+=${Object.keys(SHAPES).length * SCENE_DURATION * 1000}`, // время в мс
+            end: `+=${Object.keys(SHAPES).length * SCENE_DURATION * 800}`, // время в мс
             scrub: 1,
             pin: true,
             onEnter: () => masterTL.play(),

@@ -45,7 +45,6 @@ class SectionGrid {
     this.init();
   }
 
-  // Конвертация rem в пиксели (1rem = 100vw/1920)
   remToPx(rem) {
     return rem * (window.innerWidth / 1920);
   }

@@ -1,39 +1,48 @@
 @import './reset';
 @import './fonts.scss';
 @import './colors.scss';
-html{
+
+html {
     scroll-behavior: smooth;
 }
-body{
+
+body {
     max-width: 1920px;
     background: var(--black);
     margin: 0 auto;
     font-family: var(--default);
     cursor: none;
     position: relative;
-    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    overflow: hidden;
 }
-
-.container{
+.container {
     width: 100%;
     margin: 0 auto;
     max-width: 1840px;
 }
-a{
+
+a {
     cursor: none;
 }
-html{
+
+html {
     cursor: none;
 }
-div{
+
+div {
     cursor: none;
 }
-.desk{
+
+.desk {
     display: flex !important;
 }
-.mob{
+
+.mob {
     display: none !important;
 }
-.hidden{
+
+.hidden {
     overflow: hidden;
 }

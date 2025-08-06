@@ -1,4 +1,9 @@
-
+ScrollTrigger.normalizeScroll(true);
+gsap.ticker.lagSmoothing(0);
+ScrollTrigger.config({
+  limitCallbacks: true,
+  autoAdjustLag: true
+});
 function onEntry(entry) {
     entry.forEach(change => {
         if (change.isIntersecting) {

@@ -181,12 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             preloadContainer.remove();
-            body.style.overflow = 'auto';
         }, 500);
     }
 
     function startAnimation() {
-        body.style.overflow = 'hidden';
 
         // Начальная позиция логотипа (центр)
         const centerX = (window.innerWidth - logo.offsetWidth) / 2;
