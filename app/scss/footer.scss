@@ -2,7 +2,7 @@
     width: 100%;
     background: var(--main);
     padding-bottom: 40px;
-
+    overflow: hidden;
     &__body {
         display: flex;
         flex-direction: column;
