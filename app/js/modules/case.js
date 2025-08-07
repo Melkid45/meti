@@ -1,50 +1,109 @@
-
-
-if (width > 750) {
-    $(function () {
-        var controller = new ScrollMagic.Controller();
-        var wipeAnimation = new TimelineMax({ smoothChildTiming: true })
-            .fromTo(".item1", 1.5,
-                { y: "0%" },
-                { top: "-110%", opacity: 1, ease: Power2.easeOut }, 0)
-            .fromTo(".item2", 1.5,
-                { y: "0%" },
-                { top: "-110%", opacity: 1, ease: Power2.easeOut }, 0.3)
-            .fromTo(".item3", 1.5,
-                { y: "0%" },
-                { top: "-110%", opacity: 1, ease: Power2.easeOut }, 0.6)
-            .fromTo(".item4", 1.5,
-                { y: "0%" },
-                { top: "-110%", opacity: 1, ease: Power2.easeOut }, 0.9)
-            .fromTo(".item5", 1.5,
-                { y: "0%" },
-                { top: "-110%", opacity: 1, ease: Power2.easeOut }, 1.2)
-            .fromTo(".item6", 1.5,
-                { y: "0%" },
-                { top: "-110%", opacity: 1, ease: Power2.easeOut }, 1.5)
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Инициализация контроллера
+    const controller = new ScrollMagic.Controller();
+    const config = {
+        delay: 0.2
+    }
+    if (width <= 750){
+        config.delay = 0.5
+    }
+    console.log()
+    // 2. Подготовка всех элементов
+    const items = document.querySelectorAll('.case__soft .item');
+    const canvasData = [];
+    
+    // Загружаем все изображения
+    items.forEach((item, index) => {
+        const canvas = item.querySelector('.grid-canvas-case');
+        const img = item.querySelector('.media img');
+        
+        const newImg = new Image();
+        newImg.onload = function() {
+            const ctx = canvas.getContext('2d');
+            canvas.width = newImg.naturalWidth;
+            canvas.height = newImg.naturalHeight;
+            
+            // Начальное состояние - сильная пикселизация
+            renderPixelated(canvas, ctx, newImg, 20);
+            
+            // Сохраняем данные для анимации
+            canvasData.push({
+                item: item,
+                canvas: canvas,
+                ctx: ctx,
+                img: newImg,
+                index: index
+            });
+            
+            // Когда все изображения загружены - запускаем анимацию
+            if (canvasData.length === items.length) {
+                initScrollAnimation();
+            }
+        };
+        newImg.src = img.src;
+    });
+    
+    // 3. Инициализация анимации прокрутки
+    function initScrollAnimation() {
+        const sceneDuration = items.length * 150 + '%';
+        
+        // Создаем главную временную шкалу
+        const masterTl = gsap.timeline();
+        
+        canvasData.forEach(data => {
+            // Анимация для текущего элемента
+            const itemTl = gsap.timeline()
+                .fromTo(data.item, 
+                    { y: 0, opacity: 1 },
+                    { top: '-95%', opacity: 1, duration: width <= 750 ? 1.5 : 1 }
+                )
+                .to({size: 20}, {
+                    size: 1,
+                    duration: width <= 750 ? 0.8 : 0.6,// Увеличили длительность анимации пикселизации
+                    ease: "power2.out",
+                    onUpdate: function() {
+                        renderPixelated(
+                            data.canvas, 
+                            data.ctx, 
+                            data.img, 
+                            this.targets()[0].size
+                        );
+                    }
+                }, 0); // Начинаем пикселизацию почти сразу (раньше было 0.3)
+            
+            masterTl.add(itemTl, data.index * config.delay);
+        });
+        
+        // 4. Создаем сцену ScrollMagic с измененным распределением анимации
         new ScrollMagic.Scene({
             triggerElement: ".case",
             triggerHook: "onLeave",
-            duration: "700%"
+            duration: sceneDuration,
+            offset: 0 // Сдвигаем начало анимации раньше
         })
-            .setPin(".case")
-            .setTween(wipeAnimation)
-            .addTo(controller);
-    });
-}else{
-    $(function () {
-        var controller = new ScrollMagic.Controller();
-        var wipeAnimation = new TimelineMax({ smoothChildTiming: true })
-            .fromTo(".case__soft", 1.5,
-                { y: "105%" },
-                { y: "-450%", opacity: 1, ease: Power2.easeOut }, 0)
-        new ScrollMagic.Scene({
-            triggerElement: ".case",
-            triggerHook: "onLeave",
-            duration: "700%"
-        })
-            .setPin(".case")
-            .setTween(wipeAnimation)
-            .addTo(controller);
-    });
-}
+        .setPin(".case")
+        .setTween(masterTl)
+        .addTo(controller);
+    }
+    
+    // Функция рендеринга пиксельного эффекта
+    function renderPixelated(canvas, ctx, img, pixelSize) {
+        ctx.imageSmoothingEnabled = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        if (pixelSize <= 1) {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            return;
+        }
+        
+        const smallWidth = Math.floor(canvas.width / pixelSize);
+        const smallHeight = Math.floor(canvas.height / pixelSize);
+        
+        ctx.drawImage(img, 0, 0, smallWidth, smallHeight);
+        ctx.drawImage(
+            canvas, 
+            0, 0, smallWidth, smallHeight,
+            0, 0, canvas.width, canvas.height
+        );
+    }
+});

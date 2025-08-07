@@ -20,8 +20,19 @@
     opacity: 1;
     transform: translateY(0%);
 }
-
-
+.description__wrap {
+  @for $i from 1 through 12 {
+    p:nth-child(#{$i}) {
+      opacity: 0;
+      transform: translateY(-5%);
+      transition: all 0.5s ease ($i * 0.2s);
+    }
+  }
+}
+.description__wrap p.element-show{
+  opacity: 1;
+  transform: translateY(0%);
+}
 
 .benefits__subtitle {
   @for $i from 1 through 12 {
@@ -53,7 +64,7 @@
     .client__decor:nth-child(#{$i}) {
       opacity: 0;
       transform: translateY(-15%);
-      transition: all 0.5s ease ($i * 0.2s);
+      transition: all 0.5s ease ($i * 0.4s);
     }
   }
 }

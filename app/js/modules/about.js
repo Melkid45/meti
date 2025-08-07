@@ -8,7 +8,7 @@ const ABOUTCONFIG = {
     StartAnimPixel: "top top",
     endAnim: "+=30%"
 }
-if (width <= 750){
+if (width <= 750) {
     ABOUTCONFIG.animCanvas = -50;
     ABOUTCONFIG.StartAnim = "top center";
     ABOUTCONFIG.StartAnimPixel = "+=10%";
@@ -28,7 +28,51 @@ img.onload = function () {
             ease: "sine.inOut"
         }
     });
-
+    gsap.to('.ab_dec1', {
+        y: `0%`,
+        opacity: 1,
+        scrollTrigger: {
+            trigger: ".about",
+            start: '-=60%',
+            end: "-=20%",
+            scrub: 2,
+            ease: "sine.inOut",
+        }
+    });
+    gsap.to('.ab_dec2', {
+        y: `0%`,
+        opacity: 1,
+        scrollTrigger: {
+            trigger: ".about",
+            start: '-=20%',
+            end: "+=40%",
+            scrub: 2,
+            ease: "sine.inOut",
+        }
+    });
+    gsap.to('.ab_dec3', {
+        y: `0%`,
+        opacity: 1,
+        scrollTrigger: {
+            trigger: ".about",
+            start: '+=10%',
+            end: "+=30%",
+            scrub: 2,
+            ease: "sine.inOut"
+        }
+    });
+    gsap.to('.benefits__decor--1', {
+        y: `0%`,
+        opacity: 1,
+        scrollTrigger: {
+            trigger: ".benefits",
+            start: '-=30%',
+            end: "+=30%",
+            scrub: 2,
+            ease: "sine.inOut",
+            markers: true
+        }
+    });
     const pixelAnimation = { pixelSize: 20 };
 
     gsap.to(pixelAnimation, {

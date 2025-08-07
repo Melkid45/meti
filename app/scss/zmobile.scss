@@ -680,7 +680,7 @@
             .stroke {
                 width: 100%;
                 height: 100%;
-
+                z-index: -1;
                 .stroke_container {
                     display: flex;
                     align-items: center;
@@ -735,7 +735,7 @@
             display: flex;
             flex-direction: column;
             gap: 80rem;
-            transform: translateY(105%);
+            transform: translateY(0%);
 
             .wrap:nth-child(2) {
                 justify-content: flex-end;
@@ -757,8 +757,33 @@
                     cursor: pointer;
                 }
 
+                .item1 {
+                    left: 20rem;
+                }
+
+                .item2 {
+                    right: 40rem;
+                }
+
+                .item3 {
+                    right: 577rem;
+                }
+
+                .item4 {
+                    right: 40rem;
+                }
+
+                .item5 {
+                    left: 40rem;
+                }
+
+                .item6 {
+                    right: 40rem;
+                }
+
                 .big_case {
-                    width: 100%;
+                    width: 335rem;
+
 
                     .media {
                         height: 410rem;
@@ -766,7 +791,7 @@
                 }
 
                 .small_case {
-                    width: 100%;
+                    width: 335rem;
 
                     .media {
                         height: 410rem;
@@ -777,8 +802,9 @@
                     display: flex;
                     flex-direction: column;
                     gap: 20rem;
-                    position: static;
-
+                    position: absolute;
+                    left: 20rem;
+                    z-index: 2;
                     .media {
                         width: 100%;
                         position: relative;
