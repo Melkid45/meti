@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="../images/dist/shutterstock_3571757453.mp4" as="video" type="video/mp4">
+    <link rel="preload" href="../images/dist/shutterstock_3571757453.webm" as="video" type="video/webm">
+    <link rel="preload" href="../images/dist/showreel.mp4" as="video" type="video/mp4">
+    <link rel="preload" href="../images/dist/showreel.webm" as="video" type="video/webm">
     <link
         href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&family=Onest:wght@100..900&display=swap"
         rel="stylesheet">
@@ -119,9 +123,9 @@
         <img src="../images/dist/logo.svg" alt="">
     </div>
     <main class="main" data-grid="true">
-        <video loop autoplay playsinline preload="metadata">
+        <video class="priority-video" loop autoplay playsinline preload="auto">
             <source src="../images/dist/shutterstock_3571757453.mp4" type="video/mp4">
-            <source src="../images/dist/shutterstock_3571757453.mov" type="video/mov">
+            <source src="../images/dist/shutterstock_3571757453.webm" type="video/webm">
         </video>
         <canvas id="grid-canvas-begin"></canvas>
         <div class="container">

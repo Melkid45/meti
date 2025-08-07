@@ -1,3 +1,17 @@
+const video = document.querySelector('.priority-video');
+const videoShowreel = document.querySelector('.priority-video');
+video.load();
+videoShowreel.load();
+
+video.setAttribute('webkit-playsinline', '');
+video.setAttribute('x-webkit-airplay', 'allow');
+
+videoShowreel.setAttribute('webkit-playsinline', '');
+videoShowreel.setAttribute('x-webkit-airplay', 'allow');
+
+video.addEventListener('loadedmetadata', function () {
+    video.style.opacity = 1;
+});
 ScrollTrigger.normalizeScroll(true);
 gsap.ticker.lagSmoothing(0);
 ScrollTrigger.config({
