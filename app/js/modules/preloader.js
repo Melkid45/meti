@@ -119,15 +119,15 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             logoHeader.style.opacity = '1';
         }, 2000);
-        setTimeout(() => {
-            $('.main__body .stroke div p').each(function () {
-                $(this).shuffleLetters({
-                    step: 5,
-                    fps: 120,
-                    text: $(this).text()
-                });
-            })
-        }, 500);
+        // setTimeout(() => {
+        //     $('.main__body .stroke div p').each(function () {
+        //         $(this).shuffleLetters({
+        //             step: 5,
+        //             fps: 120,
+        //             text: $(this).text()
+        //         });
+        //     })
+        // }, 500);
         setTimeout(() => {
             $('.main__body .stroke div').addClass('anim_stroke')
         }, 2000);

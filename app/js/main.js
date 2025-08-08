@@ -2,7 +2,6 @@ const video = document.querySelector('.priority-video');
 const videoShowreel = document.querySelector('.showreel__video');
 video.load();
 videoShowreel.load();
-
 video.setAttribute('webkit-playsinline', '');
 video.setAttribute('x-webkit-airplay', 'allow');
 
