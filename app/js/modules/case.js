@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function initScrollAnimation() {
-    const sceneDuration = items.length * 120 + '%';
+    const sceneDuration = items.length * 100 + '%';
     const masterTl = gsap.timeline();
 
     effects.forEach((effect, i) => {
