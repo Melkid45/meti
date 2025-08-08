@@ -121,3 +121,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     });
 });
+$('.feedback_btn').on('click', function(e){
+    let col = 0
+    $('.inputs input').each(function(e){
+        if ($(this).val() == ''){
+            $(this).addClass('error')
+        }else{
+            $(this).removeClass('error')
+            col++
+        }
+    })
+    if (col == 5){
+        $('.feedback__bot-form').fadeOut(300)
+        $('.feedback__bot-thank').fadeIn(300)
+        $('.title__feed').text('Спасибо!')
+    }
+})

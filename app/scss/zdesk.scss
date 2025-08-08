@@ -286,13 +286,19 @@
                     color: var(--white);
                 }
 
-                .canvas-container {
+                .about-parallax {
                     width: 497rem;
                     height: 276rem;
+                    position: relative;
 
-                    canvas {
+                    #pixelCanvas {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
                         width: 100%;
                         height: 100%;
+                        object-fit: cover;
+                        z-index: 2;
                     }
                 }
             }
@@ -356,6 +362,140 @@
                         letter-spacing: 0%;
                         color: var(--white);
                         max-width: 497rem;
+                    }
+                }
+            }
+        }
+    }
+
+    .services__new {
+        width: 100%;
+
+        &__body {
+            display: flex;
+            flex-direction: column;
+            gap: 36rem;
+
+            h2 {
+                font-weight: 300;
+                font-size: 16rem;
+                line-height: 24rem;
+                letter-spacing: 0%;
+                text-transform: uppercase;
+                color: var(--white);
+            }
+
+            .item:nth-child(3) {
+                z-index: 5;
+            }
+
+            .items {
+                width: 100%;
+                height: 100vh;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+
+                .items__line {
+                    width: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    display: flex;
+                    flex-direction: column;
+                    z-index: 3;
+                }
+
+                .item:nth-child(2) {
+                    z-index: 0;
+                }
+
+                .item:nth-child(3) {
+                    z-index: 1;
+                }
+
+                .item:nth-child(4) {
+                    z-index: 2;
+                }
+
+                .wrapper {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 2;
+
+                    img {
+                        width: 760rem;
+                        height: 760rem;
+                        position: absolute;
+                        background: #000;
+                    }
+                }
+
+                .wrapper img:not(:first-child) {
+                    clip-path: inset(100% 0 0 0);
+                }
+
+                .item {
+                    width: 100%;
+                    height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-top: 1rem solid #F4F4F429;
+                    overflow: hidden;
+                    position: relative;
+
+                    .number {
+                        position: absolute;
+                        left: 40rem;
+                        top: 36rem;
+                        font-size: 14rem;
+                        line-height: 20rem;
+                        color: #fff;
+                    }
+
+                    p {
+                        transition: opacity 0.3s ease;
+                        text-align: start;
+                        font-weight: 300;
+                        font-size: 18rem;
+                        line-height: 28rem;
+                        letter-spacing: 0%;
+                        color: var(--white);
+                        max-width: 448rem;
+                        position: absolute;
+                        bottom: 32rem;
+                        right: 0;
+                    }
+
+                    h3 {
+                        font-family: var(--onest);
+                        font-weight: 570;
+                        font-size: 160rem;
+                        line-height: 160rem;
+                        letter-spacing: -4%;
+                        text-transform: uppercase;
+                        color: var(--white);
+                        text-align: center;
+                        white-space: nowrap;
+                        will-change: contents;
+                        font-variant-ligatures: none;
+                        font-kerning: none;
+                        position: absolute;
+
+                        span {
+                            font-family: "Chava";
+                            font-weight: 400;
+                            font-size: 157rem;
+                            line-height: 141rem;
+                            letter-spacing: 0%;
+                            text-transform: uppercase;
+                        }
                     }
                 }
             }
@@ -1295,6 +1435,46 @@
                 }
             }
 
+            &-thank {
+                width: 100%;
+                display: none;
+
+                .wrap {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6rem;
+                    align-items: flex-end;
+
+                    span {
+                        font-family: var(--onest);
+                        font-weight: 570;
+                        font-size: 80rem;
+                        line-height: 80rem;
+                        letter-spacing: -2%;
+                        text-transform: uppercase;
+                        color: var(--white);
+                        width: 100%;
+                    }
+
+                    span:nth-child(1) {
+                        width: 1303rem;
+                    }
+
+                    span:nth-child(2) {
+                        width: 100%;
+                        text-align: start;
+                    }
+
+                    span:nth-child(3) {
+                        width: 1591rem;
+                    }
+
+                    span:nth-child(4) {
+                        text-align: end;
+                    }
+                }
+            }
+
             &-form {
                 display: flex;
                 flex-direction: column;
@@ -1341,6 +1521,29 @@
                             z-index: 2;
                         }
 
+                        div::before {
+                            content: '!';
+                            width: 40rem;
+                            height: 40rem;
+                            background: rgba(201, 78, 78, 1);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 300;
+                            font-style: Light;
+                            font-size: 20rem;
+                            line-height: 24rem;
+                            letter-spacing: 0%;
+                            text-align: center;
+                            text-transform: uppercase;
+                            position: absolute;
+                            right: 0rem;
+                            z-index: 10;
+                            color: var(--white);
+                            transition: all 0.3s ease;
+                            opacity: 0;
+                        }
+
                         input::placeholder {
                             color: #8A7CD4;
                         }
@@ -1350,7 +1553,8 @@
                         width: 100%;
                         justify-content: flex-end;
 
-                        input {
+                        input,
+                        div {
                             width: 746rem;
                         }
                     }
@@ -1359,7 +1563,8 @@
                         justify-content: space-between;
                         width: 100%;
 
-                        input {
+                        input,
+                        div {
                             width: 100%;
                         }
                     }
@@ -1367,7 +1572,8 @@
                     .wrap:nth-child(3) {
                         justify-content: flex-end;
 
-                        input {
+                        input,
+                        div {
                             width: 1530rem;
                         }
                     }
@@ -1383,7 +1589,8 @@
                     .wrap:nth-child(5) {
                         justify-content: flex-end;
 
-                        input {
+                        input,
+                        div {
                             width: 1260rem;
                         }
                     }
@@ -1399,7 +1606,8 @@
                     .wrap:nth-child(7) {
                         justify-content: space-between;
 
-                        input {
+                        input,
+                        div {
                             width: 100%;
                         }
 

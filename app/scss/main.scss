@@ -280,6 +280,136 @@
     }
 }
 
+.services__new {
+    width: 100%;
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+
+        h2 {
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0%;
+            text-transform: uppercase;
+            color: var(--white);
+        }
+
+        .item:nth-child(3) {
+            z-index: 5;
+        }
+
+        .items {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            .items__line{
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: flex;
+                flex-direction: column;
+            }
+            .item:nth-child(2) {
+                z-index: 0;
+            }
+
+            .item:nth-child(3) {
+                z-index: 1;
+            }
+
+            .item:nth-child(4) {
+                z-index: 2;
+            }
+
+            .wrapper {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2;
+
+                img {
+                    width: 760px;
+                    height: 760px;
+                    position: absolute;
+                    background: #000;
+                }
+            }
+
+            .wrapper img:not(:first-child) {
+                clip-path: inset(100% 0 0 0);
+            }
+            .item {
+                width: 100%;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-top: 1px solid #F4F4F429;
+                overflow: hidden;
+                position: relative;
+
+                .number {
+                    position: absolute;
+                    left: 40px;
+                    top: 36px;
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: #fff;
+                }
+
+                p {
+                    transition: opacity 0.3s ease;
+                    text-align: start;
+                    font-weight: 300;
+                    font-size: 18px;
+                    line-height: 28px;
+                    letter-spacing: 0%;
+                    color: var(--white);
+                    max-width: 448px;
+                    position: absolute;
+                    bottom: 32px;
+                    right: 0;
+                }
+
+                h3 {
+                    font-family: var(--onest);
+                    font-weight: 570;
+                    font-size: 160px;
+                    line-height: 160px;
+                    letter-spacing: -4%;
+                    text-transform: uppercase;
+                    color: var(--white);
+                    text-align: center;
+                    white-space: nowrap;
+                    will-change: contents;
+                    font-variant-ligatures: none;
+                    font-kerning: none;
+                    position: absolute;
+
+                    span {
+                        font-family: "Chava";
+                        font-weight: 400;
+                        font-size: 157px;
+                        line-height: 141px;
+                        letter-spacing: 0%;
+                        text-transform: uppercase;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .services {
     width: 100%;
     position: relative;
@@ -1241,6 +1371,46 @@
             }
         }
 
+        &-thank {
+            width: 100%;
+            display: none;
+
+            .wrap {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                align-items: flex-end;
+
+                span {
+                    font-family: var(--onest);
+                    font-weight: 570;
+                    font-size: 80px;
+                    line-height: 80px;
+                    letter-spacing: -2%;
+                    text-transform: uppercase;
+                    color: var(--white);
+                    width: 100%;
+                }
+
+                span:nth-child(1) {
+                    width: 1303px;
+                }
+
+                span:nth-child(2) {
+                    width: 100%;
+                    text-align: start;
+                }
+
+                span:nth-child(3) {
+                    width: 1591px;
+                }
+
+                span:nth-child(4) {
+                    text-align: end;
+                }
+            }
+        }
+
         &-form {
             display: flex;
             flex-direction: column;
@@ -1272,6 +1442,13 @@
                         color: var(--white);
                     }
 
+                    div {
+                        width: auto;
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                    }
+
                     input {
                         background: transparent;
                         border: none;
@@ -1284,8 +1461,36 @@
                         letter-spacing: -2%;
                         text-transform: uppercase;
                         display: flex;
-                        align-items: flex-end;
+                        align-items: center;
                         transition: all 0.3s ease;
+                        position: relative;
+                    }
+
+                    div:has(input.error)::before {
+                        opacity: 1;
+                    }
+
+                    div::before {
+                        content: '!';
+                        width: 40px;
+                        height: 40px;
+                        background: rgba(201, 78, 78, 1);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: 300;
+                        font-style: Light;
+                        font-size: 20px;
+                        line-height: 24px;
+                        letter-spacing: 0%;
+                        text-align: center;
+                        text-transform: uppercase;
+                        position: absolute;
+                        right: 0px;
+                        z-index: 10;
+                        color: var(--white);
+                        transition: all 0.3s ease;
+                        opacity: 0;
                     }
 
                     input::placeholder {
@@ -1297,7 +1502,8 @@
                     width: 100%;
                     justify-content: flex-end;
 
-                    input {
+                    input,
+                    div {
                         width: 746px;
                     }
                 }
@@ -1306,7 +1512,8 @@
                     justify-content: space-between;
                     width: 100%;
 
-                    input {
+                    input,
+                    div {
                         width: 100%;
                     }
                 }
@@ -1314,7 +1521,8 @@
                 .wrap:nth-child(3) {
                     justify-content: flex-end;
 
-                    input {
+                    input,
+                    div {
                         width: 1530px;
                     }
                 }
@@ -1330,7 +1538,8 @@
                 .wrap:nth-child(5) {
                     justify-content: flex-end;
 
-                    input {
+                    input,
+                    div {
                         width: 1260px;
                     }
                 }
@@ -1346,7 +1555,8 @@
                 .wrap:nth-child(7) {
                     justify-content: space-between;
 
-                    input {
+                    input,
+                    div {
                         width: 100%;
                     }
 

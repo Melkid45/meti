@@ -70,7 +70,6 @@ img.onload = function () {
             end: "+=30%",
             scrub: 2,
             ease: "sine.inOut",
-            markers: true
         }
     });
     const pixelAnimation = { pixelSize: 20 };

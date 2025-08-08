@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
         setTimeout(() => {
             $('.main__body .stroke div').addClass('anim_stroke')
-        }, 3500);
+        }, 2000);
         const squaresToFade = Math.floor(progress * grid.length);
         for (let i = 0; i < squaresToFade; i++) {
             if (i < grid.length) {

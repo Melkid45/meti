@@ -24,8 +24,8 @@ class SectionGrid {
       offsetY: 0
     };
 
-    if (section.classList.contains('services')) {
-      this.settings.offsetX = -1;
+    if (section.classList.contains('services__new')) {
+      this.settings.offsetX = 1;
       this.settings.offsetY = -25; 
     }
     if (section.classList.contains('client')) {

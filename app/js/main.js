@@ -1,5 +1,5 @@
 const video = document.querySelector('.priority-video');
-const videoShowreel = document.querySelector('.priority-video');
+const videoShowreel = document.querySelector('.showreel__video');
 video.load();
 videoShowreel.load();
 

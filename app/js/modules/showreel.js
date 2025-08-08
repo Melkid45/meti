@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
         gap: 0,
         fillColor: 'rgba(244, 244, 244, 0.03)',
         bgColor: '#000000',
-        fillDuration: 0.4,
-        delayDuration: 0.3,
-        clearDuration: 0.3 
+        fillDuration: 0.45,
+        delayDuration: 0.1,
+        clearDuration: 0.45 
     };
     if (width <= 750){
         CONFIG.squareSize = 20;
@@ -140,9 +140,8 @@ document.addEventListener('DOMContentLoaded', function() {
         new ScrollMagic.Scene({
             triggerElement: ".showreel",
             duration: `${totalDuration * 200}%`,
-            triggerHook: 0
+            triggerHook: 1,
         })
-        .setPin(".showreel")
         .on("progress", function(e) {
             updateAnimation(e.progress);
         })
