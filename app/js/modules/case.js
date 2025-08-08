@@ -344,40 +344,50 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function initScrollAnimation() {
-    const sceneDuration = items.length * 100 + '%';
-    const masterTl = gsap.timeline();
-
-    effects.forEach((effect, i) => {
-      const item = items[i];
-      const duration = isFullEffect ? 1 : 1.5;
-      const pixelDur = isFullEffect ? 0.2 : 0.3;
-      const stagger = isFullEffect ? 0.2 : 0.5;
-
-      const tl = gsap.timeline()
-        .fromTo(item, { y: 0, opacity: 1 }, { top: '-95%', opacity: 1, duration })
-        .to({ size: 10 }, {
-          size: 1,
-          duration: pixelDur,
-          ease: "power2.out",
-          onUpdate() {
-            const newSize = this.targets()[0].size;
-            if (effect && typeof effect.setPixelSize === 'function') effect.setPixelSize(newSize);
-          }
-        }, 0);
-
-      masterTl.add(tl, i * stagger);
-    });
-
-    new ScrollMagic.Scene({
-      triggerElement: ".case",
-      triggerHook: "onLeave",
-      duration: sceneDuration,
-      offset: 0
-    })
-      .setPin(".case")
-      .setTween(masterTl)
-      .addTo(controller);
+  function getSceneDuration() {
+    return (items.length * window.innerHeight) + 200;
   }
+
+  const masterTl = gsap.timeline();
+
+  effects.forEach((effect, i) => {
+    const item = items[i];
+    const duration = isFullEffect ? 1 : 1.5;
+    const pixelDur = isFullEffect ? 0.2 : 0.3;
+    const stagger = isFullEffect ? 0.2 : 0.5;
+
+    const tl = gsap.timeline()
+      .fromTo(item, { y: 0, opacity: 1 }, { top: '-95%', opacity: 1, duration })
+      .to({ size: 10 }, {
+        size: 1,
+        duration: pixelDur,
+        ease: "power2.out",
+        onUpdate() {
+          const newSize = this.targets()[0].size;
+          if (effect && typeof effect.setPixelSize === 'function') {
+            effect.setPixelSize(newSize);
+          }
+        }
+      }, 0);
+
+    masterTl.add(tl, i * stagger);
+  });
+
+  const scene = new ScrollMagic.Scene({
+    triggerElement: ".case",
+    triggerHook: "onLeave",
+    duration: getSceneDuration(),
+    offset: 0
+  })
+    .setPin(".case")
+    .setTween(masterTl)
+    .addTo(controller);
+
+  window.addEventListener('resize', () => {
+    scene.duration(getSceneDuration());
+  });
+}
+
 
   window.addEventListener('beforeunload', () => {
     effects.forEach(e => e.stop && e.stop());
