@@ -1464,8 +1464,9 @@
         .feedback__top {
             width: 100%;
             height: 360rem;
-            position: relative;
-
+            position: absolute;
+            top: 0;
+            left: 0;
             canvas {
                 width: 100%;
                 height: 100%;

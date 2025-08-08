@@ -1304,12 +1304,14 @@
 
         .feedback__top {
             width: 100%;
-            height: 0;
-            position: relative;
-            overflow: visible;
+            height: 50vh;
+            position: absolute;
+            overflow: hidden;
+            top: 0;
+            left: 0;
             canvas {
                 width: 100%;
-                height: 50vh;
+                height: 100%;
             }
         }
 
@@ -1322,7 +1324,6 @@
             gap: 236rem;
             padding: 140rem 40rem 192rem 40rem;
             position: relative;
-
             .title {
                 display: flex;
                 flex-direction: column;

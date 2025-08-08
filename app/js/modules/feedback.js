@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (width <= 750){
         CONFIG.widthView = 375;
         CONFIG.squareSize = 20;
+        CONFIG.animationDuration = 500;
     }
     function remToPx(rem) {
         return rem * (window.innerWidth / CONFIG.widthView);

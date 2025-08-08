@@ -1237,12 +1237,14 @@
 
     .feedback__top {
         width: 100%;
-        height: 0;
-        position: relative;
+        height: 50vh;
+        position: absolute;
         overflow: visible;
+        top: 0;
+        left: 0;
         canvas {
             width: 100%;
-            height: 50vh;
+            height: 100%;
             image-rendering: -moz-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
             image-rendering: pixelated;
