@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Конфигурация
     const CONFIG = {
         squareSize: 54,
         fillColor: '#442CBF',
