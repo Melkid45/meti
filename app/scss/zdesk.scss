@@ -428,6 +428,12 @@
                     justify-content: center;
                     z-index: 2;
 
+                    svg {
+                        width: 760px;
+                        height: 760px;
+                        position: absolute;
+                    }
+
                     img {
                         width: 760rem;
                         height: 760rem;
@@ -1304,11 +1310,12 @@
 
         .feedback__top {
             width: 100%;
-            height: 50vh;
+            height: 100vh;
             position: absolute;
             overflow: hidden;
             top: 0;
             left: 0;
+
             canvas {
                 width: 100%;
                 height: 100%;
@@ -1324,6 +1331,7 @@
             gap: 236rem;
             padding: 140rem 40rem 192rem 40rem;
             position: relative;
+
             .title {
                 display: flex;
                 flex-direction: column;

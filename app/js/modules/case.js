@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.settings = {
         cellSize: 54,
         effectRadius: 120,
-        blurRadius: 40,
+        blurRadius: 30,
         fillColor: 'rgba(244,244,244,0.9)'
       };
 
@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.ctx.drawImage(this.blurCanvas, cellX, cellY, cellSize, cellSize, cellX, cellY, cellSize, cellSize);
 
             const dist = Math.sqrt(distSq);
-            const alpha = 0.03 * (1 - dist / effectRadius);
+            const alpha = 0.01 * (1 - dist / effectRadius);
             this.ctx.fillStyle = `rgba(244,244,244,${alpha.toFixed(3)})`;
             this.ctx.fillRect(cellX, cellY, cellSize, cellSize);
           }
@@ -353,12 +353,12 @@ document.addEventListener('DOMContentLoaded', () => {
   effects.forEach((effect, i) => {
     const item = items[i];
     const duration = isFullEffect ? 1 : 1.5;
-    const pixelDur = isFullEffect ? 0.2 : 0.3;
+    const pixelDur = isFullEffect ? 0.4 : 0.3;
     const stagger = isFullEffect ? 0.2 : 0.5;
 
     const tl = gsap.timeline()
       .fromTo(item, { y: 0, opacity: 1 }, { top: '-95%', opacity: 1, duration })
-      .to({ size: 10 }, {
+      .to({ size: 20 }, {
         size: 1,
         duration: pixelDur,
         ease: "power2.out",
