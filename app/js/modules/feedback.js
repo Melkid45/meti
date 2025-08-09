@@ -39,11 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const squareSizePx = Math.floor(remToPx(CONFIG.squareSize));
         const gapPx = Math.floor(remToPx(CONFIG.gap));
         
-        // Рассчитываем количество столбцов и строк с округлением вверх
         const cols = Math.ceil(width / (squareSizePx + gapPx));
         const rows = Math.ceil(height / (squareSizePx + gapPx));
         
-        // Рассчитываем начальные координаты, чтобы сетка начиналась за левой границей
         const startX = -((cols * (squareSizePx + gapPx) - width) / 2);
         const startY = -((rows * (squareSizePx + gapPx) - height) / 2);
         

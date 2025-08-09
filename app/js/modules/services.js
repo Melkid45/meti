@@ -133,15 +133,11 @@ $.fn.shuffleLetters = function (options) {
       requestAnimationFrame(animate);
     });
   };
-
-  /***********************
-   * GRID + SHAPES + ScrollTrigger
-   ***********************/
   (function () {
     gsap.registerPlugin(ScrollTrigger);
 
     const GRID_SIZE = 14;
-    const CELL_SIZE = 40; // px
+    const CELL_SIZE = 40;
     const colors = ["#442CBF"];
 
     const SHAPES = {
@@ -162,7 +158,6 @@ $.fn.shuffleLetters = function (options) {
 
     const svg = document.getElementById('interactive-grid');
 
-    // Создаём сетку клеток и запоминаем в 2D массиве cellsGrid[y][x]
     const cellsGrid = [];
     const allCells = [];
     for (let y = 0; y < GRID_SIZE; y++) {
@@ -185,23 +180,19 @@ $.fn.shuffleLetters = function (options) {
       }
     }
 
-    // Установим viewBox размеры в зависимости от GRID_SIZE и CELL_SIZE (на случай, если поменяешь)
     svg.setAttribute('viewBox', `0 0 ${GRID_SIZE * CELL_SIZE} ${GRID_SIZE * CELL_SIZE}`);
     svg.setAttribute('width', GRID_SIZE * CELL_SIZE);
     svg.setAttribute('height', GRID_SIZE * CELL_SIZE);
 
-    // Заполним правую колонку элементами, соответствующими SHAPES
     const itemsLine = document.querySelector('.items__line');
     const shapeNames = Object.keys(SHAPES);
 
-    // Подготовим элементы и размеры для корректного перемещения itemsLine
     const wrapper = document.querySelector('.wrapper');
     const items = document.querySelectorAll('.items__line .item');
     const $titles = $('.items__line .item h3');
 
     function layoutItems() {
       const wrapperH = wrapper.clientHeight;
-      // высота всей полосы = кол-во элементов * высота обёртки
       itemsLine.style.height = (shapeNames.length * wrapperH) + 'px';
       items.forEach(it => it.style.height = wrapperH + 'px');
       itemsLine.style.top = '0px';
@@ -211,24 +202,20 @@ $.fn.shuffleLetters = function (options) {
       layoutItems();
     });
 
-    // Функция — отрисовать фигуру по имени (чисто и с нормальным stagger)
     let lastTargetCells = [];
     function drawShape(shapeName) {
       const coords = SHAPES[shapeName];
       if (!coords) return;
-      // build array of DOM nodes
       const targetCells = coords.map(([x,y]) => {
         if (cellsGrid[y] && cellsGrid[y][x]) return cellsGrid[y][x];
         return null;
       }).filter(Boolean);
 
-      // прекращаем текущие твины и очищаем заливку всех клеток
       gsap.killTweensOf(allCells);
       gsap.set(allCells, { attr: { fill: 'transparent' } });
 
       if (targetCells.length === 0) return;
 
-      // анимируем нужные клетки единым вызовом (stagger отрабатывает корректно)
       gsap.to(targetCells, {
         attr: { fill: colors[0] },
         duration: 0.55,
@@ -243,33 +230,28 @@ $.fn.shuffleLetters = function (options) {
       lastTargetCells = targetCells;
     }
 
-    // Показ первой фигуры
     drawShape(shapeNames[0]);
 
-    // ScrollTrigger: пинит .services__new и обновляет положение itemsLine
     let currentActiveIndex = 0;
     ScrollTrigger.create({
       trigger: ".services__new",
       start: "top -5.5%",
-      end: `+=${shapeNames.length * 100}%`, // длинная зона прокрутки внутри блока
+      end: `+=${shapeNames.length * 100}%`,
       pin: true,
       scrub: 1,
       onUpdate: self => {
-        const progress = self.progress; // 0..1
+        const progress = self.progress;
         const wrapperH = wrapper.clientHeight;
-        // Перемещаем itemsLine вертикально в px
         const maxTranslate = (shapeNames.length - 1) * wrapperH;
         const topPx = -progress * maxTranslate;
         gsap.set(itemsLine, { y: topPx });
 
-        // Определяем активный индекс (round)
         const activeIndex = Math.max(0, Math.min(shapeNames.length - 1, Math.round(progress * (shapeNames.length - 1))));
         if (activeIndex !== currentActiveIndex) {
           currentActiveIndex = activeIndex;
           const shapeName = shapeNames[activeIndex];
           drawShape(shapeName);
 
-          // shuffle title
           $titles.eq(activeIndex).shuffleLetters({
             step: 5, fps: 60, text: $titles.eq(activeIndex).text(), duration: 700
           });

@@ -77,6 +77,7 @@ class SectionGrid {
     this.canvas.style.height = this.rect.height + 'px';
     this.canvas.width = this.rect.width * dpr;
     this.canvas.height = this.rect.height * dpr;
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0); 
     this.ctx.scale(dpr, dpr);
 
     const baseSizePx = this.remToPx(this.settings.baseSize);
@@ -248,6 +249,7 @@ class GridSystem {
       this.sectionGrids.forEach(grid => {
         grid.resize();
         grid.updateSectionPosition();
+        grid.initPool();
       });
     });
   }

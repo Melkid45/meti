@@ -61,8 +61,7 @@ if (width > 750) {
 
     const video = document.querySelector('.showreel__video');
 
-    // Добавляем обработчик скролла
-    let lastCursorState = null; // Запоминаем последнее состояние
+    let lastCursorState = null; 
 
     function checkCursorOverShowreel() {
         const showreel = $('.showreel')[0];
@@ -77,7 +76,6 @@ if (width > 750) {
             mouseY >= rect.top &&
             mouseY <= rect.bottom;
 
-        // Проверяем, изменилось ли состояние
         if (isOver !== lastCursorState) {
             lastCursorState = isOver;
 
@@ -93,11 +91,10 @@ if (width > 750) {
         }
     }
 
-    // Оптимизируем обработчик скролла с помощью throttle
     let scrollTimeout;
     $(window).on('scroll', function () {
         clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(checkCursorOverShowreel, 100);
+        scrollTimeout = setTimeout(checkCursorOverShowreel, 10);
     });
 
     function toggleVideoPlayback() {
@@ -123,9 +120,7 @@ if (width > 750) {
         $('.default_text').text(isPlaying ? 'Пауза' : 'воспроизвести');
     }
 
-    // Инициализация при загрузке
     $(document).ready(function () {
-        // Проверяем положение курсора сразу после загрузки
         setTimeout(checkCursorOverShowreel, 100);
     });
 }

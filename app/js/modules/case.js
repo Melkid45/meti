@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function initScrollAnimation() {
     function getSceneDuration() {
-      return (items.length * window.innerHeight) + 400;
+      return (items.length * window.innerHeight) + window.innerHeight;
     }
 
     const masterTl = gsap.timeline();
@@ -448,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const stagger = isFullEffect ? 0.2 : 0.5;
 
       const tl = gsap.timeline()
-        .fromTo(item, { y: 0, opacity: 1 }, { top: '-100%', opacity: 1, duration })
+        .fromTo(item, { y: 0, opacity: 1 }, { top: '-110%', opacity: 1, duration })
         .to({ size: 20 }, {
           size: 1,
           duration: pixelDur,
