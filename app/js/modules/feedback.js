@@ -145,6 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 $('.feedback_btn').on('click', function(e){
     let col = 0;
     let formData = {};
@@ -154,7 +160,7 @@ $('.feedback_btn').on('click', function(e){
         } else {
             $(this).removeClass('error');
             col++;
-            const name = $(this).attr('placeholder').toLowerCase();
+            const name = $(this).attr('name');
             formData[name] = $(this).val();
         }
     });
