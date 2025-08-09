@@ -273,7 +273,9 @@ $.fn.shuffleLetters = function (options) {
 
   // Показ первой фигуры в первой grid
   gsap.set(wrapperImages[0], { clipPath: 'inset(0% 0 0 0)' });
-  drawShape(shapeNames[0], 0);
+  const firstServiceIcon = $('[data-service="0"]').attr('data-icon');
+  console.log(firstServiceIcon);
+  drawShape(firstServiceIcon, 0);
 
   // ScrollTrigger
   let currentActiveIndex = 0;
@@ -293,11 +295,14 @@ $.fn.shuffleLetters = function (options) {
       gsap.set(itemsLine, { y: topPx });
 
       // Определяем активный индекс
-      const activeIndex = Math.max(0, Math.min(shapeNames.length - 1, Math.round(progress * (shapeNames.length - 1))));
+      // Считаем количество услуг на странице
+      const servicesItems = $('.services__new .item').length;
+      const activeIndex = Math.max(0, Math.min(servicesItems - 1, Math.round(progress * (servicesItems - 1))));
 
       if (activeIndex !== currentActiveIndex) {
         currentActiveIndex = activeIndex;
-        const shapeName = shapeNames[activeIndex];
+        // Берем название иконки из атрибута услуги
+        const shapeName = $('[data-service="'+activeIndex+'"]').attr('data-icon');
 
         // Рисуем фигуру в соответствующей grid
         // Используем activeIndex для выбора фигуры и grid
