@@ -1,80 +1,27 @@
-
 if (width > 750) {
     gsap.set('.cursor', { xPercent: -50, yPercent: -50 });
-
-    $(document).mousemove(function (event) {
+    let lastCursorState = null;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    const video = document.querySelector('.showreel__video');
+    function moveCursor(x, y) {
         gsap.to('.cursor', {
-            x: event.clientX,
-            y: event.clientY,
+            x: x,
+            y: y,
             duration: 0.1,
             ease: 'power1.out'
         });
-    });
-
-    $(document).on('mouseenter', 'a', function () {
-        let attr = $(this).attr('href')
-        $('.default_text').fadeIn(200)
-        if (attr.includes('tel')) {
-            $('.default_text').text('Позвонить')
-            $('.cursor .phone').css({
-                scale: '1'
-            });
-            $('.cursor svg').not('.cursor .arrow').css({
-                scale: 0
-            })
-        } else if (attr.includes('mail')) {
-            $('.cursor .mail').css({
-                scale: '1'
-            });
-            $('.cursor svg').not('.cursor .arrow').css({
-                scale: 0
-            })
-            $('.default_text').text('Написать')
-        } else {
-            $('.default_text').text('Клик')
-            $('.cursor .arrow').css({
-                scale: '1'
-            });
-            $('.cursor svg').not('.cursor .arrow').css({
-                scale: 0
-            })
-        }
-    }).on('mouseleave', 'a', function () {
-        $('.cursor svg').css({
-            scale: '0'
-        });
-        $('.default_text').fadeOut(200)
-    });
-    $(document).on({
-        mouseleave: function () {
-            $('.cursor svg').css('scale', '0');
-            $('.default_text').fadeOut(200);
-        },
-        mousemove: function () {
-            updateVideoCursor();
-        },
-        click: function (event) {
-            event.preventDefault();
-            toggleVideoPlayback();
-        },
-    }, '.showreel');
-
-    const video = document.querySelector('.showreel__video');
-
-    let lastCursorState = null; 
-
-    function checkCursorOverShowreel() {
-        const showreel = $('.showreel')[0];
+    }
+    function checkCursorOverShowreel(mouseX, mouseY) {
+        const showreel = document.querySelector('.showreel');
         if (!showreel) return;
 
-        const mouseX = window.event?.clientX || 0;
-        const mouseY = window.event?.clientY || 0;
         const rect = showreel.getBoundingClientRect();
 
         const isOver = mouseX >= rect.left &&
-            mouseX <= rect.right &&
-            mouseY >= rect.top &&
-            mouseY <= rect.bottom;
+                       mouseX <= rect.right &&
+                       mouseY >= rect.top &&
+                       mouseY <= rect.bottom;
 
         if (isOver !== lastCursorState) {
             lastCursorState = isOver;
@@ -90,13 +37,16 @@ if (width > 750) {
             }
         }
     }
+    function updateVideoCursor() {
+        if (!video) return;
 
-    let scrollTimeout;
-    $(window).on('scroll', function () {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(checkCursorOverShowreel, 10);
-    });
+        const isPlaying = !video.paused && !video.ended;
+        const $cursor = $('.cursor');
 
+        $cursor.find('.pause').css('scale', isPlaying ? '1' : '0');
+        $cursor.find('.play').css('scale', isPlaying ? '0' : '1');
+        $('.default_text').fadeIn(200).text(isPlaying ? 'Пауза' : 'воспроизвести');
+    }
     function toggleVideoPlayback() {
         if (!video) return;
 
@@ -107,33 +57,78 @@ if (width > 750) {
         }
         updateVideoCursor();
     }
+    $(document).on('mousemove', function(e) {
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        moveCursor(lastMouseX, lastMouseY);
+        checkCursorOverShowreel(lastMouseX, lastMouseY);
+    });
+    $(document).on('mouseenter', 'a', function () {
+        const attr = $(this).attr('href') || '';
+        $('.default_text').fadeIn(200);
 
-    function updateVideoCursor() {
+        if (attr.includes('tel')) {
+            $('.default_text').text('Позвонить');
+            $('.cursor .phone').css('scale', '1');
+            $('.cursor svg').not('.cursor .arrow, .cursor .phone').css('scale', 0);
+        } else if (attr.includes('mail')) {
+            $('.default_text').text('Написать');
+            $('.cursor .mail').css('scale', '1');
+            $('.cursor svg').not('.cursor .arrow, .cursor .mail').css('scale', 0);
+        } else {
+            $('.default_text').text('Клик');
+            $('.cursor .arrow').css('scale', '1');
+            $('.cursor svg').not('.cursor .arrow').css('scale', 0);
+        }
+    }).on('mouseleave', 'a', function () {
+        $('.cursor svg').css('scale', '0');
+        $('.default_text').fadeOut(200);
+    });
+    $(document).on({
+        mouseleave: function () {
+            $('.cursor svg').css('scale', '0');
+            $('.default_text').fadeOut(200);
+        },
+        mousemove: function () {
+            updateVideoCursor();
+        },
+        click: function (event) {
+            event.preventDefault();
+            toggleVideoPlayback();
+        }
+    }, '.showreel');
+
+    $('.muteor').on('click', function () {
         if (!video) return;
 
-        const isPlaying = !video.paused && !video.ended;
-        const $cursor = $('.cursor');
+        if (video.muted) {
+            video.muted = false;
+            $('.mute').fadeIn(300);
+            $('.sound').fadeOut(300);
+        } else {
+            video.muted = true;
+            $('.mute').fadeOut(300);
+            $('.sound').fadeIn(300);
+        }
+    });
 
-        $cursor.find('.pause').css('scale', isPlaying ? '1' : '0');
-        $cursor.find('.play').css('scale', isPlaying ? '0' : '1');
-        $('.default_text').fadeIn(200);
-        $('.default_text').text(isPlaying ? 'Пауза' : 'воспроизвести');
-    }
+    let scrollTimeout;
+    $(window).on('scroll', function () {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            checkCursorOverShowreel(lastMouseX, lastMouseY);
+        }, 10);
+    });
+
+    setInterval(() => {
+        checkCursorOverShowreel(lastMouseX, lastMouseY);
+    }, 300);
 
     $(document).ready(function () {
-        setTimeout(checkCursorOverShowreel, 100);
+        $('.cursor svg').css('scale', '0');
+        $('.default_text').hide();
+        setTimeout(() => {
+            checkCursorOverShowreel(lastMouseX, lastMouseY);
+        }, 10);
     });
 }
-
-$('.muteor').on('click', function (e) {
-    const video = document.querySelector('.showreel__video');
-    if (video.muted) {
-        video.muted = false;
-        $('.mute').fadeIn(300)
-        $('.sound').fadeOut(300)
-    } else {
-        video.muted = true;
-        $('.mute').fadeOut(300)
-        $('.sound').fadeIn(300)
-    }
-})
