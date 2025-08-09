@@ -12,7 +12,6 @@ if (width > 750) {
     });
 
     $(document).on('mouseenter', 'a', function () {
-        console.log($(this).attr('href'))
         let attr = $(this).attr('href')
         $('.default_text').fadeIn(200)
         if (attr.includes('tel')) {
@@ -49,7 +48,7 @@ if (width > 750) {
     $(document).on({
         mouseleave: function () {
             $('.cursor svg').css('scale', '0');
-            $('.default_text').fadeOut(200)
+            $('.default_text').fadeOut(200);
         },
         mousemove: function () {
             updateVideoCursor();
@@ -61,6 +60,45 @@ if (width > 750) {
     }, '.showreel');
 
     const video = document.querySelector('.showreel__video');
+
+    // Добавляем обработчик скролла
+    let lastCursorState = null; // Запоминаем последнее состояние
+
+    function checkCursorOverShowreel() {
+        const showreel = $('.showreel')[0];
+        if (!showreel) return;
+
+        const mouseX = window.event?.clientX || 0;
+        const mouseY = window.event?.clientY || 0;
+        const rect = showreel.getBoundingClientRect();
+
+        const isOver = mouseX >= rect.left &&
+            mouseX <= rect.right &&
+            mouseY >= rect.top &&
+            mouseY <= rect.bottom;
+
+        // Проверяем, изменилось ли состояние
+        if (isOver !== lastCursorState) {
+            lastCursorState = isOver;
+
+            if (isOver) {
+                updateVideoCursor();
+            } else {
+                $('.cursor .mute, .cursor .pause, .cursor .play').css('scale', '0');
+                const text = $('.default_text').text();
+                if (text === 'Пауза' || text === 'воспроизвести') {
+                    $('.default_text').fadeOut(200);
+                }
+            }
+        }
+    }
+
+    // Оптимизируем обработчик скролла с помощью throttle
+    let scrollTimeout;
+    $(window).on('scroll', function () {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(checkCursorOverShowreel, 100);
+    });
 
     function toggleVideoPlayback() {
         if (!video) return;
@@ -81,9 +119,15 @@ if (width > 750) {
 
         $cursor.find('.pause').css('scale', isPlaying ? '1' : '0');
         $cursor.find('.play').css('scale', isPlaying ? '0' : '1');
-        $('.default_text').fadeIn(200)
-        $('.default_text').text(isPlaying ? 'Пауза' : 'воспроизвести')
+        $('.default_text').fadeIn(200);
+        $('.default_text').text(isPlaying ? 'Пауза' : 'воспроизвести');
     }
+
+    // Инициализация при загрузке
+    $(document).ready(function () {
+        // Проверяем положение курсора сразу после загрузки
+        setTimeout(checkCursorOverShowreel, 100);
+    });
 }
 
 $('.muteor').on('click', function (e) {

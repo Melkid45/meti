@@ -59,22 +59,22 @@
                 <nav class="header__body-menu">
                     <ul>
                         <li>
-                            <a href="">Агентство</a>
+                            <a href="#about">Агентство</a>
                         </li>
                         <li>
-                            <a href="">Что мы умеем</a>
+                            <a href="#services">Что мы умеем</a>
                         </li>
                         <li>
-                            <a href="">Кейсы</a>
+                            <a href="#case">Кейсы</a>
                         </li>
                         <li>
-                            <a href="">почему мы</a>
+                            <a href="#benefits">почему мы</a>
                         </li>
                         <li>
-                            <a href="">Клиенты</a>
+                            <a href="#client">Клиенты</a>
                         </li>
                         <li>
-                            <a href="">Контакты</a>
+                            <a href="#contact">Контакты</a>
                         </li>
                         <li>
                             <a href="">презентация</a>
@@ -99,12 +99,12 @@
     <div class="header__mobile">
         <nav class="header__mobile-menu">
             <ul>
-                <li><a href="">Агентство</a></li>
-                <li><a href="">Что мы умеем</a></li>
-                <li><a href="">Кейсы</a></li>
-                <li><a href="">почему мы</a></li>
-                <li><a href="">Клиенты</a></li>
-                <li><a href="">Контакты</a></li>
+                <li><a href="#about">Агентство</a></li>
+                <li><a href="#services">Что мы умеем</a></li>
+                <li><a href="#case">Кейсы</a></li>
+                <li><a href="#benefits">почему мы</a></li>
+                <li><a href="#client">Клиенты</a></li>
+                <li><a href="#contact">Контакты</a></li>
             </ul>
         </nav>
         <div class="header__mobile-info">
@@ -145,9 +145,9 @@
             </div>
         </div>
     </main>
-    <section class="about" data-grid="true">
-        <img src="../images/dist/about/1.svg" alt="" class="about__decor ab_dec1">
-        <img src="../images/dist/about/2.svg" alt="" class="about__decor ab_dec2">
+    <section id="about" class="about" data-grid="true">
+        <img src="../images/dist/about/2.png" alt="" class="about__decor ab_dec1">
+        <img src="../images/dist/about/1.png" alt="" class="about__decor ab_dec2">
         <img src="../images/dist/about/3.svg" alt="" class="about__decor ab_dec3">
         <div class="container">
             <div class="about__body">
@@ -245,7 +245,7 @@
             </div>
         </div>
     </section> -->
-    <section class="services__new" data-grid="true">
+    <section id="services" class="services__new" data-grid="true">
         <div class="container">
             <div class="services__new__body">
                 <h2 class="services__new__body-title">
@@ -253,16 +253,7 @@
                 </h2>
                 <div class="items">
                     <div class="wrapper">
-                        <!-- <img src="../images/dist/services/1.svg" alt="">
-                        <img src="../images/dist/services/2.svg" alt="">
-                        <img src="../images/dist/services/3.svg" alt="">
-                        <img src="../images/dist/services/4.svg" alt="">
-                        <img src="../images/dist/services/5.svg" alt="">
-                        <img src="../images/dist/services/6.svg" alt="">
-                        <img src="../images/dist/services/7.svg" alt="">
-                        <img src="../images/dist/services/8.svg" alt="">
-                        <img src="../images/dist/services/9.svg" alt=""> -->
-                        <svg id="interactive-grid" width="562" height="562" viewBox="0 0 562 562"></svg>
+                        <svg id="interactive-grid" class="interactive-grid" width="562" height="562" viewBox="0 0 562 562"></svg>
                     </div>
                     <div class="items__line">
                         <div class="item">
@@ -320,7 +311,6 @@
                                 и конкурентную среду
                             </p>
                         </div>
-    
                         <div class="item">
                             <span class="number">06</span>
                             <h3 class="title_serv">
@@ -389,7 +379,7 @@
         <img src="../images/dist/showreel_logo.svg" alt="">
         </div>
     </section>
-    <section class="case" data-grid="true">
+    <section id="case" class="case" data-grid="true">
         <div class="case__main">
             <div class="top">
                 <span>[портфолио]</span>
@@ -1002,7 +992,7 @@
             </div>
         </div>
     </section>
-    <section class="benefits" data-grid="true">
+    <section id="benefits" class="benefits" data-grid="true">
         <div class="container benefits__container">
             <div class="row benefits__row">
                 <div class="row__col--7 benefits__col benefits__col--title">
@@ -1036,7 +1026,7 @@
             <img class="u-icon benefits__decor benefits__decor--1" src="../images/dist/our-client.svg" alt="">
         </div>
     </section>
-    <section class="client" data-grid="true">
+    <section id="client" class="client" data-grid="true">
         <canvas id="clientGridCanvas"></canvas>
         <img class="client__decor element-animation client__decor1" src="../images/dist/client/1.svg" alt="">
         <img class="client__decor element-animation client__decor2" src="../images/dist/client/2.svg" alt="">
@@ -1183,7 +1173,7 @@
         <div id="feedback_top" class="feedback__top">
             <canvas id="feedback-grid-canvas"></canvas>
         </div>
-        <div class="feedback__bot">
+        <div id="contact" class="feedback__bot">
             <div class="title">
                 <div class="main__title">
                     <h3>[Контакты]</h3>

@@ -1312,7 +1312,7 @@
             width: 100%;
             height: 100vh;
             position: absolute;
-            overflow: hidden;
+            overflow: visible;
             top: 0;
             left: 0;
 
@@ -1329,7 +1329,7 @@
             flex-direction: column;
             align-items: center;
             gap: 236rem;
-            padding: 140rem 40rem 192rem 40rem;
+            padding: 280rem 40rem 192rem 40rem;
             position: relative;
 
             .title {

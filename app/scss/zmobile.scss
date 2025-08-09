@@ -237,7 +237,7 @@
 
     .main {
         width: 100%;
-        height: 100vh;
+        height: 90vh;
         position: relative;
         display: flex;
         align-items: center;
@@ -255,7 +255,7 @@
 
         video {
             width: 750rem;
-            height: 100vh;
+            height: 90vh;
             position: absolute;
             z-index: 0;
             top: auto;
@@ -264,7 +264,7 @@
 
         &__body {
             width: 100%;
-            height: 100vh;
+            height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -1779,6 +1779,7 @@
                     color: #fff;
                     border: none;
                     cursor: pointer;
+                    background: #000;
                 }
 
                 p {

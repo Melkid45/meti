@@ -250,7 +250,7 @@ $.fn.shuffleLetters = function (options) {
     let currentActiveIndex = 0;
     ScrollTrigger.create({
       trigger: ".services__new",
-      start: "top top",
+      start: "top -5.5%",
       end: `+=${shapeNames.length * 100}%`, // длинная зона прокрутки внутри блока
       pin: true,
       scrub: 1,

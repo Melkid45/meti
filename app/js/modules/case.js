@@ -17,26 +17,34 @@ document.addEventListener('DOMContentLoaded', () => {
       this.canvas = media.querySelector('.grid-canvas-case');
       this.ctx = this.canvas.getContext('2d');
 
+      // Для пикселизации
       this.pixelSize = 20;
       this.pixelCanvas = document.createElement('canvas');
       this.pixelCtx = this.pixelCanvas.getContext('2d');
 
+      // Для эффектов
       this.isGridActive = false;
       this.mouse = { x: -1000, y: -1000 };
-      this.originalCanvas = null;
-      this.originalCtx = null;
-      this.blurCanvas = null;
-      this.blurCtx = null;
+      this.originalCanvas = document.createElement('canvas');
+      this.originalCtx = this.originalCanvas.getContext('2d');
+      this.blurCanvas = document.createElement('canvas');
+      this.blurCtx = this.blurCanvas.getContext('2d');
+      this.zoomCanvas = document.createElement('canvas');
+      this.zoomCtx = this.zoomCanvas.getContext('2d');
 
       this.rafId = null;
       this.isInitialized = false;
       this.isBlurWorking = false;
       this.isBlurDone = false;
+      
       this.settings = {
         cellSize: 54,
         effectRadius: 120,
-        blurRadius: 30,
-        fillColor: 'rgba(244,244,244,0.9)'
+        blurRadius: 120,
+        fillColor: 'rgba(244,244,244,0.9)',
+        zoomFactor: 5,
+        zoomRadius: 120,
+        zoomTransition: 0.25
       };
 
       this.visibilityObserver = new IntersectionObserver(entries => {
@@ -54,12 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
         threshold: 0.05,
         rootMargin: '400px'
       });
+
       const rect = this.media.getBoundingClientRect();
       if (rect.top < window.innerHeight + 400 && rect.bottom > -400 && this.img.complete) {
         this.init();
       } else {
         this.visibilityObserver.observe(this.media);
       }
+
       this._onResize = debounce(() => {
         if (!this.isInitialized) return;
         this.resizeCanvas();
@@ -69,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isFullEffect) {
           this.blurCanvas.width = this.canvas.width;
           this.blurCanvas.height = this.canvas.height;
+          this.zoomCanvas.width = this.canvas.width;
+          this.zoomCanvas.height = this.canvas.height;
           this.blurCtx.drawImage(this.originalCanvas, 0, 0);
           this.applyBlur();
         }
@@ -87,27 +99,27 @@ document.addEventListener('DOMContentLoaded', () => {
       if (this.isInitialized) return;
       this.isInitialized = true;
       this.resizeCanvas();
-      this.originalCanvas = document.createElement('canvas');
+      
       this.originalCanvas.width = this.canvas.width;
       this.originalCanvas.height = this.canvas.height;
-      this.originalCtx = this.originalCanvas.getContext('2d');
       this.originalCtx.drawImage(this.img, 0, 0, this.originalCanvas.width, this.originalCanvas.height);
+
       if (isFullEffect) {
-        this.blurCanvas = document.createElement('canvas');
         this.blurCanvas.width = this.canvas.width;
         this.blurCanvas.height = this.canvas.height;
-        this.blurCtx = this.blurCanvas.getContext('2d');
+        this.zoomCanvas.width = this.canvas.width;
+        this.zoomCanvas.height = this.canvas.height;
         this.blurCtx.drawImage(this.originalCanvas, 0, 0);
         this.applyBlur();
       }
 
       this.setupEvents();
-
       this.requestRender();
     }
 
     setupEvents() {
       if (!isFullEffect) return;
+      
       this._onMouseMove = (e) => {
         const rect = this.canvas.getBoundingClientRect();
         this.mouse.x = e.clientX - rect.left;
@@ -128,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyBlur() {
       if (!this.blurCtx || !this.originalCtx) return;
       if (this.isBlurWorking) return;
+      
       this.isBlurWorking = true;
       this.isBlurDone = false;
 
@@ -139,12 +152,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const W = width, H = height;
       const iw = W + 1;
       const ih = H + 1;
+      
       this.blurCtx.putImageData(srcImageData, 0, 0);
+      
       if (radius === 0) {
         this.isBlurWorking = false;
         this.isBlurDone = true;
         return;
       }
+
       const len = iw * ih;
       const integralR = new Float64Array(len);
       const integralG = new Float64Array(len);
@@ -176,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
           computeBlurRows(0);
         }
       };
+
       const rectSum = (intArr, x0, y0, x1, y1) => {
         const A = y0 * iw + x0;
         const B = y0 * iw + (x1 + 1);
@@ -183,9 +200,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const D = (y1 + 1) * iw + (x1 + 1);
         return intArr[D] - intArr[B] - intArr[C] + intArr[A];
       };
+
       const dstImageData = this.blurCtx.createImageData(W, H);
       const dst = dstImageData.data;
-
       const computeRowsPerChunk = Math.max(4, Math.floor(100000 / W));
       const self = this;
 
@@ -226,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       setTimeout(buildStep, 0);
     }
+
     renderPixelated(pixelSize) {
       const ctx = this.ctx;
       const canvas = this.canvas;
@@ -237,34 +255,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return;
       }
+      
       const smallW = Math.max(1, Math.floor(canvas.width / Math.max(1, pixelSize)));
       const smallH = Math.max(1, Math.floor(canvas.height / Math.max(1, pixelSize)));
+      
       if (this.pixelCanvas.width !== smallW || this.pixelCanvas.height !== smallH) {
         this.pixelCanvas.width = smallW;
         this.pixelCanvas.height = smallH;
       }
+      
       this.pixelCtx.clearRect(0, 0, this.pixelCanvas.width, this.pixelCanvas.height);
-      this.pixelCtx.drawImage(this.originalCanvas, 0, 0, this.originalCanvas.width, this.originalCanvas.height, 0, 0, this.pixelCanvas.width, this.pixelCanvas.height);
+      this.pixelCtx.drawImage(
+        this.originalCanvas, 
+        0, 0, this.originalCanvas.width, this.originalCanvas.height,
+        0, 0, this.pixelCanvas.width, this.pixelCanvas.height
+      );
+      
       ctx.imageSmoothingEnabled = false;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(this.pixelCanvas, 0, 0, this.pixelCanvas.width, this.pixelCanvas.height, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        this.pixelCanvas,
+        0, 0, this.pixelCanvas.width, this.pixelCanvas.height,
+        0, 0, canvas.width, canvas.height
+      );
     }
 
     drawGrid() {
       if (!isFullEffect) return;
-      if (!this.blurCanvas) return;
+      if (!this.blurCanvas || !this.isBlurDone) return;
 
-      const { cellSize, effectRadius } = this.settings;
+      const { cellSize, effectRadius, zoomFactor, zoomRadius, zoomTransition } = this.settings;
       const cx = this.mouse.x;
       const cy = this.mouse.y;
-      if (!this.isGridActive) return;
-
+      
       const startCol = Math.max(0, Math.floor((cx - effectRadius) / cellSize));
       const endCol = Math.min(Math.ceil(this.canvas.width / cellSize), Math.ceil((cx + effectRadius) / cellSize));
       const startRow = Math.max(0, Math.floor((cy - effectRadius) / cellSize));
       const endRow = Math.min(Math.ceil(this.canvas.height / cellSize), Math.ceil((cy + effectRadius) / cellSize));
 
-      const radiusSq = effectRadius * effectRadius;
+      const effectRadiusSq = effectRadius * effectRadius;
+      const zoomRadiusSq = zoomRadius * zoomRadius;
+
+      // Сначала рисуем размытые ячейки
       for (let y = startRow; y < endRow; y++) {
         for (let x = startCol; x < endCol; x++) {
           const cellX = x * cellSize;
@@ -273,9 +305,15 @@ document.addEventListener('DOMContentLoaded', () => {
           const centreY = cellY + cellSize / 2;
           const distSq = (centreX - cx) * (centreX - cx) + (centreY - cy) * (centreY - cy);
 
-          if (distSq < radiusSq) {
-            this.ctx.drawImage(this.blurCanvas, cellX, cellY, cellSize, cellSize, cellX, cellY, cellSize, cellSize);
+          if (distSq < effectRadiusSq) {
+            // Рисуем размытую ячейку
+            this.ctx.drawImage(
+              this.blurCanvas,
+              cellX, cellY, cellSize, cellSize,
+              cellX, cellY, cellSize, cellSize
+            );
 
+            // Добавляем свечение
             const dist = Math.sqrt(distSq);
             const alpha = 0.01 * (1 - dist / effectRadius);
             this.ctx.fillStyle = `rgba(244,244,244,${alpha.toFixed(3)})`;
@@ -283,18 +321,70 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }
+
+      // Затем рисуем увеличенные области
+      for (let y = startRow; y < endRow; y++) {
+        for (let x = startCol; x < endCol; x++) {
+          const cellX = x * cellSize;
+          const cellY = y * cellSize;
+          const centreX = cellX + cellSize / 2;
+          const centreY = cellY + cellSize / 2;
+          const distSq = (centreX - cx) * (centreX - cx) + (centreY - cy) * (centreY - cy);
+
+          if (distSq < zoomRadiusSq) {
+            const dist = Math.sqrt(distSq);
+            const zoomStrength = 1 - dist / zoomRadius;
+            const currentZoom = 1 + (zoomFactor - 1) * zoomStrength;
+            
+            // Размеры для увеличения
+            const srcSize = cellSize / currentZoom;
+            const destSize = cellSize;
+            
+            // Центр увеличенной области
+            const srcCenterX = cellX + cellSize / 2 - (cx - (cellX + cellSize / 2)) * (currentZoom - 1);
+            const srcCenterY = cellY + cellSize / 2 - (cy - (cellY + cellSize / 2)) * (currentZoom - 1);
+            
+            // Позиция в оригинальном изображении
+            const srcX = srcCenterX - srcSize / 2;
+            const srcY = srcCenterY - srcSize / 2;
+            
+            // Ограничиваем границы
+            const safeSrcX = Math.max(0, Math.min(this.originalCanvas.width - srcSize, srcX));
+            const safeSrcY = Math.max(0, Math.min(this.originalCanvas.height - srcSize, srcY));
+            
+            // Очищаем zoom canvas
+            this.zoomCtx.clearRect(0, 0, this.zoomCanvas.width, this.zoomCanvas.height);
+            
+            // Рисуем увеличенную область на временном canvas
+            this.zoomCtx.drawImage(
+              this.originalCanvas,
+              safeSrcX, safeSrcY, srcSize, srcSize,
+              cellX, cellY, destSize, destSize
+            );
+            
+            // Копируем на основной canvas с прозрачностью
+            const transitionAlpha = Math.min(1, zoomStrength / zoomTransition);
+            this.ctx.globalAlpha = transitionAlpha;
+            this.ctx.drawImage(
+              this.zoomCanvas,
+              cellX, cellY, destSize, destSize,
+              cellX, cellY, destSize, destSize
+            );
+            this.ctx.globalAlpha = 1.0;
+          }
+        }
+      }
     }
+
     requestRender() {
       if (this.rafId) return;
-      this.rafId = requestAnimationFrame(() => this.animate());
-    }
-
-    animate() {
-      this.renderPixelated(this.pixelSize);
-
-      if (isFullEffect) this.drawGrid();
-
-      this.rafId = null;
+      this.rafId = requestAnimationFrame(() => {
+        this.renderPixelated(this.pixelSize);
+        if (isFullEffect && this.isGridActive) {
+          this.drawGrid();
+        }
+        this.rafId = null;
+      });
     }
 
     stop() {
@@ -313,6 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Инициализация элементов и анимации скролла
   const items = document.querySelectorAll('.case__soft .item');
   const effects = [];
   let loadedCount = 0;
@@ -344,50 +435,49 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function initScrollAnimation() {
-  function getSceneDuration() {
-    return (items.length * window.innerHeight) + 200;
-  }
+    function getSceneDuration() {
+      return (items.length * window.innerHeight) + 400;
+    }
 
-  const masterTl = gsap.timeline();
+    const masterTl = gsap.timeline();
 
-  effects.forEach((effect, i) => {
-    const item = items[i];
-    const duration = isFullEffect ? 1 : 1.5;
-    const pixelDur = isFullEffect ? 0.4 : 0.3;
-    const stagger = isFullEffect ? 0.2 : 0.5;
+    effects.forEach((effect, i) => {
+      const item = items[i];
+      const duration = isFullEffect ? 1 : 1.5;
+      const pixelDur = isFullEffect ? 0.4 : 0.3;
+      const stagger = isFullEffect ? 0.2 : 0.5;
 
-    const tl = gsap.timeline()
-      .fromTo(item, { y: 0, opacity: 1 }, { top: '-95%', opacity: 1, duration })
-      .to({ size: 20 }, {
-        size: 1,
-        duration: pixelDur,
-        ease: "power2.out",
-        onUpdate() {
-          const newSize = this.targets()[0].size;
-          if (effect && typeof effect.setPixelSize === 'function') {
-            effect.setPixelSize(newSize);
+      const tl = gsap.timeline()
+        .fromTo(item, { y: 0, opacity: 1 }, { top: '-100%', opacity: 1, duration })
+        .to({ size: 20 }, {
+          size: 1,
+          duration: pixelDur,
+          ease: "power2.out",
+          onUpdate() {
+            const newSize = this.targets()[0].size;
+            if (effect && typeof effect.setPixelSize === 'function') {
+              effect.setPixelSize(newSize);
+            }
           }
-        }
-      }, 0);
+        }, 0);
 
-    masterTl.add(tl, i * stagger);
-  });
+      masterTl.add(tl, i * stagger);
+    });
 
-  const scene = new ScrollMagic.Scene({
-    triggerElement: ".case",
-    triggerHook: "onLeave",
-    duration: getSceneDuration(),
-    offset: 0
-  })
-    .setPin(".case")
-    .setTween(masterTl)
-    .addTo(controller);
+    const scene = new ScrollMagic.Scene({
+      triggerElement: ".case",
+      triggerHook: "onLeave",
+      duration: getSceneDuration(),
+      offset: 0
+    })
+      .setPin(".case")
+      .setTween(masterTl)
+      .addTo(controller);
 
-  window.addEventListener('resize', () => {
-    scene.duration(getSceneDuration());
-  });
-}
-
+    window.addEventListener('resize', () => {
+      scene.duration(getSceneDuration());
+    });
+  }
 
   window.addEventListener('beforeunload', () => {
     effects.forEach(e => e.stop && e.stop());
