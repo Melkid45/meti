@@ -274,7 +274,6 @@ $.fn.shuffleLetters = function (options) {
   // Показ первой фигуры в первой grid
   gsap.set(wrapperImages[0], { clipPath: 'inset(0% 0 0 0)' });
   const firstServiceIcon = $('[data-service="0"]').attr('data-icon');
-  console.log(firstServiceIcon);
   drawShape(firstServiceIcon, 0);
 
   // ScrollTrigger

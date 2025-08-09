@@ -147,17 +147,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
 $('.feedback_btn').on('click', function(e){
     let col = 0;
-    $('.inputs input').each(function(e){
+    let formData = {};
+    $('.inputs input').each(function(){
         if ($(this).val() == ''){
             $(this).addClass('error');
         } else {
             $(this).removeClass('error');
             col++;
+            const name = $(this).attr('placeholder').toLowerCase();
+            formData[name] = $(this).val();
         }
     });
     if (col == 5){
-        $('.feedback__bot-form').fadeOut(300);
-        $('.feedback__bot-thank').fadeIn(300);
-        $('.title__feed').text('Спасибо!');
+        if($('.feedback_btn').hasClass('send_feedback')) {
+            $.ajax({
+                url: '/feedback',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    $('.feedback__bot-form').fadeOut(300);
+                    $('.feedback__bot-thank').fadeIn(300);
+                    const successTitle = $('.title__feed').attr('data-success');
+                    $('.title__feed').text(successTitle);
+                },
+                error: function(xhr, status, error) {
+                    // alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+                    console.error(error);
+                }
+            });
+        } else {
+            $('.feedback__bot-form').fadeOut(300);
+            $('.feedback__bot-thank').fadeIn(300);
+            const successTitle = $('.title__feed').attr('data-success');
+            $('.title__feed').text(successTitle);
+        }
+
     }
 });
