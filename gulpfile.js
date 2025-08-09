@@ -64,8 +64,9 @@ function sprite(){
 }
 function scripts() {
     return src([
+        'app/js/libs/**/*.js',
         'app/js/main.js',
-        'app/js/modules/**/*.js' // добавляем все JS файлы из папки modules
+        'app/js/modules/**/*.js'
     ])
     .pipe(concat('main.min.js'))
     .pipe(uglify())
@@ -91,7 +92,7 @@ function watching() {
     watch(['app/scss/style.scss'], styles);
     watch(['app/scss/*.scss'], styles);
     watch(['app/images/src'], images);
-    watch(['app/js/main.js', 'app/js/modules/**/*.js'], scripts);
+    watch(['app/js/main.js', 'app/js/modules/**/*.js', 'app/js/libs/**/*.js',], scripts);
     watch(['app/components/*', 'app/pages/*'], pages);
     watch(['app/*.html']).on('change', browserSync.reload);
 }
