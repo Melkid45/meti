@@ -10,31 +10,36 @@ class SectionGrid {
     this.sectionTop = 0;
 
     this.settings = {
-      baseSize: 54, 
+      baseSize: 54,
       sizeVariation: 0,
       spacing: 0,
-      activationRadius: 120, 
+      activationRadius: 120,
       fadeSpeed: 0.01,
       maxRotation: 0.0,
       rotationSpeed: 0,
       borderColor: { r: 244, g: 244, b: 244, a: 0.24 },
       fillColor: { r: 0, g: 0, b: 0, a: 0 },
-      borderWidth: 1,     
+      borderWidth: 1,
       offsetX: 0,
       offsetY: 0
     };
 
     if (section.classList.contains('services__new')) {
-      this.settings.offsetX = 1;
-      this.settings.offsetY = -25; 
+      if (window.innerWidth <= 1800) {
+        this.settings.offsetX = 1;
+        this.settings.offsetY = -23;
+      }else{
+        this.settings.offsetX = 1;
+        this.settings.offsetY = -25;
+      }
     }
     if (section.classList.contains('client')) {
-      this.settings.offsetX = 0; 
-      this.settings.offsetY = 11; 
+      this.settings.offsetX = 0;
+      this.settings.offsetY = 11;
     }
     if (section.classList.contains('main')) {
       this.settings.offsetX = 27;
-      this.settings.offsetY = -27; 
+      this.settings.offsetY = -27;
     }
     if (section.classList.contains('feedback')) {
       this.settings.offsetX = 27;
@@ -77,7 +82,7 @@ class SectionGrid {
     this.canvas.style.height = this.rect.height + 'px';
     this.canvas.width = this.rect.width * dpr;
     this.canvas.height = this.rect.height * dpr;
-    this.ctx.setTransform(1, 0, 0, 1, 0, 0); 
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
 
     const baseSizePx = this.remToPx(this.settings.baseSize);
@@ -101,7 +106,7 @@ class SectionGrid {
           x: startX + x * baseSizePx,
           y: startY + y * baseSizePx,
           width: baseSizePx,
-          height: baseSizePx, 
+          height: baseSizePx,
           rotation: 0,
           targetRotation: 0,
           alpha: 0,
