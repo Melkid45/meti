@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const rows = Math.ceil(height / (squareSizePx + gapPx)) + 1;
         const gridWidth = cols * (squareSizePx + gapPx);
         const gridHeight = rows * (squareSizePx + gapPx);
-        const offsetX = Math.floor((width - gridWidth) / 2);
-        const offsetY = Math.floor((height - gridHeight) / 2);
+        const offsetX = Math.round((width - gridWidth) / 2);
+        const offsetY = Math.round((height - gridHeight) / 2);
         grid = [];
         for (let y = -1; y < rows; y++) {
             for (let x = -1; x < cols; x++) {
@@ -69,9 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = CONFIG.bgColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         grid.forEach(square => {
-            const x = Math.floor(square.x);
-            const y = Math.floor(square.y);
-            const size = Math.floor(square.width);
+            const x = Math.round(square.x);
+            const y = Math.round(square.y);
+            const size = Math.round(square.width);
 
             ctx.fillStyle = square.filled ? CONFIG.fillColor : CONFIG.bgColor;
             ctx.fillRect(x, y, size, size);
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .on("progress", (e) => {
             const filledCount = Math.floor(e.progress * grid.length);
             updateGrid(filledCount);
-            if (e.progress >= 0.99){
+            if (e.progress >= 0.90){
                 canvas.style.background = '#000'
             }else{
                 canvas.style.background = 'transparent'

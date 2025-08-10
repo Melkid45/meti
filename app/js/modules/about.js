@@ -1,7 +1,9 @@
 const canvas = document.getElementById('pixelCanvas');
 const ctx = canvas.getContext('2d');
 const img = new Image();
-img.src = '../images/dist/about.webp';
+let ImgSrc = document.querySelector('#about__img').src
+img.src = ImgSrc;
+document.querySelector('#about__img').remove()
 const ABOUTCONFIG = {
     animCanvas: -250,
     StartAnim: "top top",
@@ -11,7 +13,7 @@ const ABOUTCONFIG = {
 if (width <= 750) {
     ABOUTCONFIG.animCanvas = -50;
     ABOUTCONFIG.StartAnim = "top center";
-    ABOUTCONFIG.StartAnimPixel = "+=10%";
+    ABOUTCONFIG.StartAnimPixel = "+=30%";
     ABOUTCONFIG.endAnim = "+=30%";
 }
 img.onload = function () {
@@ -81,6 +83,7 @@ img.onload = function () {
             end: ABOUTCONFIG.endAnim,
             scrub: 1,
             ease: "sine.inOut",
+            markers: true
         },
         pixelSize: 1,
         onUpdate: function () {

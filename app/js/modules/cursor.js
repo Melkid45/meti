@@ -31,7 +31,7 @@ if (width > 750) {
             } else {
                 $('.cursor .mute, .cursor .pause, .cursor .play').css('scale', '0');
                 const text = $('.default_text').text();
-                if (text === 'Пауза' || text === 'воспроизвести') {
+                if (text === ConFigNames.pause || text === ConFigNames.play) {
                     $('.default_text').fadeOut(200);
                 }
             }
@@ -45,7 +45,7 @@ if (width > 750) {
 
         $cursor.find('.pause').css('scale', isPlaying ? '1' : '0');
         $cursor.find('.play').css('scale', isPlaying ? '0' : '1');
-        $('.default_text').fadeIn(200).text(isPlaying ? 'Пауза' : 'воспроизвести');
+        $('.default_text').fadeIn(200).text(isPlaying ? ConFigNames.pause : ConFigNames.play);
     }
     function toggleVideoPlayback() {
         if (!video) return;
@@ -68,15 +68,15 @@ if (width > 750) {
         $('.default_text').fadeIn(200);
 
         if (attr.includes('tel')) {
-            $('.default_text').text('Позвонить');
+            $('.default_text').text(`${ConFigNames.phone}`);
             $('.cursor .phone').css('scale', '1');
             $('.cursor svg').not('.cursor .arrow, .cursor .phone').css('scale', 0);
         } else if (attr.includes('mail')) {
-            $('.default_text').text('Написать');
+            $('.default_text').text(`${ConFigNames.email}`);
             $('.cursor .mail').css('scale', '1');
             $('.cursor svg').not('.cursor .arrow, .cursor .mail').css('scale', 0);
         } else {
-            $('.default_text').text('Клик');
+            $('.default_text').text(`${ConFigNames.click}`);
             $('.cursor .arrow').css('scale', '1');
             $('.cursor svg').not('.cursor .arrow').css('scale', 0);
         }

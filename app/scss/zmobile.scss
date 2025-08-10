@@ -545,11 +545,13 @@
                     align-items: center;
                     justify-content: center;
                     z-index: 2;
-                    svg{
+
+                    svg {
                         width: 280rem;
                         height: 280rem;
                         position: absolute;
                     }
+
                     img {
                         width: 280rem;
                         height: 280rem;
@@ -881,180 +883,180 @@
                 gap: 80rem;
             }
 
-            .wrap {
-                width: 100%;
-                padding: 0 20rem;
+
+            .item:hover .info .action div {
+                opacity: 1;
+                scale: 1;
+                cursor: pointer;
+            }
+
+            .item1 {
+                left: 20rem;
+            }
+
+            .item2 {
+                right: 40rem;
+            }
+
+            .item3 {
+                right: 577rem;
+            }
+
+            .item4 {
+                right: 40rem;
+            }
+
+            .item5 {
+                left: 40rem;
+            }
+
+            .item6 {
+                right: 40rem;
+            }
+
+            .big_case {
+                width: 335rem;
+
+
+                .media {
+                    height: 410rem;
+                }
+            }
+
+            .small_case {
+                width: 335rem;
+
+                .media {
+                    height: 410rem;
+                }
+            }
+
+            .item {
                 display: flex;
-                justify-content: flex-start;
-                align-items: flex-end;
                 flex-direction: column;
-                gap: 80rem;
+                gap: 20rem;
+                position: absolute;
+                left: 20rem;
+                z-index: 2;
 
-                .item:hover .info .action div {
-                    opacity: 1;
-                    scale: 1;
-                    cursor: pointer;
-                }
+                .media {
+                    width: 100%;
+                    position: relative;
+                    position: relative;
+                    background: transparent;
 
-                .item1 {
-                    left: 20rem;
-                }
-
-                .item2 {
-                    right: 40rem;
-                }
-
-                .item3 {
-                    right: 577rem;
-                }
-
-                .item4 {
-                    right: 40rem;
-                }
-
-                .item5 {
-                    left: 40rem;
-                }
-
-                .item6 {
-                    right: 40rem;
-                }
-
-                .big_case {
-                    width: 335rem;
-
-
-                    .media {
-                        height: 410rem;
-                    }
-                }
-
-                .small_case {
-                    width: 335rem;
-
-                    .media {
-                        height: 410rem;
-                    }
-                }
-
-                .item {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 20rem;
-                    position: absolute;
-                    left: 20rem;
-                    z-index: 2;
-
-                    .media {
+                    .grid-portfolio {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
                         width: 100%;
-                        position: relative;
-                        position: relative;
-                        background: transparent;
-
-                        .grid-portfolio {
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 100%;
-                            z-index: 2;
-                            display: flex;
-                        }
-
-
-                        .grid-canvas {
-                            position: relative;
-                            width: 100%;
-                            height: 100%;
-                        }
-
-                        .btn__rotate {
-                            width: 53rem;
-                            height: 53rem;
-                            background: #442CBF;
-                            border-radius: 50%;
-                            position: absolute;
-                            top: -26rem;
-                            right: 33rem;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-
-                            .icon {
-                                width: 24rem;
-                                height: 24rem;
-                            }
-
-                            .text {
-                                width: 80rem;
-                                height: 80rem;
-                                position: absolute;
-                                transform-origin: center;
-                                animation: rotate 10s linear infinite;
-                                will-change: transform;
-                                mix-blend-mode: difference;
-                                fill: #fff;
-                            }
-
-                            @keyframes rotate {
-                                from {
-                                    transform: rotate(0deg);
-                                }
-
-                                to {
-                                    transform: rotate(-360deg);
-                                }
-                            }
-                        }
-                    }
-
-                    .info {
+                        height: 100%;
+                        z-index: 2;
                         display: flex;
+                    }
+
+
+                    .grid-canvas {
+                        position: relative;
                         width: 100%;
-                        justify-content: space-between;
+                        height: 100%;
+                    }
+
+                    .btn__rotate {
+                        width: 53rem;
+                        height: 53rem;
+                        background: #442CBF;
+                        border-radius: 50%;
+                        position: absolute;
+                        top: -26rem;
+                        right: 33rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        .icon {
+                            width: 24rem;
+                            height: 24rem;
+                        }
 
                         .text {
-                            display: flex;
-                            flex-direction: column;
-                            gap: 8rem;
+                            width: 80rem;
+                            height: 80rem;
+                            position: absolute;
+                            transform-origin: center;
+                            animation: rotate 10s linear infinite;
+                            will-change: transform;
+                            mix-blend-mode: difference;
+                            fill: #fff;
 
-                            span {
-                                font-family: var(--onest);
-                                font-weight: 570;
-                                font-size: 24rem;
-                                leading-trim: NONE;
-                                line-height: 28rem;
-                                letter-spacing: -4%;
-                                text-transform: uppercase;
-                                color: var(--white);
-                            }
-
-                            p {
+                            text {
                                 font-weight: 300;
-                                font-size: 14rem;
-                                line-height: 20rem;
+                                font-size: 11rem;
+                                line-height: 0px;
                                 letter-spacing: 0%;
-                                color: var(--white);
+                                text-align: center;
+                                color: #fff;
                             }
                         }
 
-                        .action {
-                            width: 54rem;
-                            height: 54rem;
-                            border: 1.35rem solid #F4F4F429;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            display: none;
-
-                            div {
-                                width: 27rem;
-                                height: 27rem;
-                                background: var(--main);
-                                transition: all 0.3s ease;
-                                opacity: 0;
-                                scale: 0;
+                        @keyframes rotate {
+                            from {
+                                transform: rotate(0deg);
                             }
+
+                            to {
+                                transform: rotate(-360deg);
+                            }
+                        }
+                    }
+                }
+
+                .info {
+                    display: flex;
+                    width: 100%;
+                    justify-content: space-between;
+
+                    .text {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8rem;
+
+                        span {
+                            font-family: var(--onest);
+                            font-weight: 570;
+                            font-size: 24rem;
+                            leading-trim: NONE;
+                            line-height: 28rem;
+                            letter-spacing: -4%;
+                            text-transform: uppercase;
+                            color: var(--white);
+                        }
+
+                        p {
+                            font-weight: 300;
+                            font-size: 14rem;
+                            line-height: 20rem;
+                            letter-spacing: 0%;
+                            color: var(--white);
+                        }
+                    }
+
+                    .action {
+                        width: 54rem;
+                        height: 54rem;
+                        border: 1.35rem solid #F4F4F429;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        display: none;
+
+                        div {
+                            width: 27rem;
+                            height: 27rem;
+                            background: var(--main);
+                            transition: all 0.3s ease;
+                            opacity: 0;
+                            scale: 0;
                         }
                     }
                 }
@@ -1471,6 +1473,7 @@
             position: absolute;
             top: 0;
             left: 0;
+
             canvas {
                 width: 100%;
                 height: 100%;
@@ -1671,12 +1674,14 @@
                             color: var(--white);
                             text-align: start;
                         }
-                        div::before{
+
+                        div::before {
                             width: 20rem;
                             height: 20rem;
                             font-size: 11rem;
                             line-height: 16rem;
                         }
+
                         input {
                             background: transparent;
                             border: none;
@@ -1702,7 +1707,8 @@
                         width: 100%;
                         justify-content: flex-start;
 
-                        input, div {
+                        input,
+                        div {
                             width: 318rem;
                         }
                     }
@@ -1711,7 +1717,8 @@
                         justify-content: space-between;
                         width: 100%;
 
-                        input, div {
+                        input,
+                        div {
                             width: 305rem;
                         }
                     }
@@ -1719,7 +1726,8 @@
                     .wrap:nth-child(3) {
                         justify-content: flex-end;
 
-                        input, div {
+                        input,
+                        div {
                             width: 318rem;
                         }
                     }
@@ -1735,7 +1743,8 @@
                     .wrap:nth-child(5) {
                         justify-content: flex-end;
 
-                        input, div {
+                        input,
+                        div {
                             width: 317rem;
                         }
                     }
@@ -1752,7 +1761,8 @@
                         justify-content: space-between;
                         margin-top: -8rem;
 
-                        input, div {
+                        input,
+                        div {
                             width: 317rem;
                         }
 

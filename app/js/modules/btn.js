@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
         squareSize: 40,
         fillColor: '#000000',
         initialFillRatio: 0.3,
-        animationDuration: 50,
-        staggerDelay: 2
+        animationDuration: 25,
+        staggerDelay: 1
     };
-    if (width <= 750){
+    if (width <= 750) {
         CONFIG.squareSize = 20;
     }
     const button = document.querySelector('.feedback_btn');
@@ -44,18 +44,23 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.forEach(square => {
             square.initialFilled = square.filled;
         });
-        
+
         draw();
     }
 
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+
         grid.forEach(square => {
             if (square.filled || square.progress > 0) {
                 ctx.fillStyle = CONFIG.fillColor;
                 ctx.globalAlpha = square.filled ? 1 : square.progress;
-                ctx.fillRect(square.x, square.y, square.width, square.height);
+                ctx.fillRect(
+                    Math.round(square.x),
+                    Math.round(square.y),
+                    Math.round(square.width) + 1,
+                    Math.round(square.height) + 1
+                );
                 ctx.globalAlpha = 1;
             }
         });
@@ -65,14 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Promise(resolve => {
             setTimeout(() => {
                 const startTime = performance.now();
-                
+
                 function update(time) {
                     const elapsed = time - startTime;
                     const progress = Math.min(elapsed / CONFIG.animationDuration, 1);
-                    
+
                     square.progress = targetState ? progress : 1 - progress;
                     draw();
-                    
+
                     if (progress < 1) {
                         requestAnimationFrame(update);
                     } else {
@@ -81,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         resolve();
                     }
                 }
-                
+
                 requestAnimationFrame(update);
             }, delay);
         });
@@ -90,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function startHoverAnimation() {
         isHovered = true;
         const shuffledGrid = [...grid].sort(() => Math.random() - 0.5);
-        
+
         for (let i = 0; i < shuffledGrid.length; i++) {
             if (!isHovered) break;
             const square = shuffledGrid[i];
@@ -103,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function startLeaveAnimation() {
         isHovered = false;
         const shuffledGrid = [...grid].sort(() => Math.random() - 0.5);
-        
+
         for (let i = 0; i < shuffledGrid.length; i++) {
             if (isHovered) break;
             const square = shuffledGrid[i];

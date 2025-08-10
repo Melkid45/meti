@@ -79,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         grid.forEach(square => {
-            const x = Math.floor(square.x);
-            const y = Math.floor(square.y);
-            const size = Math.floor(square.width);
+            const x = Math.round(square.x);
+            const y = Math.round(square.y);
+            const size = Math.round(square.width);
 
             ctx.fillStyle = square.filled ? CONFIG.fillColor : CONFIG.bgColor;
             ctx.fillRect(x, y, size, size);
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .on("progress", (e) => {
         const filledCount = Math.floor(e.progress * grid.length);
         updateGrid(filledCount);
-        if (e.progress >= 0.95){
+        if (e.progress >= 0.90){
             canvas.style.background = CONFIG.fillColor;
         } else {
             canvas.style.background = 'transparent';

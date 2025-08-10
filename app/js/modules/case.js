@@ -9,20 +9,39 @@ document.addEventListener('DOMContentLoaded', () => {
       t = setTimeout(() => fn(...args), wait);
     };
   }
+  function drawImageCover(ctx, img, canvasWidth, canvasHeight) {
+    const imgRatio = img.naturalWidth / img.naturalHeight;
+    const canvasRatio = canvasWidth / canvasHeight;
 
+    let drawWidth, drawHeight, offsetX, offsetY;
+
+    if (canvasRatio > imgRatio) {
+      drawWidth = canvasWidth;
+      drawHeight = canvasWidth / imgRatio;
+      offsetX = 0;
+      offsetY = (canvasHeight - drawHeight) / 2;
+    } else {
+      drawHeight = canvasHeight;
+      drawWidth = canvasHeight * imgRatio;
+      offsetX = (canvasWidth - drawWidth) / 2;
+      offsetY = 0;
+    }
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+  }
   class CombinedImageEffect {
+
     constructor(media) {
       this.media = media;
       this.img = media.querySelector('img');
       this.canvas = media.querySelector('.grid-canvas-case');
       this.ctx = this.canvas.getContext('2d');
 
-      // Для пикселизации
       this.pixelSize = 20;
       this.pixelCanvas = document.createElement('canvas');
       this.pixelCtx = this.pixelCanvas.getContext('2d');
 
-      // Для эффектов
       this.isGridActive = false;
       this.mouse = { x: -1000, y: -1000 };
       this.originalCanvas = document.createElement('canvas');
@@ -36,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.isInitialized = false;
       this.isBlurWorking = false;
       this.isBlurDone = false;
-      
+
       this.settings = {
         cellSize: 54,
         effectRadius: 120,
@@ -75,7 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
         this.resizeCanvas();
         this.originalCanvas.width = this.canvas.width;
         this.originalCanvas.height = this.canvas.height;
-        this.originalCtx.drawImage(this.img, 0, 0, this.originalCanvas.width, this.originalCanvas.height);
+        drawImageCover(this.originalCtx, this.img, this.originalCanvas.width, this.originalCanvas.height);
+
         if (isFullEffect) {
           this.blurCanvas.width = this.canvas.width;
           this.blurCanvas.height = this.canvas.height;
@@ -90,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
       window.addEventListener('resize', this._onResize);
     }
 
+
     resizeCanvas() {
       this.canvas.width = this.media.offsetWidth;
       this.canvas.height = this.media.offsetHeight;
@@ -99,10 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (this.isInitialized) return;
       this.isInitialized = true;
       this.resizeCanvas();
-      
+
       this.originalCanvas.width = this.canvas.width;
       this.originalCanvas.height = this.canvas.height;
-      this.originalCtx.drawImage(this.img, 0, 0, this.originalCanvas.width, this.originalCanvas.height);
+      drawImageCover(this.originalCtx, this.img, this.originalCanvas.width, this.originalCanvas.height);
+
 
       if (isFullEffect) {
         this.blurCanvas.width = this.canvas.width;
@@ -119,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupEvents() {
       if (!isFullEffect) return;
-      
+
       this._onMouseMove = (e) => {
         const rect = this.canvas.getBoundingClientRect();
         this.mouse.x = e.clientX - rect.left;
@@ -140,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyBlur() {
       if (!this.blurCtx || !this.originalCtx) return;
       if (this.isBlurWorking) return;
-      
+
       this.isBlurWorking = true;
       this.isBlurDone = false;
 
@@ -152,9 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const W = width, H = height;
       const iw = W + 1;
       const ih = H + 1;
-      
+
       this.blurCtx.putImageData(srcImageData, 0, 0);
-      
+
       if (radius === 0) {
         this.isBlurWorking = false;
         this.isBlurDone = true;
@@ -255,22 +277,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return;
       }
-      
+
       const smallW = Math.max(1, Math.floor(canvas.width / Math.max(1, pixelSize)));
       const smallH = Math.max(1, Math.floor(canvas.height / Math.max(1, pixelSize)));
-      
+
       if (this.pixelCanvas.width !== smallW || this.pixelCanvas.height !== smallH) {
         this.pixelCanvas.width = smallW;
         this.pixelCanvas.height = smallH;
       }
-      
+
       this.pixelCtx.clearRect(0, 0, this.pixelCanvas.width, this.pixelCanvas.height);
       this.pixelCtx.drawImage(
-        this.originalCanvas, 
+        this.originalCanvas,
         0, 0, this.originalCanvas.width, this.originalCanvas.height,
         0, 0, this.pixelCanvas.width, this.pixelCanvas.height
       );
-      
+
       ctx.imageSmoothingEnabled = false;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(
@@ -287,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const { cellSize, effectRadius, zoomFactor, zoomRadius, zoomTransition } = this.settings;
       const cx = this.mouse.x;
       const cy = this.mouse.y;
-      
+
       const startCol = Math.max(0, Math.floor((cx - effectRadius) / cellSize));
       const endCol = Math.min(Math.ceil(this.canvas.width / cellSize), Math.ceil((cx + effectRadius) / cellSize));
       const startRow = Math.max(0, Math.floor((cy - effectRadius) / cellSize));
@@ -296,7 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const effectRadiusSq = effectRadius * effectRadius;
       const zoomRadiusSq = zoomRadius * zoomRadius;
 
-      // Сначала рисуем размытые ячейки
       for (let y = startRow; y < endRow; y++) {
         for (let x = startCol; x < endCol; x++) {
           const cellX = x * cellSize;
@@ -306,14 +327,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const distSq = (centreX - cx) * (centreX - cx) + (centreY - cy) * (centreY - cy);
 
           if (distSq < effectRadiusSq) {
-            // Рисуем размытую ячейку
             this.ctx.drawImage(
               this.blurCanvas,
               cellX, cellY, cellSize, cellSize,
               cellX, cellY, cellSize, cellSize
             );
 
-            // Добавляем свечение
             const dist = Math.sqrt(distSq);
             const alpha = 0.01 * (1 - dist / effectRadius);
             this.ctx.fillStyle = `rgba(244,244,244,${alpha.toFixed(3)})`;
@@ -322,7 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Затем рисуем увеличенные области
       for (let y = startRow; y < endRow; y++) {
         for (let x = startCol; x < endCol; x++) {
           const cellX = x * cellSize;
@@ -335,34 +353,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const dist = Math.sqrt(distSq);
             const zoomStrength = 1 - dist / zoomRadius;
             const currentZoom = 1 + (zoomFactor - 1) * zoomStrength;
-            
-            // Размеры для увеличения
+
             const srcSize = cellSize / currentZoom;
             const destSize = cellSize;
-            
-            // Центр увеличенной области
+
             const srcCenterX = cellX + cellSize / 2 - (cx - (cellX + cellSize / 2)) * (currentZoom - 1);
             const srcCenterY = cellY + cellSize / 2 - (cy - (cellY + cellSize / 2)) * (currentZoom - 1);
-            
-            // Позиция в оригинальном изображении
+
             const srcX = srcCenterX - srcSize / 2;
             const srcY = srcCenterY - srcSize / 2;
-            
-            // Ограничиваем границы
+
             const safeSrcX = Math.max(0, Math.min(this.originalCanvas.width - srcSize, srcX));
             const safeSrcY = Math.max(0, Math.min(this.originalCanvas.height - srcSize, srcY));
-            
-            // Очищаем zoom canvas
+
             this.zoomCtx.clearRect(0, 0, this.zoomCanvas.width, this.zoomCanvas.height);
-            
-            // Рисуем увеличенную область на временном canvas
+
             this.zoomCtx.drawImage(
               this.originalCanvas,
               safeSrcX, safeSrcY, srcSize, srcSize,
               cellX, cellY, destSize, destSize
             );
-            
-            // Копируем на основной canvas с прозрачностью
+
             const transitionAlpha = Math.min(1, zoomStrength / zoomTransition);
             this.ctx.globalAlpha = transitionAlpha;
             this.ctx.drawImage(
@@ -403,7 +414,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Инициализация элементов и анимации скролла
   const items = document.querySelectorAll('.case__soft .item');
   const effects = [];
   let loadedCount = 0;
@@ -426,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (img.complete) {
       setTimeout(() => {
         if (img) {
-          try { img.removeEventListener('load', onLoadCounter); } catch (e) {}
+          try { img.removeEventListener('load', onLoadCounter); } catch (e) { }
         }
         loadedCount++;
         if (loadedCount === items.length) initScrollAnimation();
@@ -436,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function initScrollAnimation() {
     function getSceneDuration() {
-      return (items.length * window.innerHeight) + window.innerHeight;
+      return (items.length * window.innerHeight) + window.innerHeight / 2;
     }
 
     const masterTl = gsap.timeline();
