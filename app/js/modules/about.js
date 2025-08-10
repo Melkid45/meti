@@ -83,7 +83,6 @@ img.onload = function () {
             end: ABOUTCONFIG.endAnim,
             scrub: 1,
             ease: "sine.inOut",
-            markers: true
         },
         pixelSize: 1,
         onUpdate: function () {

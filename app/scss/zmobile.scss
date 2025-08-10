@@ -91,8 +91,8 @@
                     li {
                         font-family: var(--onest);
                         font-weight: 570;
-                        font-size: 32px;
-                        line-height: 36px;
+                        font-size: 32rem;
+                        line-height: 36rem;
                         letter-spacing: -2%;
                         text-transform: uppercase;
                         color: var(--white);
@@ -113,9 +113,9 @@
                         font-family: var(--onest);
                         font-weight: 570;
                         font-style: SemiBold;
-                        font-size: 32px;
+                        font-size: 32rem;
                         leading-trim: NONE;
-                        line-height: 36px;
+                        line-height: 36rem;
                         letter-spacing: -2%;
                         text-transform: uppercase;
                         color: var(--white);
@@ -130,9 +130,9 @@
 
                     a {
                         font-weight: 300;
-                        font-size: 11px;
+                        font-size: 11rem;
                         leading-trim: NONE;
-                        line-height: 16px;
+                        line-height: 16rem;
                         letter-spacing: 0%;
                         text-transform: uppercase;
                         color: var(--white);
@@ -509,7 +509,7 @@
 
             .items {
                 width: 100%;
-                height: 100vh;
+                height: 440rem;
                 overflow: hidden;
                 display: flex;
                 align-items: center;
@@ -830,7 +830,7 @@
                     white-space: nowrap;
                     display: inline-flex;
                     mix-blend-mode: difference !important;
-                    margin-top: -13rem;
+                    margin-top: -8rem;
 
                     &-title {
                         display: flex;
@@ -849,9 +849,9 @@
                             font-family: "Chava";
                             font-size: 118rem;
                             line-height: 106rem;
-                            margin-top: 0rem;
+                            margin-top: -13rem;
                             margin-left: 0rem;
-                            margin-right: 0rem;
+                            margin-right: 10rem;
                         }
 
                         &:after {
@@ -991,7 +991,7 @@
 
                             text {
                                 font-weight: 300;
-                                font-size: 11rem;
+                                font-size: 10rem;
                                 line-height: 0px;
                                 letter-spacing: 0%;
                                 text-align: center;
