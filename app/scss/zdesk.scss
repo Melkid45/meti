@@ -843,7 +843,6 @@
 
                             text {
                                 font-weight: 300;
-                                font-size: 16rem;
                                 line-height: 0px;
                                 letter-spacing: 0%;
                                 text-align: center;
@@ -1672,7 +1671,7 @@
         width: 100%;
         background: var(--main);
         padding-bottom: 40rem;
-
+        padding-top: 20rem;
         &__body {
             display: flex;
             flex-direction: column;

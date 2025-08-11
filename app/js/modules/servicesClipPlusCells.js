@@ -323,11 +323,19 @@ $.fn.shuffleLetters = function (options) {
         });
       });
     },
-    onLeave: () => {
-      allCellsGrids.forEach((grid, index) => drawShape(null, index, true));
+    onLeave: (self) => {
+      allCellsGrids.forEach((grid, index) => {
+        if (index !== 0 && index !== allCellsGrids.length - 1) {
+          drawShape(null, index, true);
+        }
+      });
     },
-    onLeaveBack: () => {
-      allCellsGrids.forEach((grid, index) => drawShape(null, index, true));
+    onLeaveBack: (self) => {
+      allCellsGrids.forEach((grid, index) => {
+        if (index !== 0 && index !== allCellsGrids.length - 1) {
+          drawShape(null, index, true);
+        }
+      });
     }
   });
 })();

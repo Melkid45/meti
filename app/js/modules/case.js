@@ -493,3 +493,27 @@ document.addEventListener('DOMContentLoaded', () => {
     effects.forEach(e => e.stop && e.stop());
   });
 });
+function adjustTextToCircle() {
+  document.querySelectorAll('.btn__rotate .text').forEach(function(svg) {
+    const textElement = svg.querySelector('text');
+    const textPath = svg.querySelector('textPath');
+    const path = svg.querySelector('.circlePath');
+    
+    if (!textElement || !textPath || !path) return;
+    
+    const text = textPath.textContent.trim();
+    const pathLength = path.getTotalLength();
+    const charSpacing = 0.5;
+    const fontSize = pathLength / (text.length * (0.2 + charSpacing));
+    textElement.setAttribute('font-size', fontSize);
+    const textWidth = text.length * fontSize * (0.5 + charSpacing * 0.3);
+    const offsetCorrection = (pathLength - textWidth) / 2;
+    textPath.setAttribute('startOffset', Math.max(0, 50 - (offsetCorrection / pathLength * 100)) + '%');
+    textElement.setAttribute('letter-spacing', charSpacing);
+  });
+}
+window.addEventListener('DOMContentLoaded', adjustTextToCircle);
+window.addEventListener('resize', adjustTextToCircle);
+if (document.readyState !== 'loading') {
+  adjustTextToCircle();
+}

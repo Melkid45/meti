@@ -509,7 +509,7 @@
 
             .items {
                 width: 100%;
-                height: 440rem;
+                height: 100vh;
                 overflow: hidden;
                 display: flex;
                 align-items: center;
@@ -577,7 +577,7 @@
                     .number {
                         position: absolute;
                         left: 20rem;
-                        top: 36rem;
+                        top: 96rem;
                         font-size: 11rem;
                         line-height: 16rem;
                         color: #fff;
@@ -593,7 +593,7 @@
                         color: var(--white);
                         max-width: 335rem;
                         position: absolute;
-                        bottom: 32rem;
+                        bottom: 96rem;
                         right: 0;
                     }
 
@@ -1815,7 +1815,7 @@
         width: 100%;
         background: var(--main);
         padding-bottom: 16rem;
-
+        padding-top: 0rem;
         &__body {
             display: flex;
             flex-direction: column;
