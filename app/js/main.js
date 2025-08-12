@@ -67,5 +67,23 @@ $('.burger').on('click', function (e) {
 })
 $('.header__mobile-menu ul li').on('click', function (e) {
     $('.header__mobile').removeClass('show')
-    $(this).find('.current').removeClass('show')
+    $('.burger').find('.current').removeClass('show')
+})
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', () => {
+    scene.enabled(false);
+    setTimeout(() => {
+      scene.enabled(true);
+    }, 1000);
+  });
+});
+document.addEventListener("DOMContentLoaded", function(){
+ var IsRefresh = getCookie("IsRefresh");
+ if (IsRefresh != null && IsRefresh != "") {
+    DeleteCookie("IsRefresh");
+ }
+ else {
+    window.scrollTo(0,0)
+    setCookie("IsRefresh", "true", 1);
+ }
 })

@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.canvas = media.querySelector('.grid-canvas-case');
       this.ctx = this.canvas.getContext('2d');
 
-      this.pixelSize = 20;
+      this.pixelSize = 40;
       this.pixelCanvas = document.createElement('canvas');
       this.pixelCtx = this.pixelCanvas.getContext('2d');
 
@@ -446,20 +446,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function initScrollAnimation() {
     function getSceneDuration() {
-      return (items.length * window.innerHeight) + window.innerHeight / 2;
+      const caseEl = document.querySelector('.case');
+      const totalHeight = document.body.scrollHeight;
+      const caseOffsetTop = caseEl.offsetTop;
+      const caseHeight = caseEl.offsetHeight;
+      const innerScroll = items.length * window.innerHeight;
+      return Math.min(innerScroll, totalHeight - caseOffsetTop - caseHeight);
     }
 
     const masterTl = gsap.timeline();
 
     effects.forEach((effect, i) => {
       const item = items[i];
-      const duration = isFullEffect ? 1 : 1.5;
-      const pixelDur = isFullEffect ? 0.4 : 0.3;
-      const stagger = isFullEffect ? 0.2 : 0.5;
-
+      const duration = isFullEffect ? 1 : 1;
+      const pixelDur = isFullEffect ? 0.4 : 0.4;
+      const stagger = isFullEffect ? 0.2 : 0.3;
+      let height = isFullEffect ? '-110%' : '-70%';
+      if (window.innerWidth < 500) {
+        height = '-80%';
+      }
       const tl = gsap.timeline()
-        .fromTo(item, { y: 0, opacity: 1 }, { top: '-110%', opacity: 1, duration })
-        .to({ size: 20 }, {
+        .fromTo(item, { y: 0, opacity: 1 }, { top: height, opacity: 1, duration })
+        .to({ size: 40 }, {
           size: 1,
           duration: pixelDur,
           ease: "power2.out",
@@ -493,27 +501,63 @@ document.addEventListener('DOMContentLoaded', () => {
     effects.forEach(e => e.stop && e.stop());
   });
 });
-function adjustTextToCircle() {
-  document.querySelectorAll('.btn__rotate .text').forEach(function(svg) {
-    const textElement = svg.querySelector('text');
-    const textPath = svg.querySelector('textPath');
-    const path = svg.querySelector('.circlePath');
-    
-    if (!textElement || !textPath || !path) return;
-    
-    const text = textPath.textContent.trim();
-    const pathLength = path.getTotalLength();
-    const charSpacing = 0.5;
-    const fontSize = pathLength / (text.length * (0.2 + charSpacing));
-    textElement.setAttribute('font-size', fontSize);
-    const textWidth = text.length * fontSize * (0.5 + charSpacing * 0.3);
-    const offsetCorrection = (pathLength - textWidth) / 2;
-    textPath.setAttribute('startOffset', Math.max(0, 50 - (offsetCorrection / pathLength * 100)) + '%');
-    textElement.setAttribute('letter-spacing', charSpacing);
+
+
+
+
+
+
+// Btn Rotate
+
+const GUI = dat.GUI;
+const VIEWBOX = 130;
+const TEXT_ELEMENTS = Array.from(document.querySelectorAll('[data-circular-text]'));
+
+const OPTIONS = {
+  size: 12,
+  radius: 53,
+  showPath: true,
+  spread: true,
+  inside: false,
+  texts: []
+};
+
+TEXT_ELEMENTS.forEach((el, index) => {
+  OPTIONS.texts[index] = el.dataset.circularText || 'Your text • ';
+
+  const path = el.querySelector('.circlePath');
+  path.id = `circlePath${index}`;
+
+  const textPath = el.querySelector('.textPath');
+  textPath.setAttribute('href', `#${path.id}`);
+  textPath.textContent = OPTIONS.texts[index];
+});
+
+
+const updateAllElements = () => {
+  TEXT_ELEMENTS.forEach((element, index) => {
+    const circlePath = element.querySelector('.circlePath');
+    const textPath = element.querySelector('.textPath');
+    const textElement = element.querySelector('text');
+
+    const startX = VIEWBOX * 0.5 - OPTIONS.radius;
+    const startY = VIEWBOX * 0.5;
+    const path = `
+          M ${startX}, ${startY}
+          a ${OPTIONS.radius},${OPTIONS.radius} 0 1,${OPTIONS.inside ? 0 : 1} ${OPTIONS.radius * 2},0
+          a ${OPTIONS.radius},${OPTIONS.radius} 0 1,${OPTIONS.inside ? 0 : 1} -${OPTIONS.radius * 2},0
+        `;
+
+    circlePath.setAttribute('d', path);
+    textPath.textContent = OPTIONS.texts[index];
+    circlePath.style.setProperty('--show', OPTIONS.showPath ? 1 : 0);
+
+    if (OPTIONS.spread) {
+      textPath.setAttribute('textLength', Math.PI * 2 * OPTIONS.radius * 0.95);
+    } else {
+      textPath.removeAttribute('textLength');
+    }
   });
-}
-window.addEventListener('DOMContentLoaded', adjustTextToCircle);
-window.addEventListener('resize', adjustTextToCircle);
-if (document.readyState !== 'loading') {
-  adjustTextToCircle();
-}
+};
+
+updateAllElements();

@@ -67,7 +67,6 @@
         flex-direction: column;
         justify-content: flex-end;
         overflow: hidden;
-
         .top {
             width: 100%;
             display: flex;
@@ -75,7 +74,7 @@
             align-items: center;
             position: relative;
             z-index: 0;
-
+            padding: 0 40px;
             span {
                 font-weight: 300;
                 font-size: 16px;
@@ -89,14 +88,16 @@
         .stroke {
             width: 100%;
             mix-blend-mode: difference;
-
+            margin-left: 40px;
+            overflow: hidden;
+            margin-right: 20px;
             @keyframes animTitle {
                 from {
                     transform: translateX(0%);
                 }
 
                 to {
-                    transform: translate(-325.5%);
+                    transform: translate(-297%);
                 }
             }
 
@@ -120,12 +121,11 @@
                 display: flex;
                 align-items: center;
                 gap: 150px;
-
                 span {
                     font-family: var(--chava);
                     font-weight: 400;
                     font-size: 275.33px;
-                    line-height: 247.33px;
+                    line-height: 280px;
                     letter-spacing: 0%;
                     text-transform: uppercase;
                     color: var(--white);
@@ -564,8 +564,8 @@
     justify-content: center;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
-
+    overflow: visible;
+    padding-top: 400px;
     .case__main {
         width: 100%;
         display: flex;
@@ -593,7 +593,7 @@
         .stroke {
             width: 100%;
             height: 100%;
-
+            mix-blend-mode: difference;
             .stroke_container {
                 display: flex;
                 align-items: center;
@@ -782,6 +782,7 @@
                             letter-spacing: 0%;
                             text-align: center;
                             color: #fff;
+                            font-size: 16px;
                         }
                     }
 

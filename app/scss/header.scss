@@ -49,10 +49,13 @@
         }
     }
 }
-
-.cursor {
+.cursor.hover{
     width: 40px;
     height: 40px;
+}
+.cursor {
+    width: 20px;
+    height: 20px;
     position: fixed;
     background: var(--white);
     z-index: 999;

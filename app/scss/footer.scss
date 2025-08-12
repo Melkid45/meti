@@ -15,7 +15,7 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
-
+            padding: 0 40px;
             span {
                 font-weight: 300;
                 font-size: 14px;
@@ -52,6 +52,7 @@
         .wrap__stroke {
             overflow: hidden;
             width: 100%;
+            margin-left: 40px;
         }
 
         .stroke {
@@ -84,7 +85,7 @@
             display: flex;
             justify-content: space-between;
             width: 100%;
-
+            padding: 0 40px;
             span {
                 font-weight: 300;
                 font-size: 14px;
@@ -114,6 +115,6 @@
     }
 
     to {
-        transform: translate(-149.3%);
+        transform: translate(-143.1%);
     }
 }

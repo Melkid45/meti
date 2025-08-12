@@ -68,13 +68,13 @@ img.onload = function () {
         opacity: 1,
         scrollTrigger: {
             trigger: ".benefits",
-            start: '-=30%',
+            start: '-=50%',
             end: "+=30%",
             scrub: 2,
             ease: "sine.inOut",
         }
     });
-    const pixelAnimation = { pixelSize: 20 };
+    const pixelAnimation = { pixelSize: 40 };
 
     gsap.to(pixelAnimation, {
         scrollTrigger: {
@@ -94,7 +94,7 @@ img.onload = function () {
 function initCanvas() {
     canvas.width = img.width;
     canvas.height = img.height;
-    renderPixelated(20);
+    renderPixelated(40);
 }
 
 function renderPixelated(pixelSize) {

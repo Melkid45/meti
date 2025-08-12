@@ -4,21 +4,22 @@ class SectionGrid {
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
     this.cellPool = [];
-    this.mouse = { x: -1000, y: -1000 };
+    this.mouse = { x: -1000, y: -1000, inside: false };
     this.rafId = null;
     this.isActive = true;
     this.sectionTop = 0;
 
     this.settings = {
-      baseSize: 54,
-      sizeVariation: 0,
+      baseSize: 54,  
       spacing: 0,
       activationRadius: 120,
-      fadeSpeed: 0.01,
-      maxRotation: 0.0,
-      rotationSpeed: 0,
-      borderColor: { r: 244, g: 244, b: 244, a: 0.24 },
-      fillColor: { r: 0, g: 0, b: 0, a: 0 },
+      trailLifetime: 200, 
+      fadeScaleStart: 1.0,  
+      fadeScaleEnd: 0.0,     
+      hoverScale: 1.35,      
+      rotationSpeed: 0,  
+      gridColor: { r: 140, g: 140, b: 140 }, 
+      cursorColor: { r: 255, g: 255, b: 255 }, 
       borderWidth: 1,
       offsetX: 0,
       offsetY: 0
@@ -28,7 +29,7 @@ class SectionGrid {
       if (window.innerWidth <= 1800) {
         this.settings.offsetX = 1;
         this.settings.offsetY = -23;
-      }else{
+      } else {
         this.settings.offsetX = 1;
         this.settings.offsetY = -25;
       }
@@ -38,8 +39,8 @@ class SectionGrid {
       this.settings.offsetY = 11;
     }
     if (section.classList.contains('main')) {
-      this.settings.offsetX = 27;
-      this.settings.offsetY = -27;
+      this.settings.offsetX = 11;
+      this.settings.offsetY = 10;
     }
     if (section.classList.contains('feedback')) {
       this.settings.offsetX = 27;
@@ -51,6 +52,7 @@ class SectionGrid {
   remToPx(rem) {
     return rem * (window.innerWidth / 1920);
   }
+
   init() {
     this.canvas.style.position = 'absolute';
     this.canvas.style.top = '0';
@@ -80,13 +82,12 @@ class SectionGrid {
     const dpr = window.devicePixelRatio || 1;
     this.canvas.style.width = this.rect.width + 'px';
     this.canvas.style.height = this.rect.height + 'px';
-    this.canvas.width = this.rect.width * dpr;
-    this.canvas.height = this.rect.height * dpr;
+    this.canvas.width = Math.max(1, Math.floor(this.rect.width * dpr));
+    this.canvas.height = Math.max(1, Math.floor(this.rect.height * dpr));
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
 
     const baseSizePx = this.remToPx(this.settings.baseSize);
-    const spacingPx = this.remToPx(this.settings.spacing);
 
     this.gridCols = Math.ceil(this.rect.width / baseSizePx);
     this.gridRows = Math.ceil(this.rect.height / baseSizePx);
@@ -108,11 +109,12 @@ class SectionGrid {
           width: baseSizePx,
           height: baseSizePx,
           rotation: 0,
-          targetRotation: 0,
-          alpha: 0,
-          active: false,
+          alpha: 1,               
+          visible: false,
+          age: Infinity,     
           lastActiveTime: 0,
-          borderWidth: Math.floor(this.remToPx(this.settings.borderWidth))
+          borderWidth: Math.max(1, Math.floor(this.remToPx(this.settings.borderWidth))),
+          scale: 0  
         });
       }
     }
@@ -120,80 +122,87 @@ class SectionGrid {
 
   updateMousePosition(x, y) {
     const rect = this.section.getBoundingClientRect();
-    this.mouse.x = x - rect.left;
-    this.mouse.y = y - rect.top;
-  }
-
-  updateCells() {
-    const activationRadiusPx = this.remToPx(this.settings.activationRadius);
-    const activationRadiusSq = activationRadiusPx * activationRadiusPx;
-    const now = performance.now();
-
-    for (let cell of this.cellPool) {
-      const dx = this.mouse.x - (cell.x + cell.width / 2);
-      const dy = this.mouse.y - (cell.y + cell.height / 2);
-      const distanceSq = dx * dx + dy * dy;
-
-      if (distanceSq < activationRadiusSq) {
-        cell.active = true;
-        cell.lastActiveTime = now;
-        cell.targetRotation = Math.atan2(dy, dx) + Math.PI / 2;
-        cell.alpha = Math.min(1, 1 - (distanceSq / activationRadiusSq));
-      } else {
-        if (cell.active && now - cell.lastActiveTime > 300) {
-          cell.active = false;
-        }
-        cell.alpha = Math.max(0, cell.alpha - this.settings.fadeSpeed);
-        cell.targetRotation = 0;
-      }
-
-      cell.rotation += (cell.targetRotation - cell.rotation) * this.settings.rotationSpeed;
+    if (rect.top <= y && rect.bottom >= y && rect.left <= x && rect.right >= x) {
+      this.mouse.x = x - rect.left;
+      this.mouse.y = y - rect.top;
+      this.mouse.inside = true;
+    } else {
+      this.leaveMouse();
     }
   }
 
-  draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.imageSmoothingEnabled = false;
-    this.ctx.fillStyle = `rgba(${this.settings.fillColor.r}, ${this.settings.fillColor.g}, ${this.settings.fillColor.b}, ${this.settings.fillColor.a})`;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    for (let cell of this.cellPool) {
-      if (cell.alpha <= 0) continue;
+  leaveMouse() {
+    this.mouse.x = -1000;
+    this.mouse.y = -1000;
+    this.mouse.inside = false;
+  }
 
+  updateCells() {
+    const now = performance.now();
+
+    const activationRadiusPx = this.remToPx(this.settings.activationRadius);
+    const activationRadiusSq = activationRadiusPx * activationRadiusPx;
+
+    let nearest = null;
+    let nearestDistSq = Infinity;
+
+    for (let cell of this.cellPool) {
+      if (cell.visible && now - cell.lastActiveTime > this.settings.trailLifetime) {
+        cell.visible = false;
+      }
+
+      if (this.mouse.inside) {
+        const cx = cell.x + cell.width / 2;
+        const cy = cell.y + cell.height / 2;
+        const dx = this.mouse.x - cx;
+        const dy = this.mouse.y - cy;
+        const distanceSq = dx * dx + dy * dy;
+
+        if (distanceSq < activationRadiusSq) {
+          cell.visible = true;
+          cell.lastActiveTime = now;
+        }
+
+        if (distanceSq < nearestDistSq) {
+          nearestDistSq = distanceSq;
+          nearest = cell;
+        }
+      }
+    }
+    if (this.mouse.inside && nearest) {
+      this.cursorCell = nearest;
+      nearest.visible = true;
+      nearest.lastActiveTime = now;
+    }
+  }
+
+
+  lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, this.rect.width, this.rect.height);
+    this.ctx.imageSmoothingEnabled = false;
+
+    for (let cell of this.cellPool) {
+      if (!cell.visible) continue;
+
+      const size = cell.width;
       const x = Math.floor(cell.x);
       const y = Math.floor(cell.y);
-      const size = cell.width;
 
       this.ctx.save();
-      this.ctx.translate(
-        x + size / 2,
-        y + size / 2
-      );
-      this.ctx.rotate(cell.rotation);
-      this.ctx.fillStyle = `rgba(
-        ${this.settings.fillColor.r}, 
-        ${this.settings.fillColor.g}, 
-        ${this.settings.fillColor.b}, 
-        ${this.settings.fillColor.a * cell.alpha}
-      )`;
-      this.ctx.fillRect(
-        -size / 2,
-        -size / 2,
-        size,
-        size
-      );
-      this.ctx.strokeStyle = `rgba(
-        ${this.settings.borderColor.r}, 
-        ${this.settings.borderColor.g}, 
-        ${this.settings.borderColor.b}, 
-        ${this.settings.borderColor.a * cell.alpha}
-      )`;
+      this.ctx.translate(x + size / 2, y + size / 2);
+
+      if (cell === this.cursorCell) {
+        this.ctx.strokeStyle = 'rgb(255,255,255, 0.16)';
+      } else {
+        this.ctx.strokeStyle = 'rgb(255,255,255, 0.16)';
+      }
+
       this.ctx.lineWidth = cell.borderWidth;
-      this.ctx.strokeRect(
-        -size / 2,
-        -size / 2,
-        size,
-        size
-      );
+      this.ctx.strokeRect(-size / 2, -size / 2, size, size);
 
       this.ctx.restore();
     }
@@ -211,6 +220,7 @@ class SectionGrid {
     this.rafId = requestAnimationFrame(() => this.animate());
   }
 }
+
 class GridSystem {
   constructor() {
     this.sectionGrids = [];
@@ -233,13 +243,14 @@ class GridSystem {
         const rect = grid.section.getBoundingClientRect();
         if (rect.top < window.innerHeight && rect.bottom > 0) {
           grid.updateMousePosition(e.clientX, e.clientY);
+        } else {
+          grid.leaveMouse();
         }
       });
     });
 
     document.addEventListener('mouseout', () => {
-      this.mouse.x = -1000;
-      this.mouse.y = -1000;
+      this.sectionGrids.forEach(grid => grid.leaveMouse());
     });
 
     window.addEventListener('scroll', () => {
@@ -259,7 +270,7 @@ class GridSystem {
     });
   }
 }
-if (width > 750) {
+if (window.innerWidth > 750) {
   document.addEventListener('DOMContentLoaded', () => {
     new GridSystem();
   });

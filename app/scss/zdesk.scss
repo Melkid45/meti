@@ -93,7 +93,8 @@
                         text-align: center;
                         text-transform: uppercase;
                         color: var(--white);
-                        a{
+
+                        a {
                             padding: 12rem 0;
                         }
                     }
@@ -102,9 +103,14 @@
         }
     }
 
-    .cursor {
+    .cursor.hover {
         width: 40rem;
         height: 40rem;
+    }
+
+    .cursor {
+        width: 20rem;
+        height: 20rem;
         position: fixed;
         background: var(--white);
         z-index: 10001;
@@ -113,6 +119,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: all width 0.3s ease;
 
         svg {
             width: 24rem;
@@ -167,7 +174,8 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-
+                padding: 0 40rem;
+                margin-bottom: -25rem;
                 span {
                     font-weight: 300;
                     font-size: 16rem;
@@ -181,14 +189,15 @@
             .stroke {
                 width: 100%;
                 mix-blend-mode: difference;
-
+                margin-left: 40rem;
+                margin-right: 20rem;
                 @keyframes animTitle {
                     from {
                         transform: translateX(0%);
                     }
 
                     to {
-                        transform: translate(-325.5%);
+                        transform: translate(-297%);
                     }
                 }
 
@@ -217,7 +226,7 @@
                         font-family: var(--chava);
                         font-weight: 400;
                         font-size: 275.33rem;
-                        line-height: 247.33rem;
+                        line-height: 290rem;
                         letter-spacing: 0%;
                         text-transform: uppercase;
                         color: var(--white);
@@ -648,12 +657,13 @@
 
     .case {
         width: 100%;
-        height: 100vh;
+        height: auto;
         display: flex;
         justify-content: center;
         flex-direction: column;
         position: relative;
-
+        padding-top: 400rem;
+        overflow: visible !important;
         .case__main {
             width: 100%;
             display: flex;
@@ -847,6 +857,7 @@
                                 letter-spacing: 0%;
                                 text-align: center;
                                 color: #fff;
+                                font-size: 16rem;
                             }
                         }
 
@@ -1201,6 +1212,7 @@
         width: 100%;
         padding-bottom: 400rem;
         overflow: visible;
+
         &__body {
             display: flex;
             flex-direction: column;
@@ -1672,6 +1684,7 @@
         background: var(--main);
         padding-bottom: 40rem;
         padding-top: 20rem;
+
         &__body {
             display: flex;
             flex-direction: column;
@@ -1683,6 +1696,7 @@
                 align-items: center;
                 justify-content: space-between;
                 width: 100%;
+                padding: 0 40rem;
 
                 span {
                     font-weight: 300;
@@ -1709,12 +1723,17 @@
                             text-transform: uppercase;
                             color: var(--white);
                             list-style: none;
-                            a{
+
+                            a {
                                 padding: 20rem 0rem;
                             }
                         }
                     }
                 }
+            }
+
+            .wrap__stroke {
+                margin-left: 40rem;
             }
 
             .stroke {
@@ -1749,6 +1768,7 @@
                 display: flex;
                 justify-content: space-between;
                 width: 100%;
+                padding: 0 40rem;
 
                 span {
                     font-weight: 300;
@@ -1779,7 +1799,7 @@
         }
 
         to {
-            transform: translate(-149.3%);
+            transform: translate(-143.1%);
         }
     }
 }

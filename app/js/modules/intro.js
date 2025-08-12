@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         animationDuration: 500,
         widthView: 1920
     };
-    if (width <= 750){
+    if (width <= 750) {
         CONFIG.widthView = 375;
         CONFIG.squareSize = 20;
     }
@@ -26,31 +26,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const width = container.clientWidth;
         const height = container.clientHeight;
         const dpr = window.devicePixelRatio || 1;
-        canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
+        canvas.width = Math.ceil(width * dpr);
+        canvas.height = Math.ceil(height * dpr);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(dpr, dpr);
-        const squareSizePx = Math.floor(remToPx(CONFIG.squareSize));
-        const gapPx = Math.floor(remToPx(CONFIG.gap));
-        const cols = Math.ceil(width / (squareSizePx + gapPx)) + 1;
-        const rows = Math.ceil(height / (squareSizePx + gapPx)) + 1;
-        const gridWidth = cols * (squareSizePx + gapPx);
-        const gridHeight = rows * (squareSizePx + gapPx);
-        const offsetX = Math.round((width - gridWidth) / 2);
-        const offsetY = Math.round((height - gridHeight) / 2);
+
+        const squareSizePx = Math.round(remToPx(CONFIG.squareSize));
+        const gapPx = 0;
+        const cols = Math.ceil(width / squareSizePx);
+        const rows = Math.ceil(height / squareSizePx);
+        const gridWidth = cols * squareSizePx;
+        const gridHeight = rows * squareSizePx;
+        const offsetX = Math.floor((width - gridWidth) / 2);
+        const offsetY = Math.floor((height - gridHeight) / 2);
+
+
+
         grid = [];
-        for (let y = -1; y < rows; y++) {
-            for (let x = -1; x < cols; x++) {
+        for (let y = 0; y <= rows; y++) { 
+            for (let x = 0; x <= cols; x++) {
                 grid.push({
-                    x: x * (squareSizePx + gapPx) + offsetX,
-                    y: y * (squareSizePx + gapPx) + offsetY,
-                    width: squareSizePx,
-                    height: squareSizePx,
+                    x: x * squareSizePx,
+                    y: y * squareSizePx,
+                    width: squareSizePx + 1,
+                    height: squareSizePx + 1,
                     filled: false
                 });
             }
         }
+
         shuffledIndices = [...Array(grid.length).keys()];
         shuffleArray(shuffledIndices);
         lastFilledCount = 0;
@@ -69,12 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = CONFIG.bgColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         grid.forEach(square => {
-            const x = Math.round(square.x);
-            const y = Math.round(square.y);
-            const size = Math.round(square.width);
-
             ctx.fillStyle = square.filled ? CONFIG.fillColor : CONFIG.bgColor;
-            ctx.fillRect(x, y, size, size);
+            ctx.fillRect(square.x, square.y, square.width, square.height);
         });
     }
     function updateGrid(filledCount) {
@@ -106,9 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .on("progress", (e) => {
             const filledCount = Math.floor(e.progress * grid.length);
             updateGrid(filledCount);
-            if (e.progress >= 0.90){
+            if (e.progress >= 0.90) {
                 canvas.style.background = '#000'
-            }else{
+            } else {
                 canvas.style.background = 'transparent'
             }
         })

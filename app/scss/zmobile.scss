@@ -76,7 +76,7 @@
             height: 100vh;
             transition: all 0.5s ease;
             background: var(--main);
-            padding: 90rem 20rem 20rem 20rem;
+            padding: 90rem 20rem 90rem 20rem;
             display: flex;
             justify-content: space-between;
             flex-direction: column;
@@ -275,6 +275,8 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                padding: 0 20rem;
+                margin-bottom: -15rem;
 
                 span {
                     font-weight: 300;
@@ -289,6 +291,7 @@
             .stroke {
                 width: 100%;
                 mix-blend-mode: difference;
+                margin-left: 20rem;
 
                 @keyframes animTitle {
                     from {
@@ -296,12 +299,12 @@
                     }
 
                     to {
-                        transform: translate(-785.5%);
+                        transform: translate(-699.5%);
                     }
                 }
 
                 .anim_stroke {
-                    animation: 10s animTitle linear infinite;
+                    animation: 10s infinite linear animTitle;
                 }
 
                 div {
@@ -320,12 +323,11 @@
                     display: flex;
                     align-items: center;
                     gap: 60rem;
-
                     span {
                         font-family: var(--chava);
                         font-weight: 400;
                         font-size: 118rem;
-                        line-height: 106rem;
+                        line-height: 130rem;
                         letter-spacing: 0%;
                         text-transform: uppercase;
                         color: var(--white);
@@ -547,8 +549,8 @@
                     z-index: 2;
 
                     svg {
-                        width: 280rem;
-                        height: 280rem;
+                        width: 278rem;
+                        height: 281rem;
                         position: absolute;
                     }
 
@@ -786,13 +788,13 @@
 
     .case {
         width: 100%;
-        height: 100vh;
+        height: auto;
         display: flex;
         justify-content: center;
         flex-direction: column;
         position: relative;
         gap: 80rem;
-
+        padding-top: 200rem;
         .case__main {
             width: 100%;
             display: flex;
@@ -870,7 +872,7 @@
         &__soft {
             position: absolute;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             top: 0;
             left: 0;
             display: flex;
@@ -996,6 +998,7 @@
                                 letter-spacing: 0%;
                                 text-align: center;
                                 color: #fff;
+                                font-size: 8rem;
                             }
                         }
 
@@ -1816,6 +1819,7 @@
         background: var(--main);
         padding-bottom: 16rem;
         padding-top: 0rem;
+
         &__body {
             display: flex;
             flex-direction: column;
@@ -1827,7 +1831,7 @@
                 align-items: center;
                 justify-content: space-between;
                 width: 100%;
-
+                padding: 0 20rem;
                 span {
                     font-weight: 300;
                     font-size: 14rem;
@@ -1862,7 +1866,9 @@
                     }
                 }
             }
-
+            .wrap__stroke{
+                margin-left: 20rem;
+            }
             .stroke {
                 font-family: var(--onest);
                 font-weight: 570;
@@ -1880,7 +1886,6 @@
                 perspective: 1000rem;
                 -webkit-backface-visibility: hidden;
                 -webkit-transform-style: preserve-3d;
-
                 span {
                     font-family: var(--chava);
                     font-weight: 400;
@@ -1895,7 +1900,7 @@
                 display: flex;
                 justify-content: space-between;
                 width: 100%;
-
+                padding: 0 20rem;
                 span {
                     font-weight: 300;
                     font-size: 11rem;
@@ -1925,7 +1930,7 @@
         }
 
         to {
-            transform: translate(-355.3%);
+            transform: translate(-332.3%);
         }
     }
 }
