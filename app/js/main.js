@@ -77,13 +77,3 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     }, 1000);
   });
 });
-document.addEventListener("DOMContentLoaded", function(){
- var IsRefresh = getCookie("IsRefresh");
- if (IsRefresh != null && IsRefresh != "") {
-    DeleteCookie("IsRefresh");
- }
- else {
-    window.scrollTo(0,0)
-    setCookie("IsRefresh", "true", 1);
- }
-})

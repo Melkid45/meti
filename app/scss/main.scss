@@ -564,14 +564,16 @@
     justify-content: center;
     flex-direction: column;
     position: relative;
-    overflow: visible;
+    overflow: hidden;
     padding-top: 400px;
+    padding-bottom: 400px;
     .case__main {
         width: 100%;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-
+        position: relative;
+        z-index: 1;
         .top {
             display: flex;
             align-items: center;
@@ -655,8 +657,8 @@
         }
 
         .item {
-            top: 110%;
             position: absolute;
+            
         }
 
         .item1 {
@@ -693,7 +695,7 @@
 
         .big_case {
             width: 766px;
-
+            transform: translateY(120%);
             .media {
                 height: 875px;
             }
@@ -701,7 +703,7 @@
 
         .small_case {
             width: 497px;
-
+            transform: translateY(160%);
             .media {
                 height: 607px;
             }
@@ -1235,7 +1237,7 @@
 
 [data-grid="true"] {
     position: relative;
-    overflow: hidden;
+    overflow: visible !important;
 }
 
 [data-grid="true"]>canvas {

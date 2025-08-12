@@ -1,6 +1,7 @@
 class SectionGrid {
-  constructor(section) {
+  constructor(section, gridSystem) {
     this.section = section;
+    this.gridSystem = gridSystem;
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
     this.cellPool = [];
@@ -19,7 +20,7 @@ class SectionGrid {
       hoverScale: 1.35,      
       rotationSpeed: 0,  
       gridColor: { r: 140, g: 140, b: 140 }, 
-      cursorColor: { r: 255, g: 255, b: 255 }, 
+      cursorColor: { r: 39, g: 39, b: 39 }, 
       borderWidth: 1,
       offsetX: 0,
       offsetY: 0
@@ -60,7 +61,7 @@ class SectionGrid {
     this.canvas.style.width = '100%';
     this.canvas.style.height = '100%';
     this.canvas.style.pointerEvents = 'none';
-    this.canvas.style.zIndex = '1';
+    this.canvas.style.zIndex = '0';
     this.canvas.style.imageRendering = 'pixelated';
     this.section.style.position = 'relative';
     this.section.appendChild(this.canvas);
@@ -139,7 +140,6 @@ class SectionGrid {
 
   updateCells() {
     const now = performance.now();
-
     const activationRadiusPx = this.remToPx(this.settings.activationRadius);
     const activationRadiusSq = activationRadiusPx * activationRadiusPx;
 
@@ -151,7 +151,7 @@ class SectionGrid {
         cell.visible = false;
       }
 
-      if (this.mouse.inside) {
+      if (this.mouse.inside && !this.gridSystem.isIdle()) { 
         const cx = cell.x + cell.width / 2;
         const cy = cell.y + cell.height / 2;
         const dx = this.mouse.x - cx;
@@ -169,13 +169,13 @@ class SectionGrid {
         }
       }
     }
-    if (this.mouse.inside && nearest) {
+
+    if (this.mouse.inside && nearest && !this.gridSystem.isIdle()) {
       this.cursorCell = nearest;
       nearest.visible = true;
       nearest.lastActiveTime = now;
     }
   }
-
 
   lerp(a, b, t) {
     return a + (b - a) * t;
@@ -196,9 +196,9 @@ class SectionGrid {
       this.ctx.translate(x + size / 2, y + size / 2);
 
       if (cell === this.cursorCell) {
-        this.ctx.strokeStyle = 'rgb(255,255,255, 0.16)';
+        this.ctx.strokeStyle = 'rgb(39,39,39, 1)';
       } else {
-        this.ctx.strokeStyle = 'rgb(255,255,255, 0.16)';
+        this.ctx.strokeStyle = 'rgb(39,39,39, 1)';
       }
 
       this.ctx.lineWidth = cell.borderWidth;
@@ -227,16 +227,19 @@ class GridSystem {
     this.mouse = { x: -1000, y: -1000 };
     this.scrollY = window.scrollY;
     this.lastScrollY = window.scrollY;
+    this.lastMouseMoveTime = performance.now();
+    this.idleTimeout = 200; // время бездействия в мс
     this.init();
   }
 
   init() {
     const sections = document.querySelectorAll('[data-grid="true"]');
     sections.forEach(section => {
-      this.sectionGrids.push(new SectionGrid(section));
+      this.sectionGrids.push(new SectionGrid(section, this));
     });
 
     document.addEventListener('mousemove', (e) => {
+      this.lastMouseMoveTime = performance.now();
       this.mouse.x = e.clientX;
       this.mouse.y = e.clientY;
       this.sectionGrids.forEach(grid => {
@@ -269,7 +272,12 @@ class GridSystem {
       });
     });
   }
+
+  isIdle() {
+    return performance.now() - this.lastMouseMoveTime > this.idleTimeout;
+  }
 }
+
 if (window.innerWidth > 750) {
   document.addEventListener('DOMContentLoaded', () => {
     new GridSystem();

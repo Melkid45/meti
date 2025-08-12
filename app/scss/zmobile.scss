@@ -323,6 +323,7 @@
                     display: flex;
                     align-items: center;
                     gap: 60rem;
+
                     span {
                         font-family: var(--chava);
                         font-weight: 400;
@@ -786,6 +787,11 @@
         }
     }
 
+    [data-grid="true"] {
+        position: relative;
+        overflow: hidden !important;
+    }
+
     .case {
         width: 100%;
         height: auto;
@@ -795,12 +801,15 @@
         position: relative;
         gap: 80rem;
         padding-top: 200rem;
+        padding-bottom: 0rem;
+        overflow: visible !important;
+
         .case__main {
             width: 100%;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-
+            z-index: 0;
             .top {
                 display: flex;
                 align-items: center;
@@ -822,7 +831,7 @@
             .stroke {
                 width: 100%;
                 height: 100%;
-                z-index: -1;
+                z-index: -1 !important;
 
                 .stroke_container {
                     display: flex;
@@ -918,7 +927,7 @@
 
             .big_case {
                 width: 335rem;
-
+                transform: translateY(150%);
 
                 .media {
                     height: 410rem;
@@ -927,6 +936,7 @@
 
             .small_case {
                 width: 335rem;
+                transform: translateY(170%);
 
                 .media {
                     height: 410rem;
@@ -1194,6 +1204,8 @@
         }
     }
 
+
+
     .client {
         width: 100%;
         padding: 160rem 0rem 160rem;
@@ -1202,6 +1214,7 @@
         flex-direction: column;
         align-items: center;
         gap: 80rem;
+        overflow: hidden !important;
 
         #clientGridCanvas {
             position: absolute;
@@ -1593,7 +1606,7 @@
                         letter-spacing: 0%;
                         text-transform: uppercase;
                         color: var(--white);
-                        width: 497rem;
+                        width: 100%;
                     }
 
                     p {
@@ -1832,6 +1845,7 @@
                 justify-content: space-between;
                 width: 100%;
                 padding: 0 20rem;
+
                 span {
                     font-weight: 300;
                     font-size: 14rem;
@@ -1866,9 +1880,11 @@
                     }
                 }
             }
-            .wrap__stroke{
+
+            .wrap__stroke {
                 margin-left: 20rem;
             }
+
             .stroke {
                 font-family: var(--onest);
                 font-weight: 570;
@@ -1886,6 +1902,7 @@
                 perspective: 1000rem;
                 -webkit-backface-visibility: hidden;
                 -webkit-transform-style: preserve-3d;
+
                 span {
                     font-family: var(--chava);
                     font-weight: 400;
@@ -1901,6 +1918,7 @@
                 justify-content: space-between;
                 width: 100%;
                 padding: 0 20rem;
+
                 span {
                     font-weight: 300;
                     font-size: 11rem;

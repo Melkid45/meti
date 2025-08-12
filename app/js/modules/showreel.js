@@ -1,60 +1,68 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    // базовые настройки
+    const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     const CONFIG = {
-        squareSize: 54,
-        gap: 0,
+        squareSize: 54,         // rem
+        gap: 0,                 // rem
         fillColor: 'rgba(244, 244, 244, 0.03)',
         bgColor: '#000000',
-        fillDuration: 0.45,
+        fillDuration: 0.45,     // часть таймлайна
         delayDuration: 0.1,
         clearDuration: 0.45
     };
-    if (width <= 750) {
-        CONFIG.squareSize = 20;
+
+    const container = document.querySelector('.showreel') || document.body;
+    const canvas = document.getElementById('grid-canvas-video');
+    if (!canvas) {
+        console.warn('Не найден canvas#grid-canvas-video');
+        return;
     }
+    const ctx = canvas.getContext('2d');
+
     function remToPx(rem) {
         return rem * remInPx;
     }
-    const canvas = document.getElementById('grid-canvas-video');
-    const ctx = canvas.getContext('2d');
-    const container = document.querySelector('.showreel');
+
+    // если экран узкий — уменьшаем квадраты
+    if ((window.innerWidth || document.documentElement.clientWidth) <= 750) {
+        CONFIG.squareSize = 20;
+    }
+
     let grid = [];
     let shuffledIndices = [];
-    let lastProgress = 0;
+    let cols = 0;
+    let rows = 0;
+    const totalTimeline = CONFIG.fillDuration + CONFIG.delayDuration + CONFIG.clearDuration;
+
     function initGrid() {
-        const width = Math.floor(container.clientWidth);
-        const height = Math.floor(container.clientHeight);
+        const width = container.clientWidth;
+        const height = container.clientHeight;
         const dpr = window.devicePixelRatio || 1;
 
-        canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';
-        canvas.width = Math.ceil(width * dpr);
-        canvas.height = Math.ceil(height * dpr);
+        // +1px по ширине и высоте в CSS px
+        canvas.style.width = (width + 1) + 'px';
+        canvas.style.height = (height + 1) + 'px';
+        canvas.width = Math.ceil((width + 1) * dpr);
+        canvas.height = Math.ceil((height + 1) * dpr);
 
-        ctx.setTransform(1, 0, 0, 1, 0, 0); 
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(dpr, dpr);
         ctx.imageSmoothingEnabled = false;
 
-        const squareSizePx = Math.floor(remToPx(CONFIG.squareSize)) + 1;
-        const gapPx = Math.floor(remToPx(CONFIG.gap));
-        const cols = Math.ceil(width / (squareSizePx + gapPx));
-        const rows = Math.ceil(height / (squareSizePx + gapPx));
+        const squareSizePx = remToPx(CONFIG.squareSize);
+        const gapPx = remToPx(CONFIG.gap);
 
-        const gridWidth = cols * (squareSizePx + gapPx);
-        const gridHeight = rows * (squareSizePx + gapPx);
-        const offsetX = Math.max(0, Math.floor((width - gridWidth) / 2));
-        const offsetY = Math.max(0, Math.floor((height - gridHeight) / 2));
+        cols = Math.ceil((width + 1) / (squareSizePx + gapPx));
+        rows = Math.ceil((height + 1) / (squareSizePx + gapPx));
 
         grid = [];
         for (let y = 0; y < rows; y++) {
             for (let x = 0; x < cols; x++) {
-                const posX = Math.floor(x * (squareSizePx + gapPx) + offsetX);
-                const posY = Math.floor(y * (squareSizePx + gapPx) + offsetY);
                 grid.push({
-                    x: posX,
-                    y: posY,
-                    width: squareSizePx,
-                    height: squareSizePx,
+                    x: x * (squareSizePx + gapPx),
+                    y: y * (squareSizePx + gapPx),
+                    width: squareSizePx + 0.5,
+                    height: squareSizePx + 0.5,
                     filled: false
                 });
             }
@@ -68,94 +76,87 @@ document.addEventListener('DOMContentLoaded', function () {
 
         draw();
     }
+
+    function clamp(v, a, b) {
+        return Math.max(a, Math.min(b, v));
+    }
+
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.imageSmoothingEnabled = false;
         grid.forEach(square => {
-            const x = square.x;
-            const y = square.y;
-            const width = square.width;
-            const height = square.height;
-
             ctx.fillStyle = square.filled ? CONFIG.fillColor : CONFIG.bgColor;
-            ctx.fillRect(x, y, width, height);
+            ctx.fillRect(square.x, square.y, square.width, square.height);
         });
     }
+
+    // Основная, упрощённая и детерминированная функция обновления.
+    // progress: ScrollMagic progress (0..1)
     function updateAnimation(progress) {
-        const isScrollingDown = progress > lastProgress;
-        lastProgress = progress;
+        // защитная обработка
+        progress = clamp(progress, 0, 1);
+
+        // приводим прогресс к "временной" шкале (в тех же единицах, что и durations)
+        const t = progress * totalTimeline;
 
         const fillEnd = CONFIG.fillDuration;
         const clearStart = fillEnd + CONFIG.delayDuration;
-        const totalDuration = fillEnd + CONFIG.delayDuration + CONFIG.clearDuration;
 
-        if (isScrollingDown) {
-            if (progress <= fillEnd) {
-                const fillProgress = progress / fillEnd;
-                const squaresToFill = Math.floor(fillProgress * grid.length);
-
-                for (let i = 0; i < squaresToFill; i++) {
-                    grid[shuffledIndices[i]].filled = true;
-                }
-            }
-            else if (progress <= clearStart) {
-                grid.forEach(sq => sq.filled = true);
-            }
-            else {
-                const clearProgress = (progress - clearStart) / CONFIG.clearDuration;
-                const squaresToClear = Math.floor(clearProgress * grid.length);
-
-                if (progress >= 0.99 * totalDuration) {
-                    grid.forEach(sq => sq.filled = false);
-                } else {
-                    for (let i = 0; i < squaresToClear; i++) {
-                        grid[shuffledIndices[grid.length - 1 - i]].filled = false;
-                    }
-                }
-            }
+        let targetCount = 0;
+        if (t <= fillEnd) {
+            // стадия заполнения
+            const fillProgress = fillEnd > 0 ? (t / fillEnd) : 1;
+            targetCount = Math.round(fillProgress * grid.length);
+        } else if (t <= clearStart) {
+            // пауза — всё заполнено
+            targetCount = grid.length;
+        } else {
+            // стадия очищения
+            const clearProgress = CONFIG.clearDuration > 0 ? ((t - clearStart) / CONFIG.clearDuration) : 1;
+            const remaining = 1 - clamp(clearProgress, 0, 1);
+            targetCount = Math.round(remaining * grid.length);
         }
-        else {
-            if (progress >= clearStart) {
-                const clearProgress = (progress - clearStart) / CONFIG.clearDuration;
-                const squaresToRestore = grid.length - Math.floor(clearProgress * grid.length);
 
-                for (let i = 0; i < squaresToRestore; i++) {
-                    grid[shuffledIndices[i]].filled = true;
-                }
-            }
-            else if (progress >= fillEnd) {
-                grid.forEach(sq => sq.filled = true);
-            }
-            else {
-                const fillProgress = progress / fillEnd;
-                const squaresToUnfill = grid.length - Math.floor(fillProgress * grid.length);
+        targetCount = clamp(targetCount, 0, grid.length);
 
-                for (let i = 0; i < squaresToUnfill; i++) {
-                    grid[shuffledIndices[i]].filled = false;
-                }
-            }
+        // Устанавливаем filled детерминированно по shuffledIndices:
+        // первыми заполняются элементы с индексами shuffledIndices[0..targetCount-1]
+        for (let i = 0; i < grid.length; i++) {
+            const gridIndex = shuffledIndices[i];
+            grid[gridIndex].filled = i < targetCount;
         }
 
         draw();
     }
 
+    // Инициализация ScrollMagic (или любой другой скролл-логики).
     function initScrollMagic() {
+        if (typeof ScrollMagic === 'undefined') {
+            console.warn('ScrollMagic не найден — вызов updateAnimation(progress) можно сделать вручную.');
+            return;
+        }
+
         const controller = new ScrollMagic.Controller();
 
-        const totalDuration = CONFIG.fillDuration + CONFIG.delayDuration + CONFIG.clearDuration;
-
+        // продление сцены: оставляем процент от высоты в зависимости от totalTimeline,
+        // но чаще всего totalTimeline == 1, тогда duration можно выставлять как "200%" (как было у тебя).
+        // Оставим поведение похожим на твоё, но без прямой зависимости внутри updateAnimation.
+        const sceneDurationPercent = Math.max(100, totalTimeline * 200); // если totalTimeline=1 => 200%
         new ScrollMagic.Scene({
             triggerElement: ".showreel",
-            duration: `${totalDuration * 200}%`,
+            duration: `${sceneDurationPercent}%`,
             triggerHook: 1,
         })
             .on("progress", function (e) {
-                updateAnimation(e.progress);
+                updateAnimation(e.progress); // e.progress ∈ [0..1]
             })
             .addTo(controller);
     }
+
+    // Запуск
     initGrid();
     initScrollMagic();
+
+    // Реагируем на ресайз контейнера
     const resizeObserver = new ResizeObserver(entries => {
         for (let entry of entries) {
             if (entry.target === container) {
@@ -164,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     resizeObserver.observe(container);
+
     window.addEventListener('beforeunload', () => {
         resizeObserver.disconnect();
     });

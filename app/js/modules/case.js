@@ -445,57 +445,76 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function initScrollAnimation() {
-    function getSceneDuration() {
-      const caseEl = document.querySelector('.case');
-      const totalHeight = document.body.scrollHeight;
-      const caseOffsetTop = caseEl.offsetTop;
-      const caseHeight = caseEl.offsetHeight;
-      const innerScroll = items.length * window.innerHeight;
-      return Math.min(innerScroll, totalHeight - caseOffsetTop - caseHeight);
+  gsap.registerPlugin(ScrollTrigger);
+
+  const masterTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".case",
+      start: "top top",
+      end: () => {
+        const caseEl = document.querySelector('.case');
+        const totalHeight = document.body.scrollHeight;
+        const caseOffsetTop = caseEl.offsetTop;
+        const caseHeight = caseEl.offsetHeight;
+        const innerScroll = (items.length - 1) * window.innerHeight;
+        console.log(innerScroll);
+        return "+=" + innerScroll;
+      },
+      scrub: 0.5, // плавность скролла
+      pin: true,
+      invalidateOnRefresh: true,
     }
+  });
 
-    const masterTl = gsap.timeline();
+  effects.forEach((effect, i) => {
+    const item = items[i];
 
-    effects.forEach((effect, i) => {
-      const item = items[i];
-      const duration = isFullEffect ? 1 : 1;
-      const pixelDur = isFullEffect ? 0.4 : 0.4;
-      const stagger = isFullEffect ? 0.2 : 0.3;
-      let height = isFullEffect ? '-110%' : '-70%';
-      if (window.innerWidth < 500) {
-        height = '-80%';
-      }
-      const tl = gsap.timeline()
-        .fromTo(item, { y: 0, opacity: 1 }, { top: height, opacity: 1, duration })
-        .to({ size: 40 }, {
-          size: 1,
-          duration: pixelDur,
-          ease: "power2.out",
-          onUpdate() {
-            const newSize = this.targets()[0].size;
-            if (effect && typeof effect.setPixelSize === 'function') {
-              effect.setPixelSize(newSize);
-            }
+    const duration = 1; // одинаково для обоих режимов
+    const pixelDur = 0.4;
+    const stagger = isFullEffect ? 0.2 : 0.3;
+
+    let moveY = -270;
+    if (!isFullEffect) moveY = -370;
+    if (window.innerWidth < 500) moveY = -280;
+
+    let lastSize = null; // отслеживаем изменение пикселя
+
+    const tl = gsap.timeline()
+      // вместо top используем transform
+      .fromTo(item, 
+        { yPercent: 0, opacity: 1 }, 
+        { yPercent: moveY, opacity: 1, duration }
+      )
+      // пикселизация
+      .to({ size: 40 }, {
+        size: 1,
+        duration: pixelDur,
+        ease: "power2.out",
+        onUpdate() {
+          const newSize = Math.round(this.targets()[0].size);
+          if (newSize !== lastSize) {
+            lastSize = newSize;
+            effect.pixelSize = newSize; // просто меняем переменную
           }
-        }, 0);
+        }
+      }, 0);
 
-      masterTl.add(tl, i * stagger);
+    masterTl.add(tl, i * stagger);
+  });
+
+  // Отдельный цикл рендера для canvas
+  function renderLoop() {
+    effects.forEach(effect => {
+      if (typeof effect.requestRender === "function") {
+        effect.requestRender();
+      }
     });
-
-    const scene = new ScrollMagic.Scene({
-      triggerElement: ".case",
-      triggerHook: "onLeave",
-      duration: getSceneDuration(),
-      offset: 0
-    })
-      .setPin(".case")
-      .setTween(masterTl)
-      .addTo(controller);
-
-    window.addEventListener('resize', () => {
-      scene.duration(getSceneDuration());
-    });
+    requestAnimationFrame(renderLoop);
   }
+  requestAnimationFrame(renderLoop);
+}
+
+
 
   window.addEventListener('beforeunload', () => {
     effects.forEach(e => e.stop && e.stop());
