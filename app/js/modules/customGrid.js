@@ -11,37 +11,32 @@ class SectionGrid {
     this.sectionTop = 0;
 
     this.settings = {
-      baseSize: 54,  
+      baseSize: 54,
       spacing: 0,
       activationRadius: 120,
-      trailLifetime: 200, 
-      fadeScaleStart: 1.0,  
-      fadeScaleEnd: 0.0,     
-      hoverScale: 1.35,      
-      rotationSpeed: 0,  
-      gridColor: { r: 140, g: 140, b: 140 }, 
-      cursorColor: { r: 39, g: 39, b: 39 }, 
+      trailLifetime: 200,
+      fadeScaleStart: 1.0,
+      fadeScaleEnd: 0.0,
+      hoverScale: 1.35,
+      rotationSpeed: 0,
+      gridColor: { r: 140, g: 140, b: 140 },
+      cursorColor: { r: 39, g: 39, b: 39 },
       borderWidth: 1,
       offsetX: 0,
       offsetY: 0
     };
 
     if (section.classList.contains('services__new')) {
-      if (window.innerWidth <= 1800) {
-        this.settings.offsetX = 1;
-        this.settings.offsetY = -23;
-      } else {
-        this.settings.offsetX = 1;
-        this.settings.offsetY = -25;
-      }
+      this.settings.offsetX = 1;
+      this.settings.offsetY = -23.5;
     }
     if (section.classList.contains('client')) {
       this.settings.offsetX = 0;
       this.settings.offsetY = 11;
     }
     if (section.classList.contains('main')) {
-      this.settings.offsetX = 11;
-      this.settings.offsetY = 10;
+      this.settings.offsetX = 13;
+      this.settings.offsetY = 8;
     }
     if (section.classList.contains('feedback')) {
       this.settings.offsetX = 27;
@@ -110,12 +105,12 @@ class SectionGrid {
           width: baseSizePx,
           height: baseSizePx,
           rotation: 0,
-          alpha: 1,               
+          alpha: 1,
           visible: false,
-          age: Infinity,     
+          age: Infinity,
           lastActiveTime: 0,
           borderWidth: Math.max(1, Math.floor(this.remToPx(this.settings.borderWidth))),
-          scale: 0  
+          scale: 0
         });
       }
     }
@@ -151,7 +146,7 @@ class SectionGrid {
         cell.visible = false;
       }
 
-      if (this.mouse.inside && !this.gridSystem.isIdle()) { 
+      if (this.mouse.inside && !this.gridSystem.isIdle()) {
         const cx = cell.x + cell.width / 2;
         const cy = cell.y + cell.height / 2;
         const dx = this.mouse.x - cx;

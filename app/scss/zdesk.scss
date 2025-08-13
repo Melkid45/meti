@@ -189,15 +189,13 @@
             .stroke {
                 width: 100%;
                 mix-blend-mode: difference;
-                margin-left: 40rem;
-                margin-right: 20rem;
                 @keyframes animTitle {
                     from {
                         transform: translateX(0%);
                     }
 
                     to {
-                        transform: translate(-297%);
+                        transform: translate(-297.3%);
                     }
                 }
 
@@ -221,7 +219,6 @@
                     display: flex;
                     align-items: center;
                     gap: 150rem;
-
                     span {
                         font-family: var(--chava);
                         font-weight: 400;
@@ -440,11 +437,7 @@
                     justify-content: center;
                     z-index: 2;
 
-                    svg {
-                        width: 763rem;
-                        height: 761rem;
-                        position: absolute;
-                    }
+
 
                     img {
                         width: 760rem;
@@ -1733,9 +1726,6 @@
                 }
             }
 
-            .wrap__stroke {
-                margin-left: 40rem;
-            }
 
             .stroke {
                 font-family: var(--onest);

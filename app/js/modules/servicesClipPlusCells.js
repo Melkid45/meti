@@ -133,16 +133,21 @@ $.fn.shuffleLetters = function (options) {
     requestAnimationFrame(animate);
   });
 };
+
+
+
 (function () {
   gsap.registerPlugin(ScrollTrigger);
 
   const GRID_SIZE = 14;
-  const CELL_SIZE = 40; // px
+  const CELL_SIZE_REM = 54; // размер клетки в rem
+  const LINE_WIDTH_REM = 1; // 1px в rem
+  const REM = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  const CELL_SIZE = CELL_SIZE_REM * REM;
+  const LINE_WIDTH = LINE_WIDTH_REM * REM;
+  const LINE_COLOR = '#272727';
   const colors = ["#442CBF"];
-  const ANIMATION_SETTINGS = {
-    startOffset: 0.16,
-    endOffset: 0.84
-  };
+  const ANIMATION_SETTINGS = { startOffset: 0.16, endOffset: 0.84 };
 
   const SHAPES = {
     heart: [[1, 6], [1, 5], [1, 4], [2, 3], [3, 2], [4, 2], [5, 3], [6, 4], [7, 4], [8, 3], [9, 2], [10, 2], [11, 3], [12, 4], [12, 5], [12, 6], [11, 7], [10, 8], [9, 9], [8, 10], [7, 11], [6, 11], [5, 10], [4, 9], [3, 8], [2, 7]],
@@ -156,19 +161,74 @@ $.fn.shuffleLetters = function (options) {
     arrow: [[1, 12], [1, 11], [1, 10], [2, 9], [3, 8], [4, 7], [5, 6], [6, 5], [7, 4], [8, 3], [9, 2], [10, 1], [12, 1], [11, 0], [13, 2], [12, 3], [11, 4], [10, 5], [9, 6], [8, 7], [7, 8], [6, 9], [5, 10], [4, 11], [3, 12], [2, 12], [3, 10], [10, 3]]
   };
 
-  // elements
   const items = Array.from(document.querySelectorAll('.items__line .item'));
   const $titles = $('.items__line .item h3');
   const wrapper = document.querySelector('.wrapper');
   const itemsLine = document.querySelector('.items__line');
 
   if (!items || items.length === 0) return;
-
   const itemShapes = items.map(item => item.dataset.item);
-
   const svgGrids = [];
   const allCellsGrids = [];
 
+  function createGrid(svg) {
+    const cellsGrid = [];
+    const allCells = [];
+
+    const offset = LINE_WIDTH / 2;
+
+    // Ячейки без stroke
+    for (let y = 0; y < GRID_SIZE; y++) {
+      cellsGrid[y] = [];
+      for (let x = 0; x < GRID_SIZE; x++) {
+        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        rect.setAttribute('x', x * CELL_SIZE + offset);
+        rect.setAttribute('y', y * CELL_SIZE + offset);
+        rect.setAttribute('width', CELL_SIZE);
+        rect.setAttribute('height', CELL_SIZE);
+        rect.setAttribute('fill', 'transparent');
+        svg.appendChild(rect);
+        cellsGrid[y][x] = rect;
+        allCells.push(rect);
+      }
+    }
+
+    // Вертикальные линии
+    for (let x = 0; x <= GRID_SIZE; x++) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      const pos = x * CELL_SIZE + offset;
+      line.setAttribute('x1', pos);
+      line.setAttribute('y1', offset);
+      line.setAttribute('x2', pos);
+      line.setAttribute('y2', GRID_SIZE * CELL_SIZE + offset);
+      line.setAttribute('stroke', LINE_COLOR);
+      line.setAttribute('stroke-width', LINE_WIDTH);
+      svg.appendChild(line);
+    }
+
+    // Горизонтальные линии
+    for (let y = 0; y <= GRID_SIZE; y++) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      const pos = y * CELL_SIZE + offset;
+      line.setAttribute('x1', offset);
+      line.setAttribute('y1', pos);
+      line.setAttribute('x2', GRID_SIZE * CELL_SIZE + offset);
+      line.setAttribute('y2', pos);
+      line.setAttribute('stroke', LINE_COLOR);
+      line.setAttribute('stroke-width', LINE_WIDTH);
+      svg.appendChild(line);
+    }
+
+    // viewBox с запасом по толщине линии
+    svg.setAttribute('viewBox', `0 0 ${GRID_SIZE * CELL_SIZE + LINE_WIDTH} ${GRID_SIZE * CELL_SIZE + LINE_WIDTH}`);
+    svg.setAttribute('width', GRID_SIZE * CELL_SIZE + LINE_WIDTH);
+    svg.setAttribute('height', GRID_SIZE * CELL_SIZE + LINE_WIDTH);
+
+    return { cellsGrid, allCells };
+  }
+
+
+  // Создаём SVG для каждого блока
   items.forEach((item, i) => {
     let svg;
     if (i === 0 && document.getElementById('interactive-grid')) {
@@ -181,32 +241,7 @@ $.fn.shuffleLetters = function (options) {
     }
     svgGrids.push(svg);
 
-    const cellsGrid = [];
-    const allCells = [];
-    for (let y = 0; y < GRID_SIZE; y++) {
-      cellsGrid[y] = [];
-      for (let x = 0; x < GRID_SIZE; x++) {
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        rect.setAttribute('x', x * CELL_SIZE);
-        rect.setAttribute('y', y * CELL_SIZE);
-        rect.setAttribute('width', CELL_SIZE);
-        rect.setAttribute('height', CELL_SIZE);
-        rect.setAttribute('stroke', '#272727');
-        rect.setAttribute('stroke-width', '1');
-        rect.setAttribute('fill', 'transparent');
-        rect.classList.add('cell');
-        rect.dataset.x = x;
-        rect.dataset.y = y;
-        svg.appendChild(rect);
-        cellsGrid[y][x] = rect;
-        allCells.push(rect);
-      }
-    }
-
-    svg.setAttribute('viewBox', `0 0 ${GRID_SIZE * CELL_SIZE} ${GRID_SIZE * CELL_SIZE}`);
-    svg.setAttribute('width', GRID_SIZE * CELL_SIZE);
-    svg.setAttribute('height', GRID_SIZE * CELL_SIZE);
-
+    const { cellsGrid, allCells } = createGrid(svg);
     allCellsGrids.push({ cellsGrid, allCells });
   });
 
@@ -224,76 +259,68 @@ $.fn.shuffleLetters = function (options) {
   layoutItems();
   window.addEventListener('resize', layoutItems);
 
-  let lastTargetCells = [];
-
   function drawShape(shapeName, gridIndex = 0, clear = false) {
     if (gridIndex < 0 || gridIndex >= allCellsGrids.length) gridIndex = 0;
     const { cellsGrid, allCells } = allCellsGrids[gridIndex];
     if (clear || !shapeName) {
       gsap.killTweensOf(allCells);
       gsap.set(allCells, { attr: { fill: 'transparent' } });
-      lastTargetCells = [];
       return;
     }
-
     const coords = SHAPES[shapeName];
     if (!coords) {
       gsap.killTweensOf(allCells);
       gsap.set(allCells, { attr: { fill: 'transparent' } });
-      lastTargetCells = [];
       return;
     }
-    const targetCells = coords.map(([x, y]) => {
-      if (cellsGrid[y] && cellsGrid[y][x]) return cellsGrid[y][x];
-      return null;
-    }).filter(Boolean);
+    const targetCells = coords
+      .map(([x, y]) => cellsGrid[y]?.[x])
+      .filter(Boolean);
     gsap.killTweensOf(allCells);
     gsap.set(allCells, { attr: { fill: 'transparent' } });
-
-    if (targetCells.length === 0) {
-      lastTargetCells = [];
-      return;
-    }
-
     gsap.to(targetCells, {
       attr: { fill: colors[0] },
       duration: 0.55,
       ease: 'power2.out',
-      stagger: {
-        each: 0.03,
-        from: 'center',
-        grid: [GRID_SIZE, GRID_SIZE]
-      }
+      stagger: { each: 0.03, from: 'center', grid: [GRID_SIZE, GRID_SIZE] }
     });
-
-    lastTargetCells = targetCells;
   }
+
   drawShape(itemShapes[0], 0);
   let currentActiveIndex = -1;
+
   ScrollTrigger.create({
     trigger: ".services__new",
     start: "top -=5.5%",
     end: `+=${itemShapes.length * 100}%`,
     pin: true,
     scrub: 1,
+    snap: {
+      snapTo: (value) => {
+        const slide = Math.round(value * (itemShapes.length - 1));
+        return slide / (itemShapes.length - 1);
+      },
+      duration: 0.4,
+      ease: "power1.inOut"
+    },
+    anticipatePin: 1,
     onUpdate: self => {
       const progress = self.progress;
       const wrapperH = wrapper.clientHeight;
       const maxTranslate = (itemShapes.length - 1) * wrapperH;
-      const topPx = -progress * maxTranslate;
-      gsap.set(itemsLine, { y: topPx });
+      gsap.set(itemsLine, { y: -progress * maxTranslate });
       const activeIndex = Math.max(0, Math.min(itemShapes.length - 1, Math.round(progress * (itemShapes.length - 1))));
 
       if (activeIndex !== currentActiveIndex) {
         currentActiveIndex = activeIndex;
-        const shapeName = itemShapes[activeIndex];
-        drawShape(shapeName, activeIndex);
+        drawShape(itemShapes[activeIndex], activeIndex);
         if ($titles && $titles.eq(activeIndex).length) {
           $titles.eq(activeIndex).shuffleLetters({
             step: 5, fps: 60, text: $titles.eq(activeIndex).text(), duration: 700
           });
         }
       }
+
       items.forEach((item, index) => {
         const img = wrapperImages[index];
         if (!img) return;
@@ -308,7 +335,6 @@ $.fn.shuffleLetters = function (options) {
         const intersectionEnd = wrapperRect.top - itemRect.bottom;
 
         let animProgress = 0;
-
         if (intersectionStart > 0 && intersectionEnd < 0) {
           const visibleHeight = wrapperRect.height * ANIMATION_SETTINGS.endOffset -
             wrapperRect.height * ANIMATION_SETTINGS.startOffset;
@@ -323,14 +349,14 @@ $.fn.shuffleLetters = function (options) {
         });
       });
     },
-    onLeave: (self) => {
+    onLeave: () => {
       allCellsGrids.forEach((grid, index) => {
         if (index !== 0 && index !== allCellsGrids.length - 1) {
           drawShape(null, index, true);
         }
       });
     },
-    onLeaveBack: (self) => {
+    onLeaveBack: () => {
       allCellsGrids.forEach((grid, index) => {
         if (index !== 0 && index !== allCellsGrids.length - 1) {
           drawShape(null, index, true);
@@ -339,3 +365,7 @@ $.fn.shuffleLetters = function (options) {
     }
   });
 })();
+
+
+
+

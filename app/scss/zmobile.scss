@@ -38,7 +38,6 @@
             position: absolute;
             z-index: 10001;
             will-change: transform;
-            /* Для оптимизации анимации */
             transform: translateZ(0);
             /* Аппаратное ускорение */
         }
@@ -512,13 +511,12 @@
 
             .items {
                 width: 100%;
-                height: 100vh;
+                height: calc(100vh - 50rem);
                 overflow: hidden;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 position: relative;
-
                 .items__line {
                     width: 100%;
                     position: absolute;
@@ -548,7 +546,6 @@
                     align-items: center;
                     justify-content: center;
                     z-index: 2;
-
                     svg {
                         width: 278rem;
                         height: 281rem;
@@ -569,14 +566,13 @@
 
                 .item {
                     width: 100%;
-                    height: 100vh;
+                    height: calc(100vh - 50rem);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     border-top: 1rem solid #F4F4F429;
                     overflow: hidden;
                     position: relative;
-
                     .number {
                         position: absolute;
                         left: 20rem;
@@ -596,7 +592,7 @@
                         color: var(--white);
                         max-width: 335rem;
                         position: absolute;
-                        bottom: 96rem;
+                        bottom: 64rem;
                         right: 0;
                     }
 
