@@ -67,7 +67,8 @@
         flex-direction: column;
         justify-content: flex-end;
         overflow: hidden;
-
+        position: relative;
+        z-index: 1;
         .top {
             width: 100%;
             display: flex;
@@ -91,7 +92,6 @@
             width: 100%;
             mix-blend-mode: difference;
             overflow: hidden;
-
             @keyframes animTitle {
                 from {
                     transform: translateX(0%);
@@ -103,7 +103,7 @@
             }
 
             .anim_stroke {
-                animation: 10s animTitle linear infinite;
+                animation: 20s animTitle linear infinite;
             }
 
             div {
@@ -605,7 +605,7 @@
                 display: flex;
                 align-items: center;
                 gap: 40px;
-                animation: marqueecase 20s infinite linear;
+                animation: marqueecase 30s infinite linear;
                 white-space: nowrap;
                 display: inline-flex;
                 mix-blend-mode: difference !important;
@@ -1288,7 +1288,7 @@
         gap: 236px;
         padding: 280px 40px 192px 40px;
         position: relative;
-
+        z-index: 1;
         .title {
             display: flex;
             flex-direction: column;

@@ -27,6 +27,7 @@ if (window.innerWidth > 750) {
         if (!video) return;
         const isPlaying = !video.paused && !video.ended;
         $cursor.stop(true).animate({ width: '40rem', height: '40rem' }, 200);
+        $cursor.find('.arrow').css('scale', '0');
         $cursor.find('.pause').css('scale', isPlaying ? '1' : '0');
         $cursor.find('.play').css('scale', isPlaying ? '0' : '1');
         $defaultText.stop(true, true).fadeIn(200).text(isPlaying ? ConFigNames.pause : ConFigNames.play);
@@ -72,7 +73,7 @@ if (window.innerWidth > 750) {
                 $defaultText.text(ConFigNames.email);
                 $cursor.find('.mail').css('scale', '1').siblings('svg').not('.arrow, .mail').css('scale', '0');
             } else {
-                $defaultText.text(ConFigNames.click);
+                $defaultText.text('');
                 $cursor.find('.arrow').css('scale', '1').siblings('svg').not('.arrow').css('scale', '0');
             }
         })

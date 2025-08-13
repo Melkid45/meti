@@ -249,7 +249,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1;
+            z-index: 2;
         }
 
         video {
@@ -290,7 +290,7 @@
             .stroke {
                 width: 100%;
                 mix-blend-mode: difference;
-                margin-left: 20rem;
+                margin-left: 0rem;
 
                 @keyframes animTitle {
                     from {
@@ -1354,7 +1354,7 @@
 
     .awards {
         width: 100%;
-        padding-bottom: 160rem;
+        padding-bottom: 100rem;
 
         &__body {
             display: flex;
@@ -1369,16 +1369,20 @@
                 text-transform: uppercase;
                 color: var(--white);
             }
-
+            &-block::-webkit-scrollbar{
+                width: 0;
+                height: 0;
+            }
             &-block {
                 border-top: 1rem solid #F4F4F429;
                 width: 100%;
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
                 gap: 20rem;
                 max-width: 100%;
                 padding-top: 20rem;
-
+                overflow: scroll;
+                gap: 20rem;
                 .item:hover .main__wrap .action div {
                     scale: 1;
                     opacity: 1;
@@ -1389,7 +1393,8 @@
                 }
 
                 .item {
-                    width: 100%;
+                    width: 246rem;
+                    min-width: 246rem;
                     border-bottom: none;
                     padding: 0rem 0rem 20rem 0rem;
                     position: relative;
@@ -1400,14 +1405,14 @@
                     flex-direction: column;
                     opacity: 1 !important;
                     transform: translateY(0%) !important;
-                    border-bottom: 1rem solid rgba(39, 39, 39, 1);
+                    border-bottom: none;
 
                     .wrap {
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         width: 100%;
-                        height: 410rem;
+                        height: 301rem;
                         background: var(--main);
                         position: static;
                         left: 0;
@@ -1415,8 +1420,8 @@
                         opacity: 1;
 
                         img {
-                            width: 160rem;
-                            height: 160rem;
+                            width: 109rem;
+                            height: 109rem;
                         }
                     }
 
@@ -1878,7 +1883,7 @@
             }
 
             .wrap__stroke {
-                margin-left: 20rem;
+                margin-left: 0rem;
             }
 
             .stroke {

@@ -32,7 +32,10 @@
                 display: flex;
                 align-items: center;
                 gap: 73.71px;
-
+                li:hover{
+                    background: var(--white);
+                    color: var(--black);
+                }
                 li {
                     font-weight: 300;
                     font-size: 16px;
@@ -41,6 +44,8 @@
                     text-align: center;
                     text-transform: uppercase;
                     color: var(--white);
+                    padding: 0.5px 4px;
+                    transition: all 0.3s ease;
                     a{
                         padding: 12px 0px;
                     }

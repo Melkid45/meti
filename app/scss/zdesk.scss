@@ -200,7 +200,7 @@
                 }
 
                 .anim_stroke {
-                    animation: 10s animTitle linear infinite;
+                    animation: 20s animTitle linear infinite;
                 }
 
                 div {
@@ -255,22 +255,22 @@
         .ab_dec1 {
             width: 488rem;
             height: 488rem;
-            top: 150rem;
-            right: 689rem;
+            top: 161rem;
+            right: 677rem;
         }
 
         .ab_dec2 {
             width: 380rem;
             height: 380rem;
-            top: 635rem;
-            left: 149rem;
+            top: 645rem;
+            left: 161rem;
         }
 
         .ab_dec3 {
             width: 162rem;
             height: 162rem;
-            bottom: 422rem;
-            left: 582rem;
+            bottom: 410rem;
+            left: 594rem;
         }
 
         &__body {
@@ -436,7 +436,6 @@
                     align-items: center;
                     justify-content: center;
                     z-index: 2;
-
 
 
                     img {
@@ -692,7 +691,7 @@
                     display: flex;
                     align-items: center;
                     gap: 40rem;
-                    animation: marqueecase 15s infinite linear;
+                    animation: marqueecase 30s infinite linear;
                     white-space: nowrap;
                     display: inline-flex;
                     mix-blend-mode: difference !important;
@@ -951,8 +950,8 @@
             &--1 {
                 width: 922rem;
                 height: 649rem;
-                top: 26rem;
-                right: 54rem;
+                top: 41rem;
+                right: 41rem;
                 z-index: 2;
                 transform: translate3d(0, 15%, 0);
                 opacity: 0;
@@ -1071,8 +1070,8 @@
         .client__decor1 {
             width: 488rem;
             height: 488rem;
-            left: 365rem;
-            top: -65rem;
+            left: 349rem;
+            top: -62rem;
             position: absolute;
             z-index: 2;
         }
@@ -1081,15 +1080,15 @@
             width: 162rem;
             height: 162rem;
             position: absolute;
-            right: 366rem;
-            top: 368rem;
+            right: 384rem;
+            top: 370rem;
         }
 
         .client__decor3 {
             width: 380rem;
             height: 380rem;
             bottom: 75rem;
-            right: 635rem;
+            right: 653rem;
             position: absolute;
         }
 
