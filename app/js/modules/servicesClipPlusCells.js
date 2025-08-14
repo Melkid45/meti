@@ -295,14 +295,6 @@ $.fn.shuffleLetters = function (options) {
     end: `+=${itemShapes.length * 100}%`,
     pin: true,
     scrub: 1,
-    snap: {
-      snapTo: (value) => {
-        const slide = Math.round(value * (itemShapes.length - 1));
-        return slide / (itemShapes.length - 1);
-      },
-      duration: 0.4,
-      ease: "power1.inOut"
-    },
     anticipatePin: 1,
     onUpdate: self => {
       const progress = self.progress;

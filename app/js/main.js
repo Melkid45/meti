@@ -77,3 +77,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     }, 1000);
   });
 });
+window.addEventListener('load', () => {
+  ScrollTrigger.refresh();
+});

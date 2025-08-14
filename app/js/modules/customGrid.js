@@ -1,302 +1,152 @@
-class SectionGrid {
-  constructor(section, gridSystem) {
-    this.section = section;
-    this.gridSystem = gridSystem;
+class BodyGrid {
+  constructor() {
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.cellPool = [];
-    this.mouse = { x: -1000, y: -1000, inside: false };
-    this.rafId = null;
-    this.isActive = true;
-    this.sectionTop = 0;
 
     this.settings = {
-      baseSize: 54,
-      spacing: 0,
-      activationRadius: 120,
-      trailLifetime: 100,
-      fadeScaleStart: 1.0,
-      fadeScaleEnd: 0.0,
-      hoverScale: 1.35,
-      rotationSpeed: 0,
+      baseSize: 54, // px
+      activationRadius: 120, // px
+      trailLifetime: 100, // ms
       gridColor: { r: 39, g: 39, b: 39 },
-      cursorColor: { r: 39, g: 39, b: 39 },
       borderWidth: 1,
-      offsetX: 0,
-      offsetY: 0
+      disappearChance: 0.25 // шанс исчезновения
     };
-    function isSafari() {
-      return navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
-        navigator.userAgent.indexOf('CriOS') === -1 && // Chrome на iOS
-        navigator.userAgent.indexOf('FxiOS') === -1;   // Firefox на iOS
-    }
 
-    if (section.classList.contains('services__new')) {
-      if (isSafari()) {
-        this.settings.offsetX = -11.5;
-        this.settings.offsetY = 26.5;
-      } else {
-        this.settings.offsetX = -12;
-        this.settings.offsetY = 22.5;
-      }
+    this.cells = new Map();
+    this.mouse = { x: -1000, y: -1000, inside: false };
+    this.lastMouseMoveTime = performance.now();
+    this.idleTimeout = 100;
 
-    }
-    if (section.classList.contains('client')) {
-      this.settings.offsetX = 25;
-      this.settings.offsetY = -7.5;
-    }
-    if (section.classList.contains('main')) {
-      this.settings.offsetX = 0;
-      this.settings.offsetY = 0;
-    }
-    if (section.classList.contains('feedback')) {
-      this.settings.offsetX = 27;
-      this.settings.offsetY = -24;
-      this.settings.gridColor = { r: 90, g: 69, b: 199 };
-    }
-    this.init();
+    this.initCanvas();
+    this.addEvents();
+    this.animate();
   }
 
-  remToPx(rem) {
-    return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+  initCanvas() {
+    this.canvas.style.position = "fixed";
+    this.canvas.style.top = "0";
+    this.canvas.style.left = "0";
+    this.canvas.style.width = "100%";
+    this.canvas.style.height = "100%";
+    this.canvas.style.pointerEvents = "none";
+    this.canvas.style.zIndex = "2";
+    document.body.appendChild(this.canvas);
+
+    this.resizeCanvas();
+    window.addEventListener("resize", () => this.resizeCanvas());
   }
 
-  init() {
-    this.canvas.style.position = 'absolute';
-    this.canvas.style.top = '0';
-    this.canvas.style.left = '0';
-    this.canvas.style.width = '100%';
-    this.canvas.style.height = '100%';
-    this.canvas.style.pointerEvents = 'none';
-    this.canvas.style.zIndex = '0';
-    this.section.style.position = 'relative';
-    this.section.appendChild(this.canvas);
-
-    this.updateSectionPosition();
-    this.resize();
-    this.initPool();
-    this.startAnimation();
+  resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width = Math.floor(window.innerWidth * dpr);
+    this.canvas.height = Math.floor(window.innerHeight * dpr);
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.scale(dpr, dpr);
+    this.pixelRatio = dpr;
   }
 
-  updateSectionPosition() {
-    this.rect = this.section.getBoundingClientRect();
-    this.sectionTop = this.rect.top + window.scrollY;
-  }
-
-  resize() {
-  this.rect = this.section.getBoundingClientRect();
-
-  const dpr = window.devicePixelRatio || 1;
-  this.canvas.width = Math.floor(this.rect.width * dpr);
-  this.canvas.height = Math.floor(this.rect.height * dpr);
-  this.canvas.style.width = this.rect.width + 'px';
-  this.canvas.style.height = this.rect.height + 'px';
-
-  this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-  this.ctx.scale(dpr, dpr);
-
-  this.pixelRatio = dpr;
-
-  const baseSizePx = this.remToPx(this.settings.baseSize);
-  this.gridCols = Math.ceil(this.rect.width / baseSizePx);
-  this.gridRows = Math.ceil(this.rect.height / baseSizePx);
-}
-
-  initPool() {
-  this.cellPool = [];
-  const baseSizePx = this.remToPx(this.settings.baseSize);
-  const offsetXPx = this.remToPx(this.settings.offsetX);
-  const offsetYPx = this.remToPx(this.settings.offsetY);
-
-  // Чтобы линии не плавали — работаем без .5, а lineWidth компенсируем
-  for (let y = 0; y < this.gridRows; y++) {
-    for (let x = 0; x < this.gridCols; x++) {
-      const cellX = offsetXPx + x * baseSizePx;
-      const cellY = offsetYPx + y * baseSizePx;
-
-      this.cellPool.push({
-        x: cellX,
-        y: cellY,
-        width: baseSizePx,
-        height: baseSizePx,
-        borderWidth: 1 / this.pixelRatio, // 1px в реальных пикселях
-        visible: false,
-        lastActiveTime: 0
-      });
-    }
-  }
-}
-
-  updateMousePosition(x, y) {
-    const rect = this.section.getBoundingClientRect();
-    if (rect.top <= y && rect.bottom >= y && rect.left <= x && rect.right >= x) {
-      this.mouse.x = x - rect.left;
-      this.mouse.y = y - rect.top;
+  addEvents() {
+    document.addEventListener("mousemove", (e) => {
+      this.lastMouseMoveTime = performance.now();
+      this.mouse.x = e.clientX + window.scrollX;
+      this.mouse.y = e.clientY + window.scrollY;
       this.mouse.inside = true;
-    } else {
-      this.leaveMouse();
-    }
+    });
+
+    document.addEventListener("mouseout", () => {
+      this.mouse.x = -1000;
+      this.mouse.y = -1000;
+      this.mouse.inside = false;
+    });
+
+    window.addEventListener("scroll", () => {}, { passive: true });
   }
 
-  leaveMouse() {
-    this.mouse.x = -1000;
-    this.mouse.y = -1000;
-    this.mouse.inside = false;
+  isIdle() {
+    return performance.now() - this.lastMouseMoveTime > this.idleTimeout;
   }
 
   updateCells() {
-  const now = performance.now();
-  const activationRadiusPx = this.remToPx(this.settings.activationRadius);
-  const activationRadiusSq = activationRadiusPx * activationRadiusPx;
+    const now = performance.now();
+    const radius = this.settings.activationRadius;
+    const baseSizePx = this.settings.baseSize;
 
-  let nearest = null;
-  let nearestDistSq = Infinity;
+    if (this.mouse.inside && !this.isIdle()) {
+      const mx = this.mouse.x;
+      const my = this.mouse.y;
+      const startX = Math.floor((mx - radius) / baseSizePx);
+      const endX = Math.floor((mx + radius) / baseSizePx);
+      const startY = Math.floor((my - radius) / baseSizePx);
+      const endY = Math.floor((my + radius) / baseSizePx);
 
-  for (let cell of this.cellPool) {
-    // Если клетка видимая и время жизни истекло
-    if (cell.visible) {
-      if (!cell.lifeRemaining) cell.lifeRemaining = this.settings.trailLifetime;
-
-      const dt = now - (cell.lastFrameTime || now);
-      cell.lastFrameTime = now;
-      cell.lifeRemaining -= dt;
-
-      if (cell.lifeRemaining <= 0) {
-        // рандомное исчезновение
-        if (Math.random() < 0.25) { // шанс исчезнуть
-          cell.visible = false;
-          cell.lifeRemaining = this.settings.trailLifetime; // сброс для следующего раза
-        } else {
-          cell.lifeRemaining = 50 + Math.random() * 50; // продлить случайно
+      for (let gy = startY; gy <= endY; gy++) {
+        for (let gx = startX; gx <= endX; gx++) {
+          const cx = gx * baseSizePx;
+          const cy = gy * baseSizePx;
+          const dx = mx - (cx + baseSizePx / 2);
+          const dy = my - (cy + baseSizePx / 2);
+          if (dx * dx + dy * dy <= radius * radius) {
+            const key = `${gx}_${gy}`;
+            this.cells.set(key, { lastActive: now, life: this.settings.trailLifetime });
+          }
         }
       }
     }
 
-    if (this.mouse.inside && !this.gridSystem.isIdle()) {
-      const cx = cell.x + cell.width / 2;
-      const cy = cell.y + cell.height / 2;
-      const dx = this.mouse.x - cx;
-      const dy = this.mouse.y - cy;
-      const distanceSq = dx * dx + dy * dy;
-
-      if (distanceSq < activationRadiusSq) {
-        cell.visible = true;
-        cell.lastActiveTime = now;
-        cell.lifeRemaining = this.settings.trailLifetime;
-      }
-
-      if (distanceSq < nearestDistSq) {
-        nearestDistSq = distanceSq;
-        nearest = cell;
+    for (let [key, cell] of this.cells) {
+      cell.life -= 16; // примерно кадр
+      if (cell.life <= 0) {
+        if (Math.random() < this.settings.disappearChance) {
+          this.cells.delete(key);
+        } else {
+          // Продлеваем жизнь на 50–100мс
+          cell.life = 50 + Math.random() * 50;
+        }
       }
     }
   }
 
-  if (this.mouse.inside && nearest && !this.gridSystem.isIdle()) {
-    this.cursorCell = nearest;
-    nearest.visible = true;
-    nearest.lastActiveTime = now;
-    nearest.lifeRemaining = this.settings.trailLifetime;
-  }
-}
-
-
   draw() {
-  this.ctx.clearRect(0, 0, this.rect.width, this.rect.height);
-  this.ctx.imageSmoothingEnabled = false;
+    const ctx = this.ctx;
+    const baseSizePx = this.settings.baseSize;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const viewWidth = window.innerWidth;
+    const viewHeight = window.innerHeight;
 
-  for (let cell of this.cellPool) {
-    if (!cell.visible) continue;
-    this.ctx.save();
-    this.ctx.strokeStyle = `rgb(${this.settings.gridColor.r},${this.settings.gridColor.g},${this.settings.gridColor.b})`;
-    this.ctx.lineWidth = cell.borderWidth;
-    this.ctx.strokeRect(cell.x, cell.y, cell.width, cell.height);
-    this.ctx.restore();
-  }
-}
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    ctx.strokeStyle = `rgb(${this.settings.gridColor.r},${this.settings.gridColor.g},${this.settings.gridColor.b})`;
+    ctx.lineWidth = this.settings.borderWidth / this.pixelRatio;
 
-  startAnimation() {
-    if (!this.rafId) {
-      this.animate();
+    const startX = Math.floor(scrollX / baseSizePx) - 1;
+    const endX = Math.floor((scrollX + viewWidth) / baseSizePx) + 1;
+    const startY = Math.floor(scrollY / baseSizePx) - 1;
+    const endY = Math.floor((scrollY + viewHeight) / baseSizePx) + 1;
+
+    for (let gy = startY; gy <= endY; gy++) {
+      for (let gx = startX; gx <= endX; gx++) {
+        const key = `${gx}_${gy}`;
+        if (this.cells.has(key)) {
+          ctx.strokeRect(
+            gx * baseSizePx - scrollX,
+            gy * baseSizePx - scrollY,
+            baseSizePx,
+            baseSizePx
+          );
+        }
+      }
     }
   }
 
   animate() {
     this.updateCells();
     this.draw();
-    this.rafId = requestAnimationFrame(() => this.animate());
-  }
-}
-
-class GridSystem {
-  constructor() {
-    this.sectionGrids = [];
-    this.mouse = { x: -1000, y: -1000 };
-    this.scrollY = window.scrollY;
-    this.lastScrollY = window.scrollY;
-    this.lastMouseMoveTime = performance.now();
-    this.idleTimeout = 200;
-    this.currentDpr = window.devicePixelRatio;
-    this.init();
-  }
-
-  init() {
-    const sections = document.querySelectorAll('[data-grid="true"]');
-    sections.forEach(section => {
-      this.sectionGrids.push(new SectionGrid(section, this));
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      this.lastMouseMoveTime = performance.now();
-      this.mouse.x = e.clientX;
-      this.mouse.y = e.clientY;
-      this.sectionGrids.forEach(grid => {
-        const rect = grid.section.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          grid.updateMousePosition(e.clientX, e.clientY);
-        } else {
-          grid.leaveMouse();
-        }
-      });
-    });
-
-    document.addEventListener('mouseout', () => {
-      this.sectionGrids.forEach(grid => grid.leaveMouse());
-    });
-
-    window.addEventListener('scroll', () => {
-      this.lastScrollY = this.scrollY;
-      this.scrollY = window.scrollY;
-      this.sectionGrids.forEach(grid => {
-        grid.updateSectionPosition();
-      });
-    }, { passive: true });
-
-    window.addEventListener('resize', () => this.resizeAll());
-    // следим за изменением DPR (зум браузера)
-    setInterval(() => {
-      if (window.devicePixelRatio !== this.currentDpr) {
-        this.currentDpr = window.devicePixelRatio;
-        this.resizeAll();
-      }
-    }, 300);
-  }
-
-  resizeAll() {
-    this.sectionGrids.forEach(grid => {
-      grid.resize();
-      grid.updateSectionPosition();
-      grid.initPool();
-    });
-  }
-
-  isIdle() {
-    return performance.now() - this.lastMouseMoveTime > this.idleTimeout;
+    requestAnimationFrame(() => this.animate());
   }
 }
 
 if (window.innerWidth > 750) {
-  document.addEventListener('DOMContentLoaded', () => {
-    new GridSystem();
+  document.addEventListener("DOMContentLoaded", () => {
+    new BodyGrid();
   });
 }
