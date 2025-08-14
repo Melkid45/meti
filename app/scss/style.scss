@@ -11,10 +11,7 @@ body {
     background: var(--black);
     margin: 0 auto;
     font-family: var(--default);
-    cursor: none;
     position: relative;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
     overflow: hidden !important;
 }
 .container {
@@ -22,19 +19,8 @@ body {
     margin: 0 auto;
     max-width: 1840px;
 }
-
-a {
-    cursor: none;
-}
-
-html {
-    cursor: none;
-}
-button{
+*{
     cursor: none !important;
-}
-div {
-    cursor: none;
 }
 
 .desk {
