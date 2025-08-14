@@ -81,9 +81,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 window.addEventListener('load', () => {
   ScrollTrigger.refresh();
-  if (window.location.hash) {
-    setTimeout(() => ScrollTrigger.refresh(), 50);
-  }
 });
 window.addEventListener("resize load", () => controller.update(true));
 window.addEventListener("hashchange", () => {
@@ -93,6 +90,3 @@ window.addEventListener('load', () => {
     lenis.scrollTo(0); // Сброс позиции
     lenis.emit(); // Принудительное обновление
 });
-
-
-document.querySelector('.awards__body-block').addEventListener('touchmove', { passive: true });
