@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         squareSize: 54,
         gap: 0,
         fillColor: '#000000',
-        bgColor: '#F4F4F403',
+        bgColor: '#F4F4F400',
         animationDuration: 500,
         widthView: 1920
     };

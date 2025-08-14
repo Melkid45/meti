@@ -1,4 +1,4 @@
-@media (max-width: 1920px) {
+@media (max-width: 2560px) {
     html {
         font-size: calc(100vw / 1920);
     }
@@ -158,7 +158,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1;
+            z-index: -1;
         }
 
         &__body {
@@ -255,21 +255,21 @@
         .ab_dec1 {
             width: 488rem;
             height: 488rem;
-            top: 161rem;
+            top: 174.5rem;
             right: 677rem;
         }
 
         .ab_dec2 {
             width: 380rem;
             height: 380rem;
-            top: 645rem;
+            top: 656rem;
             left: 161rem;
         }
 
         .ab_dec3 {
             width: 162rem;
             height: 162rem;
-            bottom: 410rem;
+            bottom: 397rem;
             left: 594rem;
         }
 
@@ -392,6 +392,8 @@
                 letter-spacing: 0%;
                 text-transform: uppercase;
                 color: var(--white);
+                position: relative;
+                z-index: 2;
             }
 
             .item:nth-child(3) {
@@ -406,7 +408,7 @@
                 align-items: center;
                 justify-content: center;
                 position: relative;
-
+                z-index: 1;
                 .items__line {
                     width: 100%;
                     position: absolute;
@@ -436,8 +438,11 @@
                     align-items: center;
                     justify-content: center;
                     z-index: 2;
-
-
+                    svg{
+                        background: #000;
+                        position: absolute;
+                        z-index: 5;
+                    }
                     img {
                         width: 760rem;
                         height: 760rem;
@@ -459,7 +464,7 @@
                     border-top: 1rem solid #F4F4F429;
                     overflow: hidden;
                     position: relative;
-
+                    z-index: 2;
                     .number {
                         position: absolute;
                         left: 40rem;
@@ -481,6 +486,7 @@
                         position: absolute;
                         bottom: 32rem;
                         right: 0;
+                        z-index: 2;
                     }
 
                     h3 {
@@ -622,7 +628,7 @@
         align-items: center;
         justify-content: center;
         margin-top: 400rem;
-
+        z-index: 2;
         video {
             width: 100%;
             height: 100%;
@@ -656,7 +662,7 @@
         position: relative;
         padding-top: 400rem;
         overflow: visible !important;
-        padding-bottom: 400rem;
+        padding-bottom: 0rem;
         .case__main {
             width: 100%;
             display: flex;
@@ -685,7 +691,7 @@
                 width: 100%;
                 height: 100%;
                 position: relative;
-                z-index: 2;
+                z-index: 3;
 
                 .stroke_container {
                     display: flex;
@@ -709,7 +715,8 @@
                         letter-spacing: -4%;
                         text-transform: uppercase;
                         color: var(--white);
-
+                        position: relative;
+                        z-index: 5;
                         span {
                             font-family: "Chava";
                             font-size: 276rem;
@@ -798,7 +805,7 @@
                 display: flex;
                 flex-direction: column;
                 gap: 54rem;
-
+                z-index: 10;
                 .media {
                     width: 100%;
                     position: relative;
@@ -1053,7 +1060,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 160rem;
+        gap: 148rem;
 
         #clientGridCanvas {
             position: absolute;
@@ -1070,8 +1077,8 @@
         .client__decor1 {
             width: 488rem;
             height: 488rem;
-            left: 349rem;
-            top: -62rem;
+            left: 324rem;
+            top: -76rem;
             position: absolute;
             z-index: 2;
         }
@@ -1080,15 +1087,15 @@
             width: 162rem;
             height: 162rem;
             position: absolute;
-            right: 384rem;
-            top: 370rem;
+            right: 354rem;
+            top: 355rem;
         }
 
         .client__decor3 {
             width: 380rem;
             height: 380rem;
             bottom: 75rem;
-            right: 653rem;
+            right: 623rem;
             position: absolute;
         }
 
@@ -1318,22 +1325,19 @@
     .feedback {
         width: 100%;
         position: relative;
-
         .feedback__top {
             width: 100%;
-            height: 100vh;
+            height: 120%;
             position: absolute;
             overflow: visible;
             top: 0;
             left: 0;
-
+            z-index: -2;
             canvas {
                 width: 100%;
                 height: 100%;
             }
         }
-
-        background: var(--main);
 
         &__bot {
             display: flex;
@@ -1342,7 +1346,6 @@
             gap: 236rem;
             padding: 280rem 40rem 192rem 40rem;
             position: relative;
-
             .title {
                 display: flex;
                 flex-direction: column;
@@ -1353,7 +1356,6 @@
                     flex-direction: column;
                     align-items: center;
                     gap: 24rem;
-
                     h3 {
                         font-weight: 300;
                         font-style: Light;
@@ -1674,7 +1676,6 @@
 
     .footer {
         width: 100%;
-        background: var(--main);
         padding-bottom: 40rem;
         padding-top: 20rem;
 

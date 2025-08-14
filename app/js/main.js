@@ -17,6 +17,9 @@ ScrollTrigger.config({
     limitCallbacks: true,
     autoAdjustLag: true
 });
+document.addEventListener('touchmove', (e) => {
+  // Ваш код обработки touchmove (без e.preventDefault())
+}, { passive: true }); // passive: true предотвращает ошибку
 function onEntry(entry) {
     entry.forEach(change => {
         if (change.isIntersecting) {
@@ -69,14 +72,27 @@ $('.header__mobile-menu ul li').on('click', function (e) {
     $('.header__mobile').removeClass('show')
     $('.burger').find('.current').removeClass('show')
 })
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', () => {
-    scene.enabled(false);
-    setTimeout(() => {
-      scene.enabled(true);
-    }, 1000);
-  });
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(anchor.getAttribute('href'));
+        lenis.scrollTo(target, { lerp: 0.1, duration: 1.5 });
+    });
 });
 window.addEventListener('load', () => {
   ScrollTrigger.refresh();
+  if (window.location.hash) {
+    setTimeout(() => ScrollTrigger.refresh(), 50);
+  }
 });
+window.addEventListener("resize load", () => controller.update(true));
+window.addEventListener("hashchange", () => {
+  ScrollTrigger.refresh();
+});
+window.addEventListener('load', () => {
+    lenis.scrollTo(0); // Сброс позиции
+    lenis.emit(); // Принудительное обновление
+});
+
+
+document.querySelector('.awards__body-block').addEventListener('touchmove', { passive: true });

@@ -53,7 +53,14 @@ if (window.innerWidth > 750) {
             resetCursor();
         }
     }
-
+    $('button').on('mouseover', function(e){
+        $cursor.stop(true).animate({ width: '40rem', height: '40rem' }, 200);
+        $cursor.find('.arrow').css('scale', '1').siblings('svg').not('.arrow').css('scale', '0');
+    })
+    $('button').on('mouseout', function(e){
+        $cursor.stop(true).animate({ width: '20rem', height: '20rem' }, 200);
+        $cursor.find('svg').css('scale', '0');
+    })
     $(document)
         .on('mousemove', function (e) {
             lastMouseX = e.clientX;

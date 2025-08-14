@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gap: 0,
         fillColor: '#442CBF',
         bgColor: '#000000',
-        animationDuration: 1000,
+        animationDuration: 1500,
         widthView: 1920
     };
 
@@ -119,10 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .on("progress", (e) => {
             const filledCount = Math.floor(e.progress * grid.length);
             updateGrid(filledCount);
-            if (e.progress >= 0.90) {
-                canvas.style.background = CONFIG.fillColor;
-            } else {
-                canvas.style.background = 'transparent';
+            if (e.progress >= 0){
+                console.log('start')
             }
         })
         .addTo(controller);
