@@ -165,7 +165,10 @@ $.fn.shuffleLetters = function (options) {
   const $titles = $('.items__line .item h3');
   const wrapper = document.querySelector('.wrapper');
   const itemsLine = document.querySelector('.items__line');
-
+  let total = $('.items__line .item').length
+  $('.items__line .item').each(function(e) {
+    $(this).find('.total-slides').text(`0${total}`)
+  })
   if (!items || items.length === 0) return;
   const itemShapes = items.map(item => item.dataset.item);
   const svgGrids = [];

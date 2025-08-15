@@ -1387,7 +1387,10 @@
                 touch-action: pan-x;
                 overscroll-behavior-x: contain;
             }
+            .splide{
+                width: 100%;
 
+            }
             &-block {
                 border-top: 1rem solid #F4F4F429;
                 width: 100%;
@@ -1414,7 +1417,7 @@
                 }
 
                 .item {
-                    width: 246rem;
+                    width: 246rem !important;
                     min-width: 246rem;
                     border-bottom: none;
                     padding: 0rem 0rem 20rem 0rem;
@@ -1427,7 +1430,7 @@
                     opacity: 1 !important;
                     transform: translateY(0%) !important;
                     border-bottom: none;
-
+                    margin-right: 20rem !important;
                     .wrap {
                         display: flex;
                         align-items: center;
@@ -1526,7 +1529,7 @@
             gap: 160rem;
             padding: 160rem 20rem 160rem 20rem;
             position: relative;
-
+            overflow: hidden;
             .title {
                 display: flex;
                 flex-direction: column;
@@ -1712,11 +1715,37 @@
                             text-align: start;
                         }
 
-                        div::before {
+                        div p {
                             width: 20rem;
                             height: 20rem;
                             font-size: 11rem;
                             line-height: 16rem;
+
+                            .error__text {
+                                position: absolute;
+                                top: -48rem;
+                                padding: 4.5rem 10rem;
+                                background: var(--black);
+                                font-weight: 300;
+                                font-size: 11rem;
+                                line-height: 16rem;
+                                letter-spacing: 0%;
+                                text-align: center;
+                                text-transform: uppercase;
+                                color: var(--white);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                white-space: wrap;
+                            }
+
+                            .error__text::before {
+                                content: '';
+                                border: 10rem solid transparent;
+                                border-top: 10rem solid var(--black);
+                                bottom: -20rem;
+                                position: absolute;
+                            }
                         }
 
                         input {

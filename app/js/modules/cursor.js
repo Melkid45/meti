@@ -55,7 +55,6 @@ if (window.innerWidth > 750) {
     }
     $('button').on('mouseover', function(e){
         $cursor.stop(true).animate({ width: '40rem', height: '40rem' }, 200);
-        $cursor.find('.arrow').css('scale', '1').siblings('svg').not('.arrow').css('scale', '0');
     })
     $('button').on('mouseout', function(e){
         $cursor.stop(true).animate({ width: '20rem', height: '20rem' }, 200);
@@ -79,8 +78,10 @@ if (window.innerWidth > 750) {
             } else if (href.includes('mail')) {
                 $defaultText.text(ConFigNames.email);
                 $cursor.find('.mail').css('scale', '1').siblings('svg').not('.arrow, .mail').css('scale', '0');
-            } else {
+            } else if (href.includes('#')) {
                 $defaultText.text('');
+                $cursor.find('.arrow').css('scale', '0').siblings('svg').not('.arrow').css('scale', '0');
+            }else{
                 $cursor.find('.arrow').css('scale', '1').siblings('svg').not('.arrow').css('scale', '0');
             }
         })

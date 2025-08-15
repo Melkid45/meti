@@ -176,6 +176,7 @@
                 align-items: center;
                 padding: 0 40rem;
                 margin-bottom: -25rem;
+
                 span {
                     font-weight: 300;
                     font-size: 16rem;
@@ -189,6 +190,7 @@
             .stroke {
                 width: 100%;
                 mix-blend-mode: difference;
+
                 @keyframes animTitle {
                     from {
                         transform: translateX(0%);
@@ -219,6 +221,7 @@
                     display: flex;
                     align-items: center;
                     gap: 150rem;
+
                     span {
                         font-family: var(--chava);
                         font-weight: 400;
@@ -409,6 +412,7 @@
                 justify-content: center;
                 position: relative;
                 z-index: 1;
+
                 .items__line {
                     width: 100%;
                     position: absolute;
@@ -438,11 +442,13 @@
                     align-items: center;
                     justify-content: center;
                     z-index: 2;
-                    svg{
+
+                    svg {
                         background: #000;
                         position: absolute;
                         z-index: 5;
                     }
+
                     img {
                         width: 760rem;
                         height: 760rem;
@@ -465,6 +471,7 @@
                     overflow: hidden;
                     position: relative;
                     z-index: 2;
+
                     .number {
                         position: absolute;
                         left: 40rem;
@@ -629,6 +636,7 @@
         justify-content: center;
         margin-top: 400rem;
         z-index: 2;
+
         video {
             width: 100%;
             height: 100%;
@@ -663,6 +671,7 @@
         padding-top: 400rem;
         overflow: visible !important;
         padding-bottom: 0rem;
+
         .case__main {
             width: 100%;
             display: flex;
@@ -717,6 +726,7 @@
                         color: var(--white);
                         position: relative;
                         z-index: 5;
+
                         span {
                             font-family: "Chava";
                             font-size: 276rem;
@@ -806,6 +816,7 @@
                 flex-direction: column;
                 gap: 54rem;
                 z-index: 10;
+
                 .media {
                     width: 100%;
                     position: relative;
@@ -1055,7 +1066,7 @@
 
     .client {
         width: 100%;
-        padding: 110rem 0rem 400rem;
+        padding: 290rem 0rem 400rem;
         position: relative;
         display: flex;
         flex-direction: column;
@@ -1078,7 +1089,7 @@
             width: 488rem;
             height: 488rem;
             left: 324rem;
-            top: -76rem;
+            top: 90rem;
             position: absolute;
             z-index: 2;
         }
@@ -1088,7 +1099,7 @@
             height: 162rem;
             position: absolute;
             right: 354rem;
-            top: 355rem;
+            top: 522rem;
         }
 
         .client__decor3 {
@@ -1148,12 +1159,12 @@
 
             .row:nth-child(1) {
                 will-change: transform;
-                animation: marquee1 10s infinite linear;
+                animation: marquee1 15s infinite linear;
             }
 
             .row:nth-child(2) {
                 will-change: transform;
-                animation: marquee2 10s infinite linear;
+                animation: marquee2 15s infinite linear;
             }
 
             .row {
@@ -1325,6 +1336,7 @@
     .feedback {
         width: 100%;
         position: relative;
+
         .feedback__top {
             width: 100%;
             height: 120%;
@@ -1333,6 +1345,7 @@
             top: 0;
             left: 0;
             z-index: -2;
+
             canvas {
                 width: 100%;
                 height: 100%;
@@ -1346,6 +1359,7 @@
             gap: 236rem;
             padding: 280rem 40rem 192rem 40rem;
             position: relative;
+
             .title {
                 display: flex;
                 flex-direction: column;
@@ -1356,6 +1370,7 @@
                     flex-direction: column;
                     align-items: center;
                     gap: 24rem;
+
                     h3 {
                         font-weight: 300;
                         font-style: Light;
@@ -1543,7 +1558,7 @@
                             z-index: 2;
                         }
 
-                        div::before {
+                        div p {
                             content: '!';
                             width: 40rem;
                             height: 40rem;
@@ -1564,6 +1579,31 @@
                             color: var(--white);
                             transition: all 0.3s ease;
                             opacity: 0;
+
+                            .error__text {
+                                position: absolute;
+                                top: -48rem;
+                                padding: 4.5rem 10rem;
+                                background: var(--black);
+                                font-weight: 300;
+                                font-size: 14rem;
+                                line-height: 20rem;
+                                letter-spacing: 0%;
+                                text-align: center;
+                                text-transform: uppercase;
+                                color: var(--white);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+
+                            .error__text::before {
+                                content: '';
+                                border: 10rem solid transparent;
+                                border-top: 10rem solid var(--black);
+                                bottom: -20rem;
+                                position: absolute;
+                            }
                         }
 
                         input::placeholder {

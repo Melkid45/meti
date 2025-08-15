@@ -13,6 +13,9 @@ body {
     font-family: var(--default);
     position: relative;
     overflow: hidden !important;
+    opacity: 1 !important;
+    transform: none !important;
+
 }
 .container {
     width: 100%;
@@ -33,4 +36,9 @@ body {
 
 .hidden {
     overflow: hidden;
+}
+[data-scroll-section] {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: all !important;
 }
