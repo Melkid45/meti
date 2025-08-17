@@ -18,7 +18,7 @@ let lenis = new Lenis({
     autoRaf: true,
 })
 if ($(window).width() > 750) {
-    lenis.on('scroll', ({scroll}) => {
+    lenis.on('scroll', ({ scroll }) => {
         const currentScroll = scroll
         const header = document.querySelector('.header')
         if (currentScroll > lastScrollTop && currentScroll > 50) {
@@ -47,13 +47,18 @@ $('.header__mobile-menu ul li').on('click', function (e) {
     $('.header__mobile').removeClass('show')
     $('.burger').find('.current').removeClass('show')
 })
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(anchor.getAttribute('href'));
-        lenis.scrollTo(target, { lerp: 0.1, duration: 2.5 });
-    });
-});
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(anchor.getAttribute('href'));
+                lenis.scrollTo(target, { lerp: 0.1, duration: 2.5 });
+            });
+        });
+    }, 500);
+})
+
 window.addEventListener('load', () => {
     ScrollTrigger.refresh();
 });
@@ -65,7 +70,7 @@ window.addEventListener('load', () => {
     lenis.scrollTo(0); // Сброс позиции
     lenis.emit(); // Принудительное обновление
 });
-if (document.querySelector('.splide')){
+if (document.querySelector('.splide')) {
     var splide = new Splide('.splide', {
         rewind: true,
         type: 'loop',
@@ -79,14 +84,18 @@ if (document.querySelector('.splide')){
 let allowInstantScroll = true
 
 lenis.on('scroll', () => {
-  allowInstantScroll = false
+    allowInstantScroll = false
 })
 
 if (window.location.hash && allowInstantScroll) {
-  const target = document.querySelector(window.location.hash)
-  if (target) {
-    lenis.stop()
-    window.scrollTo(0, target.offsetTop)
-    setTimeout(() => lenis.start(), 3000)
-  }
+    const target = document.querySelector(window.location.hash)
+    if (target) {
+        lenis.stop()
+        window.scrollTo(0, target.offsetTop)
+        setTimeout(() => lenis.start(), 3000)
+    }
 }
+window.addEventListener('load', () => {
+  lenis.resize(); // Пересчитываем размеры
+  lenis.raf(0); // Сбрасываем анимацию
+});
