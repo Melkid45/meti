@@ -1,17 +1,24 @@
+
 if (width > 750) {
     document.addEventListener('DOMContentLoaded', () => {
         const CONFIG = {
             squareSize: 40,
             fillColor: '#000000',
-            initialFillRatio: 0.3,
+            hoverFillColor: '#FFFFFF', // Новый цвет заливки при наведении
+            initialFillRatio: 0.4,
             animationDuration: 25,
-            staggerDelay: 1
+            staggerDelay: 1,
+            borderColor: { r: 39, g: 39, b: 39 },
+            hoverBorderColor: { r: 255, g: 255, b: 255 },
+            borderWidthRem: 1,
+            colorTransitionDelay: 100,
+            colorTransitionDuration: 300,
         };
         if (width <= 750) {
             CONFIG.squareSize = 20;
         }
-        const button = document.querySelector('.feedback_btn');
-        const canvas = button.querySelector('.btn_canvas');
+        const button = document.querySelector('.load-more');
+        const canvas = button.querySelector('.btn_canvas-case');
         const ctx = canvas.getContext('2d');
         let grid = [];
         let isHovered = false;
@@ -25,9 +32,11 @@ if (width > 750) {
             const buttonHeight = button.offsetHeight;
             canvas.width = buttonWidth;
             canvas.height = buttonHeight;
+
             const squareSizePx = remToPx(CONFIG.squareSize);
             const cols = Math.ceil(buttonWidth / squareSizePx);
             const rows = Math.ceil(buttonHeight / squareSizePx);
+
             grid = [];
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
@@ -42,6 +51,7 @@ if (width > 750) {
                     });
                 }
             }
+
             grid.forEach(square => {
                 square.initialFilled = square.filled;
             });
@@ -52,16 +62,34 @@ if (width > 750) {
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            const currentFillColor = isHovered ? CONFIG.hoverFillColor : CONFIG.fillColor;
+            const currentBorderColor = isHovered
+                ? `rgb(${CONFIG.hoverBorderColor.r}, ${CONFIG.hoverBorderColor.g}, ${CONFIG.hoverBorderColor.b})`
+                : `rgb(${CONFIG.borderColor.r}, ${CONFIG.borderColor.g}, ${CONFIG.borderColor.b})`;
+
             grid.forEach(square => {
                 if (square.filled || square.progress > 0) {
-                    ctx.fillStyle = CONFIG.fillColor;
+                    ctx.fillStyle = currentFillColor;
+                    ctx.strokeStyle = currentBorderColor;
+                    ctx.lineWidth = remToPx(CONFIG.borderWidthRem);
                     ctx.globalAlpha = square.filled ? 1 : square.progress;
+
+                    // Рисуем квадрат без наложения границ (+1 убран)
                     ctx.fillRect(
                         Math.round(square.x),
                         Math.round(square.y),
-                        Math.round(square.width) + 1,
-                        Math.round(square.height) + 1
+                        Math.round(square.width),
+                        Math.round(square.height)
                     );
+
+                    // Рисуем границу (толщина учитывается внутрь, поэтому не вылезает)
+                    ctx.strokeRect(
+                        Math.round(square.x) + ctx.lineWidth / 2,
+                        Math.round(square.y) + ctx.lineWidth / 2,
+                        Math.round(square.width) - ctx.lineWidth,
+                        Math.round(square.height) - ctx.lineWidth
+                    );
+
                     ctx.globalAlpha = 1;
                 }
             });

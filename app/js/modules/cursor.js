@@ -82,6 +82,7 @@ if (window.innerWidth > 750) {
                 $defaultText.text('');
                 $cursor.find('.arrow').css('scale', '0').siblings('svg').not('.arrow').css('scale', '0');
             }else{
+                $defaultText.text('');
                 $cursor.find('.arrow').css('scale', '1').siblings('svg').not('.arrow').css('scale', '0');
             }
         })

@@ -414,11 +414,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const items = document.querySelectorAll('.case__soft .item');
+  const container = document.querySelector('.case__soft');
+  const items = container.querySelectorAll('.item');
   const effects = [];
   let loadedCount = 0;
-
-  items.forEach((item, idx) => {
+  function initItems() {
+    const items = container.querySelectorAll('.item');
+    items.forEach(item => {
+      const media = item.querySelector('.media');
+      const effect = new CombinedImageEffect(media);
+      effects.push(effect);
+    });
+  }
+  items.forEach(item => {
     const media = item.querySelector('.media');
     const effect = new CombinedImageEffect(media);
     effects.push(effect);
@@ -428,38 +436,53 @@ document.addEventListener('DOMContentLoaded', () => {
       loadedCount++;
       img.removeEventListener('load', onLoadCounter);
       if (loadedCount === items.length) {
-        initScrollAnimation();
+        initScrollAnimation(); // вызываем анимацию после загрузки всех картинок
       }
     };
-    img.addEventListener('load', onLoadCounter);
 
     if (img.complete) {
-      setTimeout(() => {
-        if (img) {
-          try { img.removeEventListener('load', onLoadCounter); } catch (e) { }
-        }
-        loadedCount++;
-        if (loadedCount === items.length) initScrollAnimation();
-      }, 0);
+      setTimeout(() => onLoadCounter(), 0);
+    } else {
+      img.addEventListener('load', onLoadCounter);
     }
   });
 
   function initScrollAnimation() {
-    gsap.registerPlugin(ScrollTrigger);
-    const masterTl = gsap.timeline({
+    const items = container.querySelectorAll('.item');
+    if (!items.length) return;
+
+    // Сохраняем ссылку на текущую временную шкалу
+    const existingTl = gsap.getById('masterTimeline');
+    const masterTl = existingTl || gsap.timeline({
+      id: 'masterTimeline',
       scrollTrigger: {
         trigger: ".case",
         start: "top top",
-        end: "+=" + (window.innerHeight * (items.length - 1)),
-        scrub: 0.5, // плавность скролла
+        end: () => "+=" + (window.innerHeight * (items.length - 1)),
+        scrub: 0.5,
         pin: true,
-      }
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          if (self.progress >= 0.6 && self.progress < 0.9) {
+            document.querySelector('.load-more').classList.add('animate')
+          }
+          if (self.progress >= 0.9 || (self.progress < 0.6)) {
+            document.querySelector('.load-more').classList.remove('animate')
+          }
+        }
+      },
+
     });
-
+    // Добавляем только новые элементы, которые еще не анимированы
     effects.forEach((effect, i) => {
-      const item = items[i];
+      if (effect.isAnimated) return;
 
-      const duration = 1; // одинаково для обоих режимов
+      const item = items[i];
+      if (!item) return;
+
+      effect.isAnimated = true;
+
+      const duration = 1;
       const pixelDur = 0.4;
       const stagger = isFullEffect ? 0.2 : 0.3;
 
@@ -467,15 +490,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isFullEffect) moveY = -370;
       if (window.innerWidth < 500) moveY = -280;
 
-      let lastSize = null; // отслеживаем изменение пикселя
+      let lastSize = null;
 
       const tl = gsap.timeline()
-        // вместо top используем transform
         .fromTo(item,
           { yPercent: 0, opacity: 1 },
           { yPercent: moveY, opacity: 1, duration }
         )
-        // пикселизация
         .to({ size: 40 }, {
           size: 1,
           duration: pixelDur,
@@ -484,30 +505,80 @@ document.addEventListener('DOMContentLoaded', () => {
             const newSize = Math.round(this.targets()[0].size);
             if (newSize !== lastSize) {
               lastSize = newSize;
-              effect.pixelSize = newSize; // просто меняем переменную
+              effect.pixelSize = newSize;
+              effect.requestRender();
             }
           }
         }, 0);
 
       masterTl.add(tl, i * stagger);
     });
-
-    // Отдельный цикл рендера для canvas
-    function renderLoop() {
-      effects.forEach(effect => {
-        if (typeof effect.requestRender === "function") {
-          effect.requestRender();
-        }
-      });
-      requestAnimationFrame(renderLoop);
-    }
-    requestAnimationFrame(renderLoop);
   }
+  let isUpdatingAnimation = false;
+  function initScrollAnimationDynamic() {
+    const currentScroll = window.scrollY || window.pageYOffset;
+
+    const masterTrigger = ScrollTrigger.getById('masterTrigger');
+    if (masterTrigger) masterTrigger.kill();
+
+    initScrollAnimation();
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const newItems = container.querySelectorAll('.item:not(.initialized)');
+        if (newItems.length) {
+          newItems.forEach(item => item.classList.add('initialized'));
+
+          setTimeout(() => {
+            lenis.scrollTo(newItems[0], {
+              offset: -100,
+              duration: 1.5,
+              lerp: 0.1
+            });
+          }, 300);
+        }
+      }, 0);
+    });
+  }
+
 
 
 
   window.addEventListener('beforeunload', () => {
     effects.forEach(e => e.stop && e.stop());
+  });
+
+  const loadMoreBtn = document.querySelector('.load-more');
+  let page = 1; // счётчик "страниц"
+
+  loadMoreBtn.addEventListener('click', () => {
+    page++;
+    fetch(`/components/case-more-${page}.html`)
+      .then(res => res.text())
+      .then(html => {
+        const temp = document.createElement('div');
+        temp.innerHTML = html;
+        const newItems = temp.querySelectorAll('.item');
+
+        newItems.forEach(item => {
+          container.insertBefore(item, loadMoreBtn);
+
+          // инициализация эффекта
+          const media = item.querySelector('.media');
+          const effect = new CombinedImageEffect(media);
+          effects.push(effect);
+
+          const img = effect.img;
+          if (img.complete) {
+            initScrollAnimationDynamic();
+          } else {
+            img.addEventListener('load', initScrollAnimationDynamic, { once: true });
+          }
+          TEXT_ELEMENTS = Array.from(document.querySelectorAll('[data-circular-text]'));
+          console.log(TEXT_ELEMENTS.length)
+          updateAllElements()
+        });
+      });
   });
 });
 
@@ -520,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const GUI = dat.GUI;
 const VIEWBOX = 130;
-const TEXT_ELEMENTS = Array.from(document.querySelectorAll('[data-circular-text]'));
+let TEXT_ELEMENTS = Array.from(document.querySelectorAll('[data-circular-text]'));
 
 const OPTIONS = {
   size: 12,
@@ -531,19 +602,20 @@ const OPTIONS = {
   texts: []
 };
 
-TEXT_ELEMENTS.forEach((el, index) => {
-  OPTIONS.texts[index] = el.dataset.circularText || 'Your text • ';
 
-  const path = el.querySelector('.circlePath');
-  path.id = `circlePath${index}`;
-
-  const textPath = el.querySelector('.textPath');
-  textPath.setAttribute('href', `#${path.id}`);
-  textPath.textContent = OPTIONS.texts[index];
-});
 
 
 const updateAllElements = () => {
+  TEXT_ELEMENTS.forEach((el, index) => {
+    OPTIONS.texts[index] = el.dataset.circularText || 'Your text • ';
+
+    const path = el.querySelector('.circlePath');
+    path.id = `circlePath${index}`;
+
+    const textPath = el.querySelector('.textPath');
+    textPath.setAttribute('href', `#${path.id}`);
+    textPath.textContent = OPTIONS.texts[index];
+  });
   TEXT_ELEMENTS.forEach((element, index) => {
     const circlePath = element.querySelector('.circlePath');
     const textPath = element.querySelector('.textPath');

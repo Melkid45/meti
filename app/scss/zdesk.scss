@@ -252,7 +252,7 @@
 
         &__decor {
             position: absolute;
-            z-index: 2;
+            z-index: 0;
         }
 
         .ab_dec1 {
@@ -935,6 +935,45 @@
                     }
                 }
             }
+
+            button {
+                width: 560rem;
+                height: 120rem;
+                background: transparent;
+                background-size: cover;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: "Onest";
+                font-weight: 570;
+                font-size: 40rem;
+                line-height: 48rem;
+                text-align: center;
+                text-transform: uppercase;
+                color: var(--white);
+                border: none;
+                cursor: pointer;
+                z-index: 1;
+                position: absolute;
+                bottom: 100rem;
+                transform: translateY(10%);
+                opacity: 0;
+                transition: all 0.5s ease;
+
+                span {
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .btn_canvas-case {
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    z-index: 0;
+                    top: 0;
+                    left: 0;
+                }
+            }
         }
 
         overflow: hidden;
@@ -1578,32 +1617,7 @@
                             z-index: 10;
                             color: var(--white);
                             transition: all 0.3s ease;
-                            opacity: 0;
-
-                            .error__text {
-                                position: absolute;
-                                top: -48rem;
-                                padding: 4.5rem 10rem;
-                                background: var(--black);
-                                font-weight: 300;
-                                font-size: 14rem;
-                                line-height: 20rem;
-                                letter-spacing: 0%;
-                                text-align: center;
-                                text-transform: uppercase;
-                                color: var(--white);
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                            }
-
-                            .error__text::before {
-                                content: '';
-                                border: 10rem solid transparent;
-                                border-top: 10rem solid var(--black);
-                                bottom: -20rem;
-                                position: absolute;
-                            }
+                            display: none;
                         }
 
                         input::placeholder {

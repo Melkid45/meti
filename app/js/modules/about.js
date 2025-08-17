@@ -1,110 +1,495 @@
-const canvas = document.getElementById('pixelCanvas');
-const ctx = canvas.getContext('2d');
-const img = new Image();
-let ImgSrc = document.querySelector('#about__img').src
-img.src = ImgSrc;
-document.querySelector('#about__img').remove()
+// ==== Конфиг как в первом коде ====
 const ABOUTCONFIG = {
-    animCanvas: -250,
-    StartAnim: "top top",
-    StartAnimPixel: "top top",
-    endAnim: "+=30%"
-}
-if (width <= 750) {
-    ABOUTCONFIG.animCanvas = -50;
-    ABOUTCONFIG.StartAnim = "top center";
-    ABOUTCONFIG.StartAnimPixel = "+=30%";
-    ABOUTCONFIG.endAnim = "+=30%";
-}
-img.onload = function () {
-    initCanvas();
-    window.addEventListener('resize', initCanvas);
-
-    gsap.to(canvas, {
-        y: ABOUTCONFIG.animCanvas,
-        scrollTrigger: {
-            trigger: ".about",
-            start: ABOUTCONFIG.StartAnim,
-            end: "bottom center",
-            scrub: 2,
-            ease: "sine.inOut"
-        }
-    });
-    gsap.to('.ab_dec1', {
-        y: `0%`,
-        opacity: 1,
-        scrollTrigger: {
-            trigger: ".about",
-            start: '-=60%',
-            end: "-=20%",
-            scrub: 2,
-            ease: "sine.inOut",
-        }
-    });
-    gsap.to('.ab_dec2', {
-        y: `0%`,
-        opacity: 1,
-        scrollTrigger: {
-            trigger: ".about",
-            start: '-=20%',
-            end: "+=40%",
-            scrub: 2,
-            ease: "sine.inOut",
-        }
-    });
-    gsap.to('.ab_dec3', {
-        y: `0%`,
-        opacity: 1,
-        scrollTrigger: {
-            trigger: ".about",
-            start: '+=10%',
-            end: "+=30%",
-            scrub: 2,
-            ease: "sine.inOut"
-        }
-    });
-    gsap.to('.benefits__decor--1', {
-        y: `0%`,
-        opacity: 1,
-        scrollTrigger: {
-            trigger: ".benefits",
-            start: '-=50%',
-            end: "+=30%",
-            scrub: 2,
-            ease: "sine.inOut",
-        }
-    });
-    const pixelAnimation = { pixelSize: 40 };
-
-    gsap.to(pixelAnimation, {
-        scrollTrigger: {
-            trigger: ".about",
-            start: ABOUTCONFIG.StartAnimPixel,
-            end: ABOUTCONFIG.endAnim,
-            scrub: 1,
-            ease: "sine.inOut",
-        },
-        pixelSize: 1,
-        onUpdate: function () {
-            renderPixelated(pixelAnimation.pixelSize);
-        }
-    });
+  animCanvas: -250,
+  StartAnim: "top top",
+  StartAnimPixel: "top top",
+  endAnim: "+=30%"
 };
 
-function initCanvas() {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    renderPixelated(40);
+if (window.innerWidth <= 750) {
+  ABOUTCONFIG.animCanvas = -50;
+  ABOUTCONFIG.StartAnim = "top center";
+  ABOUTCONFIG.StartAnimPixel = "+=30%";
+  ABOUTCONFIG.endAnim = "+=30%";
 }
 
-function renderPixelated(pixelSize) {
-    ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+// ==== GSAP анимации как были ====
+gsap.to('.about-parallax', {
+  y: ABOUTCONFIG.animCanvas,
+  scrollTrigger: {
+    trigger: ".about",
+    start: ABOUTCONFIG.StartAnim,
+    end: "bottom center",
+    scrub: 2,
+    ease: "sine.inOut"
+  }
+});
 
-    const smallWidth = Math.floor(canvas.width / pixelSize);
-    const smallHeight = Math.floor(canvas.height / pixelSize);
+gsap.to('.ab_dec1', {
+  y: 0,
+  opacity: 1,
+  scrollTrigger: {
+    trigger: ".about",
+    start: '-=60%',
+    end: "-=20%",
+    scrub: 2,
+    ease: "sine.inOut",
+  }
+});
 
-    ctx.drawImage(img, 0, 0, smallWidth, smallHeight);
-    ctx.drawImage(canvas, 0, 0, smallWidth, smallHeight, 0, 0, canvas.width, canvas.height);
-}
+gsap.to('.ab_dec2', {
+  y: 0,
+  opacity: 1,
+  scrollTrigger: {
+    trigger: ".about",
+    start: '-=20%',
+    end: "+=40%",
+    scrub: 2,
+    ease: "sine.inOut"
+  }
+});
 
+gsap.to('.ab_dec3', {
+  y: 0,
+  opacity: 1,
+  scrollTrigger: {
+    trigger: ".about",
+    start: '+=10%',
+    end: "+=30%",
+    scrub: 2,
+    ease: "sine.inOut"
+  }
+});
+
+gsap.to('.benefits__decor--1', {
+  y: 0,
+  opacity: 1,
+  scrollTrigger: {
+    trigger: ".benefits",
+    start: '-=50%',
+    end: "+=30%",
+    scrub: 2,
+    ease: "sine.inOut"
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const isFullEffect = window.innerWidth > 750;
+
+  // Небольшой debounce для resize
+  function debounce(fn, wait = 150) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
+  }
+
+  class PixelationEffect {
+    constructor(mediaElement) {
+      this.media = mediaElement;
+      this.img = mediaElement.querySelector('img');
+      this.canvas = mediaElement.querySelector('.grid-canvas-case');
+      this.ctx = this.canvas.getContext('2d');
+
+      // === параметры распикселивания (как в первом) ===
+      this.pixelSize = { value: 40 };
+      this.isPixelationComplete = false;
+
+      // === буферы ===
+      this.originalCanvas = document.createElement('canvas');
+      this.originalCtx = this.originalCanvas.getContext('2d');
+
+      // для быстрой пикселизации (персистентный буфер)
+      this.pixelCanvas = document.createElement('canvas');
+      this.pixelCtx = this.pixelCanvas.getContext('2d');
+
+      // для блюра/зума (как во втором)
+      this.blurCanvas = document.createElement('canvas');
+      this.blurCtx = this.blurCanvas.getContext('2d');
+      this.zoomCanvas = document.createElement('canvas');
+      this.zoomCtx = this.zoomCanvas.getContext('2d');
+
+      // === состояние наведения ===
+      this.isGridActive = false;
+      this.mouse = { x: -1000, y: -1000 };
+
+      // === настройки эффекта сетки/зума (взяты из второго кода) ===
+      this.settings = {
+        cellSize: 54,
+        effectRadius: 120,
+        blurRadius: 120,
+        fillColor: 'rgba(244,244,244,0.9)',
+        zoomFactor: 5,
+        zoomRadius: 120,
+        zoomTransition: 0.25
+      };
+
+      this.isInitialized = false;
+      this.isBlurWorking = false;
+      this.isBlurDone = false;
+
+      // Инициализация после загрузки изображения / когда элемент в вьюпорте
+      if (this.img.complete) {
+        this.init();
+      } else {
+        this.img.addEventListener('load', () => this.init(), { once: true });
+      }
+
+      // resize
+      this._onResize = debounce(() => {
+        if (!this.isInitialized) return;
+        this.resizeAll();
+        this.drawImageCover(this.originalCtx, this.img, this.originalCanvas.width, this.originalCanvas.height);
+        if (isFullEffect) {
+          this.blurCtx.drawImage(this.originalCanvas, 0, 0);
+          this.applyBlur();
+        }
+      }, 200);
+      window.addEventListener('resize', this._onResize);
+    }
+
+    resizeAll() {
+      // размеры исходного канваса совпадают с видимым — 1:1, как во втором коде
+      this.canvas.width = this.media.offsetWidth;
+      this.canvas.height = this.media.offsetHeight;
+
+      this.originalCanvas.width = this.canvas.width;
+      this.originalCanvas.height = this.canvas.height;
+
+      this.pixelCanvas.width = Math.max(1, Math.floor(this.canvas.width / Math.max(1, this.pixelSize.value)));
+      this.pixelCanvas.height = Math.max(1, Math.floor(this.canvas.height / Math.max(1, this.pixelSize.value)));
+
+      this.blurCanvas.width = this.canvas.width;
+      this.blurCanvas.height = this.canvas.height;
+
+      this.zoomCanvas.width = this.canvas.width;
+      this.zoomCanvas.height = this.canvas.height;
+    }
+
+    init() {
+      if (this.isInitialized) return;
+      this.isInitialized = true;
+
+      this.resizeAll();
+      this.drawImageCover(this.originalCtx, this.img, this.originalCanvas.width, this.originalCanvas.height);
+
+      if (isFullEffect) {
+        this.blurCtx.drawImage(this.originalCanvas, 0, 0);
+        this.applyBlur(); // построение integral blur, как во втором коде
+      }
+
+      this.setupEvents();
+      this.setupScrollAnimation(); // GSAP из первого кода
+      this.render(); // бесконечный рендер цикл (как у тебя)
+    }
+
+    drawImageCover(ctx, img, canvasWidth, canvasHeight) {
+      const imgRatio = img.naturalWidth / img.naturalHeight;
+      const canvasRatio = canvasWidth / canvasHeight;
+
+      let drawWidth, drawHeight, offsetX, offsetY;
+
+      if (canvasRatio > imgRatio) {
+        drawWidth = canvasWidth;
+        drawHeight = canvasWidth / imgRatio;
+        offsetX = 0;
+        offsetY = (canvasHeight - drawHeight) / 2;
+      } else {
+        drawHeight = canvasHeight;
+        drawWidth = canvasHeight * imgRatio;
+        offsetX = (canvasWidth - drawWidth) / 2;
+        offsetY = 0;
+      }
+
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    }
+
+    // === Интегральный blur, как во втором коде ===
+    applyBlur() {
+      if (!this.blurCtx || !this.originalCtx) return;
+      if (this.isBlurWorking) return;
+
+      this.isBlurWorking = true;
+      this.isBlurDone = false;
+
+      const width = this.blurCanvas.width;
+      const height = this.blurCanvas.height;
+      const radius = Math.max(0, Math.floor(this.settings.blurRadius));
+      const srcImageData = this.originalCtx.getImageData(0, 0, width, height);
+      const src = srcImageData.data;
+      const W = width, H = height;
+      const iw = W + 1;
+      const ih = H + 1;
+
+      this.blurCtx.putImageData(srcImageData, 0, 0);
+
+      if (radius === 0) {
+        this.isBlurWorking = false;
+        this.isBlurDone = true;
+        return;
+      }
+
+      const len = iw * ih;
+      const integralR = new Float64Array(len);
+      const integralG = new Float64Array(len);
+      const integralB = new Float64Array(len);
+      let buildY = 1;
+      const buildRowsPerChunk = Math.max(8, Math.floor(200000 / W));
+
+      const rectSum = (intArr, x0, y0, x1, y1) => {
+        const A = y0 * iw + x0;
+        const B = y0 * iw + (x1 + 1);
+        const C = (y1 + 1) * iw + x0;
+        const D = (y1 + 1) * iw + (x1 + 1);
+        return intArr[D] - intArr[B] - intArr[C] + intArr[A];
+      };
+
+      const dstImageData = this.blurCtx.createImageData(W, H);
+      const dst = dstImageData.data;
+      const computeRowsPerChunk = Math.max(4, Math.floor(100000 / W));
+      const self = this;
+
+      const buildStep = () => {
+        const endY = Math.min(H, buildY + buildRowsPerChunk - 1);
+        for (let y = buildY; y <= endY; y++) {
+          let rowSumR = 0, rowSumG = 0, rowSumB = 0;
+          const srcRowOffset = (y - 1) * W * 4;
+          for (let x = 1; x <= W; x++) {
+            const sIdx = srcRowOffset + (x - 1) * 4;
+            rowSumR += src[sIdx];
+            rowSumG += src[sIdx + 1];
+            rowSumB += src[sIdx + 2];
+            const idx = y * iw + x;
+            const idxAbove = (y - 1) * iw + x;
+            integralR[idx] = integralR[idxAbove] + rowSumR;
+            integralG[idx] = integralG[idxAbove] + rowSumG;
+            integralB[idx] = integralB[idxAbove] + rowSumB;
+          }
+        }
+        buildY = endY + 1;
+        if (buildY <= H) {
+          setTimeout(buildStep, 0);
+        } else {
+          computeBlurRows(0);
+        }
+      };
+
+      function computeBlurRows(startRow) {
+        const endRow = Math.min(H - 1, startRow + computeRowsPerChunk - 1);
+        for (let y = startRow; y <= endRow; y++) {
+          for (let x = 0; x < W; x++) {
+            const x0 = Math.max(0, x - radius);
+            const x1 = Math.min(W - 1, x + radius);
+            const y0 = Math.max(0, y - radius);
+            const y1 = Math.min(H - 1, y + radius);
+
+            const count = (x1 - x0 + 1) * (y1 - y0 + 1);
+
+            const rSum = rectSum(integralR, x0, y0, x1, y1);
+            const gSum = rectSum(integralG, x0, y0, x1, y1);
+            const bSum = rectSum(integralB, x0, y0, x1, y1);
+
+            const idx = (y * W + x) * 4;
+            dst[idx] = Math.round(rSum / count);
+            dst[idx + 1] = Math.round(gSum / count);
+            dst[idx + 2] = Math.round(bSum / count);
+            dst[idx + 3] = src[(y * W + x) * 4 + 3];
+          }
+        }
+        try {
+          self.blurCtx.putImageData(dstImageData, 0, 0, 0, startRow, W, endRow - startRow + 1);
+        } catch (err) {
+          self.blurCtx.putImageData(dstImageData, 0, 0);
+        }
+
+        if (endRow < H - 1) {
+          setTimeout(() => computeBlurRows(endRow + 1), 0);
+        } else {
+          self.isBlurWorking = false;
+          self.isBlurDone = true;
+        }
+      }
+
+      setTimeout(buildStep, 0);
+    }
+
+    // === Базовая пикселизация (как в первом, но через постоянный буфер) ===
+    renderPixelated(pixelSize) {
+      const canvas = this.canvas;
+      const ctx = this.ctx;
+
+      const smallW = Math.max(1, Math.floor(canvas.width / Math.max(1, pixelSize)));
+      const smallH = Math.max(1, Math.floor(canvas.height / Math.max(1, pixelSize)));
+
+      if (this.pixelCanvas.width !== smallW || this.pixelCanvas.height !== smallH) {
+        this.pixelCanvas.width = smallW;
+        this.pixelCanvas.height = smallH;
+      }
+
+      this.pixelCtx.clearRect(0, 0, this.pixelCanvas.width, this.pixelCanvas.height);
+      this.pixelCtx.drawImage(
+        this.originalCanvas,
+        0, 0, this.originalCanvas.width, this.originalCanvas.height,
+        0, 0, this.pixelCanvas.width, this.pixelCanvas.height
+      );
+
+      ctx.imageSmoothingEnabled = false;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        this.pixelCanvas,
+        0, 0, this.pixelCanvas.width, this.pixelCanvas.height,
+        0, 0, canvas.width, canvas.height
+      );
+    }
+
+    // === Рисуем сетку и зум ячеек ТОЧНО как во втором коде ===
+    drawGrid() {
+      if (!isFullEffect) return;
+      if (!this.blurCanvas || !this.isBlurDone) return;
+
+      const { cellSize, effectRadius, zoomFactor, zoomRadius, zoomTransition } = this.settings;
+      const cx = this.mouse.x;
+      const cy = this.mouse.y;
+
+      const startCol = Math.max(0, Math.floor((cx - effectRadius) / cellSize));
+      const endCol = Math.min(Math.ceil(this.canvas.width / cellSize), Math.ceil((cx + effectRadius) / cellSize));
+      const startRow = Math.max(0, Math.floor((cy - effectRadius) / cellSize));
+      const endRow = Math.min(Math.ceil(this.canvas.height / cellSize), Math.ceil((cy + effectRadius) / cellSize));
+
+      const effectRadiusSq = effectRadius * effectRadius;
+      const zoomRadiusSq = zoomRadius * zoomRadius;
+
+      // 1) Блюр + легкий fill по клеткам в зоне effectRadius
+      for (let y = startRow; y < endRow; y++) {
+        for (let x = startCol; x < endCol; x++) {
+          const cellX = x * cellSize;
+          const cellY = y * cellSize;
+          const centreX = cellX + cellSize / 2;
+          const centreY = cellY + cellSize / 2;
+          const distSq = (centreX - cx) * (centreX - cx) + (centreY - cy) * (centreY - cy);
+
+          if (distSq < effectRadiusSq) {
+            // блюр-версия клетки
+            this.ctx.drawImage(
+              this.blurCanvas,
+              cellX, cellY, cellSize, cellSize,
+              cellX, cellY, cellSize, cellSize
+            );
+
+            // «вуаль» как во втором коде
+            const dist = Math.sqrt(distSq);
+            const alpha = 0.01 * (1 - dist / effectRadius);
+            this.ctx.fillStyle = `rgba(244,244,244,${alpha.toFixed(3)})`;
+            this.ctx.fillRect(cellX, cellY, cellSize, cellSize);
+          }
+        }
+      }
+
+      // 2) Зум по клеткам в зоне zoomRadius — ПЕРЕ-СЧЁТ ДЛЯ КАЖДОЙ КЛЕТКИ (как у тебя)
+      for (let y = startRow; y < endRow; y++) {
+        for (let x = startCol; x < endCol; x++) {
+          const cellX = x * cellSize;
+          const cellY = y * cellSize;
+          const centreX = cellX + cellSize / 2;
+          const centreY = cellY + cellSize / 2;
+          const distSq = (centreX - cx) * (centreX - cx) + (centreY - cy) * (centreY - cy);
+
+          if (distSq < zoomRadiusSq) {
+            const dist = Math.sqrt(distSq);
+            const zoomStrength = 1 - dist / zoomRadius;
+            const currentZoom = 1 + (zoomFactor - 1) * zoomStrength;
+
+            const srcSize = cellSize / currentZoom;
+            const destSize = cellSize;
+
+            // важная формула из твоего кода — с учётом смещения к центру курсора
+            const srcCenterX = cellX + cellSize / 2 - (cx - (cellX + cellSize / 2)) * (currentZoom - 1);
+            const srcCenterY = cellY + cellSize / 2 - (cy - (cellY + cellSize / 2)) * (currentZoom - 1);
+
+            const srcX = srcCenterX - srcSize / 2;
+            const srcY = srcCenterY - srcSize / 2;
+
+            const safeSrcX = Math.max(0, Math.min(this.originalCanvas.width - srcSize, srcX));
+            const safeSrcY = Math.max(0, Math.min(this.originalCanvas.height - srcSize, srcY));
+
+            this.zoomCtx.clearRect(0, 0, this.zoomCanvas.width, this.zoomCanvas.height);
+            this.zoomCtx.drawImage(
+              this.originalCanvas,
+              safeSrcX, safeSrcY, srcSize, srcSize,
+              cellX, cellY, destSize, destSize
+            );
+
+            const transitionAlpha = Math.min(1, zoomStrength / zoomTransition);
+            this.ctx.save();
+            this.ctx.globalAlpha = transitionAlpha;
+            this.ctx.drawImage(
+              this.zoomCanvas,
+              cellX, cellY, destSize, destSize,
+              cellX, cellY, destSize, destSize
+            );
+            this.ctx.restore();
+          }
+        }
+      }
+    }
+
+    // === Главный рендер-цикл ===
+    render() {
+      // База: распикселивание по скроллу (как в первом)
+      if (this.isPixelationComplete) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.originalCanvas, 0, 0);
+      } else {
+        this.renderPixelated(this.pixelSize.value);
+      }
+
+      // Поверх — сетка с зумом по наведению (точно как в твоём втором коде)
+      if (isFullEffect && this.isGridActive) {
+        this.drawGrid();
+      }
+
+      requestAnimationFrame(() => this.render());
+    }
+
+    // === GSAP-анимация пикселя как в первом коде ===
+    setupScrollAnimation() {
+      gsap.to(this.pixelSize, {
+        value: 1,
+        scrollTrigger: {
+          trigger: ".about",
+          start: ABOUTCONFIG.StartAnimPixel,
+          end: ABOUTCONFIG.endAnim,
+          scrub: 1,
+          ease: "sine.inOut",
+          onComplete: () => {
+            this.isPixelationComplete = true;
+          }
+        }
+      });
+    }
+
+    setupEvents() {
+      if (!isFullEffect) return;
+
+      this.media.addEventListener('mousemove', (e) => {
+        const rect = this.canvas.getBoundingClientRect();
+        this.mouse.x = e.clientX - rect.left;
+        this.mouse.y = e.clientY - rect.top;
+        this.isGridActive = true;
+      });
+
+      this.media.addEventListener('mouseleave', () => {
+        this.isGridActive = false;
+      });
+    }
+  }
+
+  setTimeout(() => {
+    const mediaElements = document.querySelectorAll('.about_canva');
+    mediaElements.forEach(media => {
+      new PixelationEffect(media);
+    });
+  }, 200);
+});

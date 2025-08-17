@@ -89,7 +89,7 @@ class BodyGrid {
   resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
     // Канвас покрывает вьюпорт
-    this.canvas.width  = Math.floor(window.innerWidth  * dpr);
+    this.canvas.width = Math.floor(window.innerWidth * dpr);
     this.canvas.height = Math.floor(window.innerHeight * dpr);
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
@@ -118,7 +118,25 @@ class BodyGrid {
     // т.к. относительно вьюпорта всё сдвигается
     const onScroll = () => {
       if (!this.mouse.inside) return;
-      this.updateHoverColorAtPoint(this.mouse.lastClientX, this.mouse.lastClientY);
+
+      // Проверяем, находится ли курсор внутри зоны .feedback или footer
+      const scrollY = this.getScrollYpx();
+      const cursorY = this.mouse.lastClientY + scrollY;
+      let inZone = false;
+
+      document.querySelectorAll(this.zonesSelector).forEach(zone => {
+        const rect = zone.getBoundingClientRect();
+        const zoneTop = rect.top + scrollY;
+        const zoneBottom = rect.bottom + scrollY;
+
+        if (cursorY >= zoneTop && cursorY <= zoneBottom) {
+          inZone = true;
+        }
+      });
+
+      this.settings.gridColor = inZone
+        ? { r: 90, g: 69, b: 199 }  // #5A45C7
+        : { r: 39, g: 39, b: 39 };  // дефолт
     };
 
     if (this.scrollEl === window) {
@@ -137,13 +155,38 @@ class BodyGrid {
 
   // Меняем цвет, если курсор над нужной зоной (через elementFromPoint + closest)
   updateHoverColorAtPoint(clientX, clientY) {
-    const el = document.elementFromPoint(clientX, clientY);
-    const inZone = el && el.closest(this.zonesSelector);
+    // Если курсор не внутри viewport, сбрасываем в дефолт
+    if (!this.mouse.inside) {
+      this.settings.gridColor = { r: 39, g: 39, b: 39 };
+      return;
+    }
+
+    // Получаем все элементы под курсором (включая перекрытые)
+    const elements = document.elementsFromPoint(clientX, clientY);
+    let inZone = elements.some(el => el.closest(this.zonesSelector));
+
+    // Если не нашли через elementFromPoint, проверяем координаты
+    if (!inZone) {
+      const scrollY = this.getScrollYpx();
+      const cursorY = clientY + scrollY;
+
+      // Проверяем, находится ли курсор внутри зоны .feedback или footer
+      document.querySelectorAll(this.zonesSelector).forEach(zone => {
+        const rect = zone.getBoundingClientRect();
+        const zoneTop = rect.top + scrollY;
+        const zoneBottom = rect.bottom + scrollY;
+
+        if (cursorY >= zoneTop && cursorY <= zoneBottom) {
+          inZone = true;
+        }
+      });
+    }
+
     this.settings.gridColor = inZone
-      ? { r: 90, g: 69, b: 199 }               // #5A45C7
-      : { r: 39, g: 39, b: 39 };               // дефолт
-      this.canvas.style.zIndex = inZone ? '-1' : '-1';
+      ? { r: 90, g: 69, b: 199 }  // #5A45C7
+      : { r: 39, g: 39, b: 39 };  // дефолт
   }
+
 
   isIdle() {
     return performance.now() - this.lastMouseMoveTime > this.idleTimeout;
@@ -158,9 +201,9 @@ class BodyGrid {
       const mx = this.mouse.xRem;
       const my = this.mouse.yRem;
       const startX = Math.floor((mx - radius) / baseSize);
-      const endX   = Math.floor((mx + radius) / baseSize);
+      const endX = Math.floor((mx + radius) / baseSize);
       const startY = Math.floor((my - radius) / baseSize);
-      const endY   = Math.floor((my + radius) / baseSize);
+      const endY = Math.floor((my + radius) / baseSize);
 
       for (let gy = startY; gy <= endY; gy++) {
         for (let gx = startX; gx <= endX; gx++) {
@@ -190,12 +233,12 @@ class BodyGrid {
 
   draw() {
     const ctx = this.ctx;
-    const baseSizeRem   = this.settings.baseSizeRem;
+    const baseSizeRem = this.settings.baseSizeRem;
 
     // Скролл и размер видимой области — в rem
-    const scrollXRem    = this.getScrollXRem();
-    const scrollYRem    = this.getScrollYRem();
-    const viewWidthRem  = this.getViewWidthRem();
+    const scrollXRem = this.getScrollXRem();
+    const scrollYRem = this.getScrollYRem();
+    const viewWidthRem = this.getViewWidthRem();
     const viewHeightRem = this.getViewHeightRem();
 
     // Очистка в CSS-пикселях (мы уже масштабировали контекст на dpr)
@@ -205,9 +248,9 @@ class BodyGrid {
     ctx.lineWidth = (this.settings.borderWidthRem * this.remPx) / this.pixelRatio;
 
     const startX = Math.floor(scrollXRem / baseSizeRem) - 1;
-    const endX   = Math.floor((scrollXRem + viewWidthRem) / baseSizeRem) + 1;
+    const endX = Math.floor((scrollXRem + viewWidthRem) / baseSizeRem) + 1;
     const startY = Math.floor(scrollYRem / baseSizeRem) - 1;
-    const endY   = Math.floor((scrollYRem + viewHeightRem) / baseSizeRem) + 1;
+    const endY = Math.floor((scrollYRem + viewHeightRem) / baseSizeRem) + 1;
 
     const remToPx = this.remPx; // в CSS px
 

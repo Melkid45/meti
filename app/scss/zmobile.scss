@@ -1075,6 +1075,30 @@
                     }
                 }
             }
+
+            button {
+                width: 335rem;
+                height: 60rem;
+                background-size: cover;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: "Onest";
+                font-weight: 570;
+                font-size: 24rem;
+                line-height: 28rem;
+                text-align: center;
+                text-transform: uppercase;
+                color: #fff !important;
+                border: none;
+                cursor: pointer;
+                background: url(../images/dist/case__btn.png) center no-repeat;
+                background-size: 100% 100%;
+                bottom: 300rem;
+                span{
+                    color: var(--white) !important;
+                }
+            }
         }
 
         overflow: hidden;
@@ -1387,10 +1411,12 @@
                 touch-action: pan-x;
                 overscroll-behavior-x: contain;
             }
-            .splide{
+
+            .splide {
                 width: 100%;
 
             }
+
             &-block {
                 border-top: 1rem solid #F4F4F429;
                 width: 100%;
@@ -1431,6 +1457,7 @@
                     transform: translateY(0%) !important;
                     border-bottom: none;
                     margin-right: 20rem !important;
+
                     .wrap {
                         display: flex;
                         align-items: center;
@@ -1530,6 +1557,7 @@
             padding: 160rem 20rem 160rem 20rem;
             position: relative;
             overflow: hidden;
+
             .title {
                 display: flex;
                 flex-direction: column;

@@ -148,11 +148,11 @@
         <img src="images/dist/about/3.svg" alt="" class="about__decor ab_dec3">
         <div class="container">
             <div class="about__body">
-                <img id="about__img" src="images/dist/about.webp" alt="">
                 <div class="about__body-left">
                     <h3>[Привет, это meti]</h3>
-                    <div class="about-parallax about-p1">
-                        <canvas id="pixelCanvas"></canvas>
+                    <div class="about-parallax about-p1 about_canva">
+                        <canvas class="grid-canvas-case" id="pixelCanvas"></canvas>
+                        <img style="display: none;" src="images/dist/about.webp" alt="">
                     </div>
                 </div>
                 <div class="about__body-right">
@@ -180,71 +180,14 @@
                             свои бизнес-цели.
                         </p>
                     </div>
-                    <div class="about-parallax about-p2">
-                        <canvas id="pixelCanvas"></canvas>
+                    <div class="about-parallax about-p2 about_canva">
+                        <canvas class="grid-canvas-case" id="pixelCanvas"></canvas>
+                        <img style="display: none;" src="images/dist/about.webp" alt="">
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- <section class="services" >
-        <div class="container">
-            <div class="services__body">
-                <h3>[Что мы умеем]</h3>
-                <div class="services__body-block">
-                    <span id="number"></span>
-                    <svg id="interactive-grid" width="562" height="562" viewBox="0 0 562 562"></svg>
-                    <div class="services__body-block-titles">
-                        <h3>
-                            Спе<span>ц</span>пр<span>о</span>ект<span>ы</span>
-                        </h3>
-                        <h3>S<span>M</span>m
-                        </h3>
-                        <h3>Ан<span>а</span>лит<span>и</span>ка
-                        </h3>
-                        <h3>i<span>n</span>fluen<span>c</span>e <br> ma<span>r</span>keti<span>n</span>g
-                        </h3>
-                        <h3>Ст<span>р</span>атег<span>и</span>и
-                        </h3>
-                        <h3>К<span>р</span>еат<span>и</span>в
-                        </h3>
-                        <h3>ви<span>д</span>е<span>о</span>- <br>пр<span>о</span>дак<span>ш</span>н
-                        </h3>
-                        <h3>Ф<span>о</span>т<span>о</span>- <br>пр<span>о</span>дак<span>ш</span>н
-                        </h3>
-                        <h3>д<span>и</span>за<span>й</span>н <br><span>и </span>б<span>р</span>енд<span>и</span>нг
-                        </h3>
-                    </div>
-                    <div class="services__body-block-desc">
-                        <p>Разрабатываем продукты
-                            и проекты с креативным подходом, стратегическим мышлением
-                            и тщательным планированием</p>
-                        <p>Управляем присутствием
-                            бренда в социальных сетях, продвигаем, создаём контент
-                            и взаимодействуем с аудиторией</p>
-                        <p>Собираем и анализируем
-                            данные о рынке, аудитории
-                            и эффективности
-                            коммуникационных кампаний</p>
-                        <p>Привлекаем медийных личностей
-                            и блогерами для продвижения бренда, создания доверия
-                            и увеличения охвата аудитории</p>
-                        <p>Продумываем комплексные стратегии, учитывающие цели бизнеса, целевую аудиторию
-                            и конкурентную среду</p>
-                        <p>Реализуем оригинальные идеи
-                            и концепции для рекламных кампаний, мероприятий и других коммуникационных активностей</p>
-                        <p>Производим видеоконтент
-                            для рекламы и социальных медиа, корпоративные фильмы,
-                            от сценария до пост-продакшна</p>
-                        <p>Создаём высококачественные фотосессии для рекламных кампаний, каталогов
-                            и социальных сетей</p>
-                        <p>Проектируем визуальную идентичность бренда, включая логотипы, упаковку, и рекламные маркетинговые
-                            материалы</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
     <section id="services" class="services__new">
         <div class="container">
             <div class="services__new__body">
@@ -486,7 +429,10 @@
                     </div>
                 </div>
             </a>
-    
+            <button class="load-more">
+                <span>Показать ещё</span>
+                <canvas class="btn_canvas-case"></canvas>
+            </button>
         </div>
     </section>
     <section id="benefits" class="benefits">
@@ -747,10 +693,7 @@
                             <span>Меня зовут</span>
                             <div class="input__wrap">
                                 <input placeholder="Имя" type="text">
-                                <p>
-                                    !
-                                    <span class="error__text">некорректный формат ввода</span>
-                                </p>
+                                <p data-tippy="некорректный формат ввода">!</p>
                             </div>
                             <span>.</span>
                         </div>
@@ -758,20 +701,14 @@
                             <span>Я</span>
                             <div class="input__wrap">
                                 <input placeholder="Должность" type="text">
-                                <p>
-                                    !
-                                    <span class="error__text">некорректный формат ввода</span>
-                                </p>
+                                <p data-tippy="некорректный формат ввода">!</p>
                             </div>
                             <span>компании</span>
                         </div>
                         <div class="wrap element-animation">
                             <div class="input__wrap">
                                 <input class="brand" placeholder="наименование бренда" type="text">
-                                <p>
-                                    !
-                                    <span class="error__text">некорректный формат ввода</span>
-                                </p>
+                                <p data-tippy="некорректный формат ввода">!</p>
                             </div>
                             <span>.</span>
                         </div>
@@ -781,10 +718,7 @@
                         <div class="wrap element-animation">
                             <div class="input__wrap">
                                 <input placeholder="Email" type="email">
-                                <p>
-                                    !
-                                    <span class="error__text">некорректный формат ввода</span>
-                                </p>
+                                <p data-tippy="некорректный формат ввода">!</p>
                             </div>
                             <span>,</span>
                         </div>
@@ -795,10 +729,7 @@
                             <span>на номер</span>
                             <div class="input__wrap">
                                 <input placeholder="Телефон" type="tel">
-                                <p>
-                                    !
-                                    <span class="error__text">некорректный формат ввода</span>
-                                </p>
+                                <p data-tippy="некорректный формат ввода">!</p>
                             </div>
                             <span>.</span>
                         </div>
@@ -870,6 +801,8 @@
             email: 'Написать',
         }
     </script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
     <script src="js/splide.js"></script>
     <script src="js/main.min.js"></script>
 </body>
