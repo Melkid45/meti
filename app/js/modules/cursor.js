@@ -1,3 +1,4 @@
+const video = document.querySelector('.showreel__video');
 if (window.innerWidth > 750) {
     gsap.set('.cursor', { xPercent: -50, yPercent: -50 });
 
@@ -5,7 +6,6 @@ if (window.innerWidth > 750) {
     let lastMouseX = 0;
     let lastMouseY = 0;
 
-    const video = document.querySelector('.showreel__video');
     const cursor = document.querySelector('.cursor');
     const defaultText = document.querySelector('.default_text');
     const showreel = document.querySelector('.showreel');
@@ -47,16 +47,16 @@ if (window.innerWidth > 750) {
         if (isInside && !insideShowreel) {
             insideShowreel = true;
             updateVideoCursor();
-        } 
+        }
         else if (!isInside && insideShowreel) {
             insideShowreel = false;
             resetCursor();
         }
     }
-    $('button').on('mouseover', function(e){
+    $('button').on('mouseover', function (e) {
         $cursor.stop(true).animate({ width: '40rem', height: '40rem' }, 200);
     })
-    $('button').on('mouseout', function(e){
+    $('button').on('mouseout', function (e) {
         $cursor.stop(true).animate({ width: '20rem', height: '20rem' }, 200);
         $cursor.find('svg').css('scale', '0');
     })
@@ -81,7 +81,7 @@ if (window.innerWidth > 750) {
             } else if (href.includes('#')) {
                 $defaultText.text('');
                 $cursor.find('.arrow').css('scale', '0').siblings('svg').not('.arrow').css('scale', '0');
-            }else{
+            } else {
                 $defaultText.text('');
                 $cursor.find('.arrow').css('scale', '1').siblings('svg').not('.arrow').css('scale', '0');
             }
@@ -105,12 +105,7 @@ if (window.innerWidth > 750) {
         updateVideoCursor();
     });
 
-    $('.muteor').on('click', function () {
-        if (!video) return;
-        video.muted = !video.muted;
-        $cursor.find('.mute').toggle(!video.muted);
-        $cursor.find('.sound').toggle(video.muted);
-    });
+
 
     $(document).on('mouseleave', function () {
         insideShowreel = false;
@@ -128,9 +123,15 @@ if (window.innerWidth > 750) {
     $(window).on('resize', function () {
         if (window.innerWidth <= 750) {
             $(document).off('mousemove mouseenter mouseleave');
-            $showreel.off('click');
-            $('.muteor').off('click');
             $(window).off('scroll resize');
         }
+    });
+} else {
+    $('.muteor').on('click', function () {
+        console.log(1)
+        if (!video) return;
+        video.muted = !video.muted;
+        $(this).find('.mute').toggle(!video.muted);
+        $(this).find('.sound').toggle(video.muted);
     });
 }

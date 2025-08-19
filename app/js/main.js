@@ -11,24 +11,33 @@ function onEntry(entry) {
         }
     });
 }
-let lastScrollTop = 0
 let lenis = new Lenis({
     lerp: 0.1,
     smoothWheel: true,
     autoRaf: true,
 })
 if ($(window).width() > 750) {
+    let lastScrollTop = 0;
+    let isScrollingDown = false;
+    const scrollThreshold = 5; // Минимальное изменение для определения направления
+    const activationThreshold = 50; // Активация после 50px
+
     lenis.on('scroll', ({ scroll }) => {
-        const currentScroll = scroll
-        const header = document.querySelector('.header')
-        if (currentScroll > lastScrollTop && currentScroll > 50) {
-            header.classList.add('back')
-        } else {
-            header.classList.remove('back')
+        const currentScroll = scroll;
+        const header = document.querySelector('.header');
+
+        // Определяем направление с порогом
+        if (Math.abs(currentScroll - lastScrollTop) > scrollThreshold) {
+            isScrollingDown = currentScroll > lastScrollTop;
+            lastScrollTop = currentScroll;
         }
 
-        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll
-    })
+        if (isScrollingDown && currentScroll > activationThreshold) {
+            header.classList.add('back');
+        } else {
+            header.classList.remove('back');
+        }
+    });
 }
 
 let options = { threshold: [0.5] };
@@ -53,7 +62,15 @@ window.addEventListener('load', () => {
             anchor.addEventListener('click', (e) => {
                 e.preventDefault();
                 const target = document.querySelector(anchor.getAttribute('href'));
-                lenis.scrollTo(target, { lerp: 0.1, duration: 2.5 });
+                let parent = target.parentNode
+                console.log(parent)
+                if (parent.classList.contains('pin-spacer')) {
+                    const previos = parent.previousElementSibling;
+                    const height = previos.clientHeight;
+                    lenis.scrollTo(previos.offsetTop + height, { lerp: 0.1, duration: 2.5 });
+                } else {
+                    lenis.scrollTo(target, { lerp: 0.1, duration: 2.5 });
+                }
             });
         });
     }, 500);
@@ -96,6 +113,6 @@ if (window.location.hash && allowInstantScroll) {
     }
 }
 window.addEventListener('load', () => {
-  lenis.resize(); // Пересчитываем размеры
-  lenis.raf(0); // Сбрасываем анимацию
+    lenis.resize(); // Пересчитываем размеры
+    lenis.raf(0); // Сбрасываем анимацию
 });

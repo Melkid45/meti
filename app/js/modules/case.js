@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       effect.isAnimated = true;
 
-      const duration = 1;
+      const duration = 1.2;
       const pixelDur = 0.4;
       const stagger = isFullEffect ? 0.2 : 0.3;
 
@@ -522,23 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (masterTrigger) masterTrigger.kill();
 
     initScrollAnimation();
-
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        const newItems = container.querySelectorAll('.item:not(.initialized)');
-        if (newItems.length) {
-          newItems.forEach(item => item.classList.add('initialized'));
-
-          setTimeout(() => {
-            lenis.scrollTo(newItems[0], {
-              offset: -100,
-              duration: 1.5,
-              lerp: 0.1
-            });
-          }, 300);
-        }
-      }, 0);
-    });
+    
   }
 
 
@@ -562,8 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         newItems.forEach(item => {
           container.insertBefore(item, loadMoreBtn);
-
-          // инициализация эффекта
+          item.classList.add(`initialization-${page}`)
           const media = item.querySelector('.media');
           const effect = new CombinedImageEffect(media);
           effects.push(effect);

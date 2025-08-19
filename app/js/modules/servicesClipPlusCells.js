@@ -1,3 +1,4 @@
+// ===================== Shuffle Letters (jQuery плагин) =====================
 $.fn.shuffleLetters = function (options) {
   const settings = $.extend({
     step: 8,
@@ -135,13 +136,14 @@ $.fn.shuffleLetters = function (options) {
 };
 
 
-
+// ===================== Экранный скролл + ваша логика GSAP =====================
 (function () {
   gsap.registerPlugin(ScrollTrigger);
 
+  // --------- Константы для сетки / фигур (как у вас) ----------
   const GRID_SIZE = 14;
-  const CELL_SIZE_REM = 54; // размер клетки в rem
-  const LINE_WIDTH_REM = 1; // 1px в rem
+  const CELL_SIZE_REM = 54;
+  const LINE_WIDTH_REM = 1;
   const REM = parseFloat(getComputedStyle(document.documentElement).fontSize);
   const CELL_SIZE = CELL_SIZE_REM * REM;
   const LINE_WIDTH = LINE_WIDTH_REM * REM;
@@ -161,15 +163,19 @@ $.fn.shuffleLetters = function (options) {
     arrow: [[1, 12], [1, 11], [1, 10], [2, 9], [3, 8], [4, 7], [5, 6], [6, 5], [7, 4], [8, 3], [9, 2], [10, 1], [12, 1], [11, 0], [13, 2], [12, 3], [11, 4], [10, 5], [9, 6], [8, 7], [7, 8], [6, 9], [5, 10], [4, 11], [3, 12], [2, 12], [3, 10], [10, 3]]
   };
 
+  // --------- DOM-ссылки ----------
   const items = Array.from(document.querySelectorAll('.items__line .item'));
   const $titles = $('.items__line .item h3');
   const wrapper = document.querySelector('.wrapper');
   const itemsLine = document.querySelector('.items__line');
-  let total = $('.items__line .item').length
-  $('.items__line .item').each(function(e) {
-    $(this).find('.total-slides').text(`0${total}`)
-  })
+
+  // счётчик слайдов (как было)
+  let total = $('.items__line .item').length;
+  $('.items__line .item').each(function () {
+    $(this).find('.total-slides').text(`0${total}`);
+  });
   if (!items || items.length === 0) return;
+
   const itemShapes = items.map(item => item.dataset.item);
   const svgGrids = [];
   const allCellsGrids = [];
@@ -177,10 +183,8 @@ $.fn.shuffleLetters = function (options) {
   function createGrid(svg) {
     const cellsGrid = [];
     const allCells = [];
-
     const offset = LINE_WIDTH / 2;
 
-    // Ячейки без stroke
     for (let y = 0; y < GRID_SIZE; y++) {
       cellsGrid[y] = [];
       for (let x = 0; x < GRID_SIZE; x++) {
@@ -215,14 +219,13 @@ $.fn.shuffleLetters = function (options) {
       const pos = y * CELL_SIZE + offset;
       line.setAttribute('x1', offset);
       line.setAttribute('y1', pos);
-      line.setAttribute('x2', GRID_SIZE * CELL_SIZE + offset);
+      line.setAttribute('x2', GRID_SIZE * CELL_SIZE + LINE_WIDTH);
       line.setAttribute('y2', pos);
       line.setAttribute('stroke', LINE_COLOR);
       line.setAttribute('stroke-width', LINE_WIDTH);
       svg.appendChild(line);
     }
 
-    // viewBox с запасом по толщине линии
     svg.setAttribute('viewBox', `0 0 ${GRID_SIZE * CELL_SIZE + LINE_WIDTH} ${GRID_SIZE * CELL_SIZE + LINE_WIDTH}`);
     svg.setAttribute('width', GRID_SIZE * CELL_SIZE + LINE_WIDTH);
     svg.setAttribute('height', GRID_SIZE * CELL_SIZE + LINE_WIDTH);
@@ -230,12 +233,12 @@ $.fn.shuffleLetters = function (options) {
     return { cellsGrid, allCells };
   }
 
-
   // Создаём SVG для каждого блока
+  const mainExisting = document.getElementById('interactive-grid');
   items.forEach((item, i) => {
     let svg;
-    if (i === 0 && document.getElementById('interactive-grid')) {
-      svg = document.getElementById('interactive-grid');
+    if (i === 0 && mainExisting) {
+      svg = mainExisting;
       if (!wrapper.contains(svg)) wrapper.appendChild(svg);
     } else {
       svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -243,13 +246,11 @@ $.fn.shuffleLetters = function (options) {
       wrapper.appendChild(svg);
     }
     svgGrids.push(svg);
-
     const { cellsGrid, allCells } = createGrid(svg);
     allCellsGrids.push({ cellsGrid, allCells });
   });
 
   const wrapperImages = Array.from(document.querySelectorAll('.interactive-grid'));
-
   gsap.set(wrapperImages, { clipPath: 'inset(100% 0 0 0)' });
   if (wrapperImages[0]) gsap.set(wrapperImages[0], { clipPath: 'inset(0% 0 0 0)' });
 
@@ -276,9 +277,7 @@ $.fn.shuffleLetters = function (options) {
       gsap.set(allCells, { attr: { fill: 'transparent' } });
       return;
     }
-    const targetCells = coords
-      .map(([x, y]) => cellsGrid[y]?.[x])
-      .filter(Boolean);
+    const targetCells = coords.map(([x, y]) => cellsGrid[y]?.[x]).filter(Boolean);
     gsap.killTweensOf(allCells);
     gsap.set(allCells, { attr: { fill: 'transparent' } });
     gsap.to(targetCells, {
@@ -290,9 +289,11 @@ $.fn.shuffleLetters = function (options) {
   }
 
   drawShape(itemShapes[0], 0);
-  let currentActiveIndex = -1;
 
-  ScrollTrigger.create({
+  // ------------- ScrollTrigger (с вашим onUpdate) -------------
+  let currentActiveIndex = -1;
+  const st = ScrollTrigger.create({
+    id: "servicesPager",
     trigger: ".services__new",
     start: "top -=5.5%",
     end: `+=${itemShapes.length * 100}%`,
@@ -304,10 +305,12 @@ $.fn.shuffleLetters = function (options) {
       const wrapperH = wrapper.clientHeight;
       const maxTranslate = (itemShapes.length - 1) * wrapperH;
       gsap.set(itemsLine, { y: -progress * maxTranslate });
+
       const activeIndex = Math.max(0, Math.min(itemShapes.length - 1, Math.round(progress * (itemShapes.length - 1))));
 
       if (activeIndex !== currentActiveIndex) {
         currentActiveIndex = activeIndex;
+        pager.index = activeIndex; // держим в синхронизации с постраничным скроллом
         drawShape(itemShapes[activeIndex], activeIndex);
         if ($titles && $titles.eq(activeIndex).length) {
           $titles.eq(activeIndex).shuffleLetters({
@@ -316,6 +319,7 @@ $.fn.shuffleLetters = function (options) {
         }
       }
 
+      // клип-переходы
       items.forEach((item, index) => {
         const img = wrapperImages[index];
         if (!img) return;
@@ -359,8 +363,155 @@ $.fn.shuffleLetters = function (options) {
       });
     }
   });
+
+  // ------------- ПОЭКРАННЫЙ СКРОЛЛ (one wheel / one swipe) -------------
+  const scroller = document.scrollingElement || document.documentElement;
+  const pager = {
+    index: 0,
+    animating: false,
+    lastIntent: 0, // время последней попытки, чтобы не дублировать
+    get steps() { return Math.max(1, itemShapes.length - 1); }
+  };
+
+  function sectionInView() {
+    const y = scroller.scrollTop;
+    return y >= st.start && y <= st.end;
+  }
+
+  function indexToScrollTop(i) {
+    const clamped = Math.max(0, Math.min(pager.steps, i));
+    const progress = clamped / pager.steps;
+    return st.start + progress * (st.end - st.start);
+  }
+
+  function goToIndex(i, opts = {}) {
+    if (i < 0 || i > pager.steps) {
+      pager.animating = false;
+      return;
+    }
+
+    const target = indexToScrollTop(i);
+    pager.index = i;
+    pager.animating = true;
+
+    // Используем Lenis для скролла вместо GSAP
+    if (window.lenis) {
+      lenis.scrollTo(target, {
+        duration: opts.duration ?? 0.8,
+        easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t, // easeInOutQuad
+        force: true // Принудительно игнорируем другие анимации
+      });
+
+      // Ждем завершения анимации Lenis
+      setTimeout(() => {
+        pager.animating = false;
+      }, (opts.duration ?? 0.8) * 1000);
+    } else {
+      // Fallback для GSAP если Lenis не доступен
+      gsap.killTweensOf(scroller);
+      gsap.to(scroller, {
+        scrollTop: target,
+        duration: opts.duration ?? 0.8,
+        ease: opts.ease ?? "power2.out",
+        onComplete: () => {
+          pager.animating = false;
+        }
+      });
+    }
+  }
+
+  // Колесо мыши
+  function onWheel(e) {
+    if (!sectionInView()) return;
+    
+    if (pager.animating || (Date.now() - pager.lastIntent < 200)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+    }
+    
+    const dir = e.deltaY > 0 ? 1 : -1;
+    const now = Date.now();
+    pager.lastIntent = now;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    goToIndex(pager.index + dir);
+}
+
+  // Сенсорные свайпы
+  let touchStartY = 0;
+  let touchActive = false;
+
+  function onTouchStart(e) {
+    if (!sectionInView()) { touchActive = false; return; }
+    touchActive = true;
+    touchStartY = e.touches ? e.touches[0].clientY : e.clientY;
+  }
+  function onTouchMove(e) {
+    if (!touchActive) return;
+    // блокируем нативный скролл внутри секции
+    e.preventDefault();
+  }
+  function onTouchEnd(e) {
+    if (!touchActive || pager.animating) return;
+    const endY = (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : (e.clientY ?? touchStartY));
+    const deltaY = endY - touchStartY;
+    const threshold = 40; // пикселей для срабатывания
+
+    if (Math.abs(deltaY) >= threshold) {
+      const dir = deltaY < 0 ? 1 : -1; // свайп вверх -> следующий экран
+      goToIndex(pager.index + dir);
+    }
+    touchActive = false;
+  }
+
+  // Клавиатура (опционально: стрелки/pgUp/pgDn/Space)
+  function onKeyDown(e) {
+    if (!sectionInView() || pager.animating) return;
+    let handled = false;
+    if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+      goToIndex(pager.index + 1);
+      handled = true;
+    } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+      goToIndex(pager.index - 1);
+      handled = true;
+    }
+    if (handled) e.preventDefault();
+  }
+
+  // Наводим порядок при ресайзе/рефлоу
+  function onResizeRecalc() {
+    // После пересчёта позиций у ScrollTrigger обновится start/end
+    // Сохраняем текущий индекс и переводим скролл в соответствующую точку
+    if (!sectionInView()) return;
+    goToIndex(pager.index, { duration: 0.001, ease: "none" });
+  }
+
+  // Подписки
+  window.addEventListener('wheel', onWheel, { passive: false });
+  window.addEventListener('touchstart', onTouchStart, { passive: true });
+  window.addEventListener('touchmove', onTouchMove, { passive: false });
+  window.addEventListener('touchend', onTouchEnd, { passive: true });
+  window.addEventListener('keydown', onKeyDown, { passive: false });
+
+  // Когда ScrollTrigger обновляет лэйаут — подравниваемся
+  ScrollTrigger.addEventListener("refreshInit", () => {
+    // чтобы при пересчёте не было резкого дёрганья
+    if (pager.animating) gsap.killTweensOf(scroller);
+  });
+  ScrollTrigger.addEventListener("refresh", onResizeRecalc);
+  window.addEventListener('resize', () => {
+    ScrollTrigger.refresh();
+  });
+
+  // Если пользователь попал в секцию не с начала — выставим ближайший экран после небольшой задержки
+  setTimeout(() => {
+    if (sectionInView()) {
+      const progress = st.progress;
+      const nearest = Math.round(progress * pager.steps);
+      pager.index = nearest;
+      goToIndex(nearest, { duration: 0.001 });
+    }
+  }, 0);
 })();
-
-
-
-

@@ -32,18 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';
-        canvas.width = Math.round(width * dpr);
-        canvas.height = Math.round(height * dpr);
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
         ctx.scale(dpr, dpr);
 
-        const squareSizePx = Math.round(remToPx(CONFIG.squareSize));
-        const gapPx = Math.round(remToPx(CONFIG.gap));
+        const squareSizePx = remToPx(CONFIG.squareSize);
+        const gapPx = remToPx(CONFIG.gap);
 
         const cols = Math.ceil(width / (squareSizePx + gapPx));
         const rows = Math.ceil(height / (squareSizePx + gapPx));
 
-        const startX = -((cols * (squareSizePx + gapPx) - width) / 2);
-        const startY = -((rows * (squareSizePx + gapPx) - height) / 2);
+        const startX = 0;
+        const startY = 0;
 
         grid = [];
         for (let y = 0; y < rows; y++) {

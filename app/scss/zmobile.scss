@@ -2029,4 +2029,21 @@
             transform: translate(-332.3%);
         }
     }
+    .tippy-box[data-theme='custom'] {
+        background: var(--black);
+        color: var(--white);
+        padding: 4.5rem 10rem;
+        border-radius: 0px;
+
+        .tippy-content {
+            font-family: var(--default);
+            font-size: 11rem;
+            line-height: 16rem;
+            text-transform: uppercase;
+        }
+
+        .tippy-arrow::before {
+            border-top-color: var(--black) !important;
+        }
+    }
 }

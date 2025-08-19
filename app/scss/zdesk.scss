@@ -1847,4 +1847,22 @@
             transform: translate(-143.1%);
         }
     }
+
+    .tippy-box[data-theme='custom'] {
+        background: var(--black);
+        color: var(--white);
+        padding: 4.5rem 10rem;
+        border-radius: 0px;
+
+        .tippy-content {
+            font-family: var(--default);
+            font-size: 14rem;
+            line-height: 20rem;
+            text-transform: uppercase;
+        }
+
+        .tippy-arrow::before {
+            border-top-color: var(--black) !important;
+        }
+    }
 }

@@ -658,6 +658,7 @@
         flex-direction: row;
         gap: 240px;
         align-items: center;
+
         .wrap:nth-child(2) {
             justify-content: flex-end;
             gap: 40px;
@@ -861,15 +862,18 @@
                 }
             }
         }
-        button.animate{
+
+        button.animate {
             transform: translateY(0%);
             opacity: 1;
         }
-        button:hover{
-            span{
+
+        button:hover {
+            span {
                 color: var(--black);
             }
         }
+
         button {
             width: 560px;
             height: 120px;
@@ -893,6 +897,7 @@
             transform: translateY(10%);
             opacity: 0;
             transition: all 0.5s ease;
+
             span {
                 position: relative;
                 z-index: 1;
@@ -1133,7 +1138,6 @@
             gap: 40px;
             flex-wrap: nowrap;
             width: 100%;
-
             .item {
                 width: 488px;
                 height: 271px;
@@ -1144,6 +1148,7 @@
                     linear-gradient(#F4F4F429 1px, transparent 1px),
                     linear-gradient(90deg, #F4F4F429 1px, transparent 1px);
                 background-size: 54px 54px;
+                background: var(--black);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -1691,3 +1696,4 @@
         }
     }
 }
+
