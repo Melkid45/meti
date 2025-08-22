@@ -5,6 +5,7 @@ if (window.innerWidth > 750) {
     let insideShowreel = false;
     let lastMouseX = 0;
     let lastMouseY = 0;
+    let showreelCheckTimeout = null;
 
     const cursor = document.querySelector('.cursor');
     const defaultText = document.querySelector('.default_text');
@@ -42,24 +43,44 @@ if (window.innerWidth > 750) {
     function checkCursorPosition(mouseX, mouseY) {
         if (!showreel) return;
         const rect = showreel.getBoundingClientRect();
-        const isInside = mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom;
+        
+        // Добавляем буферную зону в 2px по краям для предотвращения мерцания
+        const buffer = 2;
+        const isInside = mouseX >= rect.left - buffer && 
+                        mouseX <= rect.right + buffer && 
+                        mouseY >= rect.top - buffer && 
+                        mouseY <= rect.bottom + buffer;
+
+        // Очищаем предыдущий таймаут
+        if (showreelCheckTimeout) {
+            clearTimeout(showreelCheckTimeout);
+        }
 
         if (isInside && !insideShowreel) {
-            insideShowreel = true;
-            updateVideoCursor();
+            // Небольшая задержка для подтверждения нахождения внутри
+            showreelCheckTimeout = setTimeout(() => {
+                insideShowreel = true;
+                updateVideoCursor();
+            }, 50);
         }
         else if (!isInside && insideShowreel) {
-            insideShowreel = false;
-            resetCursor();
+            // Небольшая задержка для подтверждения выхода
+            showreelCheckTimeout = setTimeout(() => {
+                insideShowreel = false;
+                resetCursor();
+            }, 50);
         }
     }
+
     $('button').on('mouseover', function (e) {
         $cursor.stop(true).animate({ width: '40rem', height: '40rem' }, 200);
     })
+    
     $('button').on('mouseout', function (e) {
         $cursor.stop(true).animate({ width: '20rem', height: '20rem' }, 200);
         $cursor.find('svg').css('scale', '0');
     })
+    
     $(document)
         .on('mousemove', function (e) {
             lastMouseX = e.clientX;
@@ -105,8 +126,6 @@ if (window.innerWidth > 750) {
         updateVideoCursor();
     });
 
-
-
     $(document).on('mouseleave', function () {
         insideShowreel = false;
         resetCursor();
@@ -124,6 +143,9 @@ if (window.innerWidth > 750) {
         if (window.innerWidth <= 750) {
             $(document).off('mousemove mouseenter mouseleave');
             $(window).off('scroll resize');
+            if (showreelCheckTimeout) {
+                clearTimeout(showreelCheckTimeout);
+            }
         }
     });
 } else {

@@ -293,41 +293,17 @@ $.fn.shuffleLetters = function (options) {
   // ------------- ScrollTrigger (с вашим onUpdate) -------------
   let currentActiveIndex = -1;
   const st = ScrollTrigger.create({
-    id: "servicesPager",
     trigger: ".services__new",
-    start: "top -=5.5%",
+    start: "top -5.5%",
     end: `+=${itemShapes.length * 100}%`,
     pin: true,
-    scrub: 1,
-    anticipatePin: 1,
+    scrub: false,
     onUpdate: self => {
       const progress = self.progress;
-      const wrapperH = wrapper.clientHeight;
-      const maxTranslate = (itemShapes.length - 1) * wrapperH;
-      gsap.set(itemsLine, { y: -progress * maxTranslate });
-
-      const activeIndex = Math.max(0, Math.min(itemShapes.length - 1, Math.round(progress * (itemShapes.length - 1))));
-
-      if (activeIndex !== currentActiveIndex) {
-        currentActiveIndex = activeIndex;
-        pager.index = activeIndex; // держим в синхронизации с постраничным скроллом
-        drawShape(itemShapes[activeIndex], activeIndex);
-        if ($titles && $titles.eq(activeIndex).length) {
-          $titles.eq(activeIndex).shuffleLetters({
-            step: 5, fps: 60, text: $titles.eq(activeIndex).text(), duration: 700
-          });
-        }
-      }
-
-      // клип-переходы
+      // только clipPath-анимации
       items.forEach((item, index) => {
         const img = wrapperImages[index];
         if (!img) return;
-        if (index === 0 && progress === 0) {
-          gsap.set(img, { clipPath: 'inset(0% 0 0 0)' });
-          return;
-        }
-
         const itemRect = item.getBoundingClientRect();
         const wrapperRect = wrapper.getBoundingClientRect();
         const intersectionStart = wrapperRect.bottom - itemRect.top;
@@ -347,31 +323,20 @@ $.fn.shuffleLetters = function (options) {
           overwrite: true
         });
       });
-    },
-    onLeave: () => {
-      allCellsGrids.forEach((grid, index) => {
-        if (index !== 0 && index !== allCellsGrids.length - 1) {
-          drawShape(null, index, true);
-        }
-      });
-    },
-    onLeaveBack: () => {
-      allCellsGrids.forEach((grid, index) => {
-        if (index !== 0 && index !== allCellsGrids.length - 1) {
-          drawShape(null, index, true);
-        }
-      });
     }
   });
+
+
+
 
   // ------------- ПОЭКРАННЫЙ СКРОЛЛ (one wheel / one swipe) -------------
   const scroller = document.scrollingElement || document.documentElement;
   const pager = {
     index: 0,
     animating: false,
-    lastIntent: 0, // время последней попытки, чтобы не дублировать
-    get steps() { return Math.max(1, itemShapes.length - 1); }
+    steps: itemShapes.length - 1
   };
+
 
   function sectionInView() {
     const y = scroller.scrollTop;
@@ -385,100 +350,90 @@ $.fn.shuffleLetters = function (options) {
   }
 
   function goToIndex(i, opts = {}) {
-    if (i < 0 || i > pager.steps) {
-      pager.animating = false;
-      return;
-    }
-
-    const target = indexToScrollTop(i);
-    pager.index = i;
+    if (pager.animating) return; // блокируем если анимация идёт
+    const targetIndex = Math.max(0, Math.min(i, pager.steps));
+    pager.index = targetIndex;
     pager.animating = true;
 
-    // Используем Lenis для скролла вместо GSAP
-    if (window.lenis) {
-      lenis.scrollTo(target, {
-        duration: opts.duration ?? 0.8,
-        easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t, // easeInOutQuad
-        force: true // Принудительно игнорируем другие анимации
-      });
+    const wrapperH = wrapper.clientHeight;
+    const targetY = -targetIndex * wrapperH;
 
-      // Ждем завершения анимации Lenis
-      setTimeout(() => {
-        pager.animating = false;
-      }, (opts.duration ?? 0.8) * 1000);
-    } else {
-      // Fallback для GSAP если Lenis не доступен
-      gsap.killTweensOf(scroller);
-      gsap.to(scroller, {
-        scrollTop: target,
-        duration: opts.duration ?? 0.8,
-        ease: opts.ease ?? "power2.out",
-        onComplete: () => {
-          pager.animating = false;
-        }
+    gsap.to(itemsLine, {
+      y: targetY,
+      duration: opts.duration ?? 0.8,
+      ease: "power2.inOut",
+      onComplete: () => pager.animating = false
+    });
+
+    drawShape(itemShapes[targetIndex], targetIndex);
+    if ($titles && $titles.eq(targetIndex).length) {
+      $titles.eq(targetIndex).shuffleLetters({
+        step: 5, fps: 60, text: $titles.eq(targetIndex).text(), duration: 700
       });
     }
   }
+
+
+
 
   // Колесо мыши
+  let wheelDelta = 0;
+
   function onWheel(e) {
     if (!sectionInView()) return;
-    
-    if (pager.animating || (Date.now() - pager.lastIntent < 200)) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-    }
-    
-    const dir = e.deltaY > 0 ? 1 : -1;
-    const now = Date.now();
-    pager.lastIntent = now;
-    
+
     e.preventDefault();
     e.stopPropagation();
-    goToIndex(pager.index + dir);
-}
+    wheelDelta += e.deltaY;
 
-  // Сенсорные свайпы
+    const threshold = 50; // сколько пикселей скролла = 1 экран
+    if (!pager.animating) {
+      if (wheelDelta >= threshold) {
+        goToIndex(pager.index + 1);
+        wheelDelta = 0;
+      } else if (wheelDelta <= -threshold) {
+        goToIndex(pager.index - 1);
+        wheelDelta = 0;
+      }
+    }
+  }
+
+
+
   let touchStartY = 0;
-  let touchActive = false;
+  let touchDeltaY = 0;
 
   function onTouchStart(e) {
-    if (!sectionInView()) { touchActive = false; return; }
-    touchActive = true;
-    touchStartY = e.touches ? e.touches[0].clientY : e.clientY;
+    if (!sectionInView()) return;
+    touchStartY = e.touches[0].clientY;
+    touchDeltaY = 0;
   }
-  function onTouchMove(e) {
-    if (!touchActive) return;
-    // блокируем нативный скролл внутри секции
-    e.preventDefault();
-  }
-  function onTouchEnd(e) {
-    if (!touchActive || pager.animating) return;
-    const endY = (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : (e.clientY ?? touchStartY));
-    const deltaY = endY - touchStartY;
-    const threshold = 40; // пикселей для срабатывания
 
-    if (Math.abs(deltaY) >= threshold) {
-      const dir = deltaY < 0 ? 1 : -1; // свайп вверх -> следующий экран
-      goToIndex(pager.index + dir);
-    }
-    touchActive = false;
+  function onTouchMove(e) {
+    e.preventDefault();
+    touchDeltaY = e.touches[0].clientY - touchStartY;
   }
+
+  function onTouchEnd(e) {
+    if (pager.animating) return;
+    const threshold = 40;
+    if (touchDeltaY <= -threshold) goToIndex(pager.index + 1);
+    else if (touchDeltaY >= threshold) goToIndex(pager.index - 1);
+  }
+
+
+
+
 
   // Клавиатура (опционально: стрелки/pgUp/pgDn/Space)
   function onKeyDown(e) {
     if (!sectionInView() || pager.animating) return;
-    let handled = false;
-    if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
-      goToIndex(pager.index + 1);
-      handled = true;
-    } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-      goToIndex(pager.index - 1);
-      handled = true;
-    }
-    if (handled) e.preventDefault();
+    if (["ArrowDown", "PageDown", " "].includes(e.key)) goToIndex(pager.index + 1);
+    else if (["ArrowUp", "PageUp"].includes(e.key)) goToIndex(pager.index - 1);
+    e.preventDefault();
   }
+
+
 
   // Наводим порядок при ресайзе/рефлоу
   function onResizeRecalc() {
@@ -490,10 +445,10 @@ $.fn.shuffleLetters = function (options) {
 
   // Подписки
   window.addEventListener('wheel', onWheel, { passive: false });
-  window.addEventListener('touchstart', onTouchStart, { passive: true });
+  window.addEventListener('touchstart', onTouchStart, { passive: false });
   window.addEventListener('touchmove', onTouchMove, { passive: false });
-  window.addEventListener('touchend', onTouchEnd, { passive: true });
-  window.addEventListener('keydown', onKeyDown, { passive: false });
+  window.addEventListener('touchend', onTouchEnd, { passive: false });
+
 
   // Когда ScrollTrigger обновляет лэйаут — подравниваемся
   ScrollTrigger.addEventListener("refreshInit", () => {

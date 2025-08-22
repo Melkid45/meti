@@ -57,6 +57,11 @@ $('.header__mobile-menu ul li').on('click', function (e) {
     $('.burger').find('.current').removeClass('show')
 })
 window.addEventListener('load', () => {
+    ScrollTrigger.refresh();
+    lenis.scrollTo(0); // Сброс позиции
+    lenis.emit(); // Принудительное обновление
+    lenis.resize(); // Пересчитываем размеры
+    lenis.raf(0); // Сбрасываем анимацию
     setTimeout(() => {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', (e) => {
@@ -74,18 +79,10 @@ window.addEventListener('load', () => {
             });
         });
     }, 500);
-})
-
-window.addEventListener('load', () => {
-    ScrollTrigger.refresh();
 });
 window.addEventListener("resize load", () => controller.update(true));
 window.addEventListener("hashchange", () => {
     ScrollTrigger.refresh();
-});
-window.addEventListener('load', () => {
-    lenis.scrollTo(0); // Сброс позиции
-    lenis.emit(); // Принудительное обновление
 });
 if (document.querySelector('.splide')) {
     var splide = new Splide('.splide', {
@@ -112,7 +109,3 @@ if (window.location.hash && allowInstantScroll) {
         setTimeout(() => lenis.start(), 3000)
     }
 }
-window.addEventListener('load', () => {
-    lenis.resize(); // Пересчитываем размеры
-    lenis.raf(0); // Сбрасываем анимацию
-});

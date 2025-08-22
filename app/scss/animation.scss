@@ -74,19 +74,7 @@
 }
 
 
-.awards__body-block {
-  @for $i from 1 through 4 {
-    .item:nth-child(#{$i}) {
-      opacity: 0;
-      transform: translateY(-5%);
-      transition: all 0.5s ease ($i * 0.2s);
-    }
-  }
-}
-.awards__body-block .item.element-show{
-    opacity: 1;
-    transform: translateY(0%);
-}
+
 
 .inputs {
   @for $i from 1 through 7 {

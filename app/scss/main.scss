@@ -529,14 +529,13 @@
 
 .showreel {
     width: 100%;
-    height: 100vh;
+    height: auto;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 400px;
     overflow: hidden;
-
+    margin-top: 400px;
     video {
         width: 100%;
         height: 100%;
@@ -1216,7 +1215,9 @@
             .item:hover .wrap {
                 opacity: 1;
             }
-
+            .item:hover{
+                z-index: 3;
+            }
             .item {
                 width: 100%;
                 border-bottom: 1px solid #F4F4F429;
@@ -1226,7 +1227,7 @@
                 align-items: center;
                 cursor: pointer;
                 overflow: visible;
-
+                z-index: 0;
                 .wrap {
                     display: flex;
                     align-items: center;
@@ -1236,9 +1237,9 @@
                     background: var(--main);
                     position: absolute;
                     left: 0;
-                    transition: all 0.3s ease;
                     opacity: 0;
-
+                    transition: all 0.3s ease;
+                    z-index: 4;
                     img {
                         width: 220px;
                         height: 220px;
@@ -1316,10 +1317,10 @@
 
     .feedback__top {
         width: 100%;
-        height: 100%;
+        height: 120%;
         position: absolute;
         overflow: visible;
-        top: 0;
+        top: 12px;
         left: 0;
 
         canvas {
@@ -1405,10 +1406,10 @@
         }
 
         .main_img {
-            width: 400px;
-            height: 520px;
+            width: 756px;
+            height: 702px;
             position: absolute;
-            left: 0;
+            left: -108px;
             top: 120px;
         }
 

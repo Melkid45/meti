@@ -40,10 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const dpr = window.devicePixelRatio || 1;
 
         // +1px по ширине и высоте в CSS px
-        canvas.style.width = (width + 1) + 'px';
-        canvas.style.height = (height + 1) + 'px';
-        canvas.width = Math.ceil((width + 1) * dpr);
-        canvas.height = Math.ceil((height + 1) * dpr);
+        canvas.style.width = (width) + 'px';
+        canvas.style.height = (height) + 'px';
+        canvas.width = Math.ceil((width) * dpr);
+        canvas.height = Math.ceil((height) * dpr);
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(dpr, dpr);
@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const squareSizePx = remToPx(CONFIG.squareSize);
         const gapPx = remToPx(CONFIG.gap);
 
-        cols = Math.ceil((width + 1) / (squareSizePx + gapPx));
-        rows = Math.ceil((height + 1) / (squareSizePx + gapPx));
+        cols = Math.ceil((width) / (squareSizePx + gapPx));
+        rows = Math.ceil((height) / (squareSizePx + gapPx));
 
         grid = [];
         for (let y = 0; y < rows; y++) {
@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 grid.push({
                     x: x * (squareSizePx + gapPx),
                     y: y * (squareSizePx + gapPx),
-                    width: squareSizePx + 0.5,
-                    height: squareSizePx + 0.5,
+                    width: squareSizePx,
+                    height: squareSizePx,
                     filled: false
                 });
             }

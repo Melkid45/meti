@@ -304,7 +304,7 @@
                 }
 
                 .anim_stroke {
-                    animation: 10s infinite linear animTitle;
+                    animation: 20s infinite linear animTitle;
                 }
 
                 div {
@@ -838,7 +838,7 @@
                     display: flex;
                     align-items: center;
                     gap: 16rem;
-                    animation: marqueecase 15s infinite linear;
+                    animation: marqueecase 25s infinite linear;
                     white-space: nowrap;
                     display: inline-flex;
                     mix-blend-mode: difference !important;
@@ -937,7 +937,7 @@
 
             .small_case {
                 width: 335rem;
-                transform: translateY(170%);
+                transform: translateY(150%);
 
                 .media {
                     height: 410rem;
@@ -1089,14 +1089,14 @@
                 line-height: 28rem;
                 text-align: center;
                 text-transform: uppercase;
-                color: #fff !important;
+                color: var(--black) !important;
                 border: none;
                 cursor: pointer;
-                background: url(../images/dist/case__btn.png) center no-repeat;
+                background: var(--white);
                 background-size: 100% 100%;
-                bottom: 300rem;
+                bottom: 150rem;
                 span{
-                    color: var(--white) !important;
+                    color: var(--black) !important;
                 }
             }
         }
@@ -1321,13 +1321,13 @@
 
             .row:nth-child(1) {
                 will-change: transform;
-                animation: marquee1 10s infinite linear;
+                animation: marquee1 20s infinite linear;
                 transform: translateX(-320%);
             }
 
             .row:nth-child(2) {
                 will-change: transform;
-                animation: marquee2 10s infinite linear;
+                animation: marquee2 20s infinite linear;
             }
 
             .row {
@@ -1627,7 +1627,7 @@
                 height: 260rem;
                 position: absolute;
                 left: 0;
-                top: 110rem;
+                top: 100rem;
                 z-index: 0;
             }
 
@@ -1972,7 +1972,7 @@
                 text-transform: uppercase;
                 color: var(--white);
                 white-space: nowrap;
-                animation: linear infinite 10s animFooter;
+                animation: linear infinite 15s animFooter;
                 display: flex;
                 flex-wrap: nowrap;
                 gap: 20rem;

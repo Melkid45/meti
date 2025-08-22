@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gap: 0,
         fillColor: '#442CBF',
         bgColor: '#000000',
-        animationDuration: 1000,
+        animationDuration: 800,
         widthView: 1920
     };
 
@@ -148,15 +148,41 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
-
+const tippyInstances = [];
+$('.input__wrap p').each(function (e) {
+    const inputName = $(this).parents('.input__wrap').find('input').attr('name');
+    const tippyElement = this
+    const Text = $(this).attr('data-tippy')
+    const instance = tippy(tippyElement, {
+        content: `${Text}`,
+        placement: 'top',
+        animation: 'fade',
+        arrow: true,
+        name: inputName,
+        theme: 'custom',
+        trigger: 'mouseenter manual',
+    });
+    tippyInstances.push(instance);
+})
 $('.feedback_btn').on('click', function (e) {
     let col = 0;
     let formData = {};
     $('.inputs input').each(function () {
+        const nameInput = $(this).attr('name')
         if ($(this).val() == '') {
             $(this).addClass('error');
+            tippyInstances.forEach((item) =>{
+                if (item.props.name == nameInput){
+                    item.show()
+                }
+            })
         } else {
             $(this).removeClass('error');
+            tippyInstances.forEach((item) =>{
+                if (item.props.name == nameInput){
+                    item.hide()
+                }
+            })
             col++;
             const name = $(this).attr('name');
             formData[name] = $(this).val();

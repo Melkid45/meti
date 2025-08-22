@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
       effect.isAnimated = true;
 
       const duration = 1.2;
-      const pixelDur = 0.4;
+      const pixelDur = 0.5;
       const stagger = isFullEffect ? 0.2 : 0.3;
 
       let moveY = -270;
@@ -558,7 +558,6 @@ document.addEventListener('DOMContentLoaded', () => {
             img.addEventListener('load', initScrollAnimationDynamic, { once: true });
           }
           TEXT_ELEMENTS = Array.from(document.querySelectorAll('[data-circular-text]'));
-          console.log(TEXT_ELEMENTS.length)
           updateAllElements()
         });
       });

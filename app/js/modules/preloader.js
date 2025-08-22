@@ -1,21 +1,21 @@
+let MainVideo = document.querySelector('.priority-video')
+if (MainVideo.readyState === 4){
+    console.log('ready')
+}
 document.addEventListener('DOMContentLoaded', () => {
     const CONFIG = {
         squareSize: 54,
         fillColor: '#442CBF',
         bgColor: '#000000',
-        animationDelay: 500, 
+        animationDelay: 500,
         fillDuration: 1500,
         fadeDuration: 2500,
-        logoMoveDuration: 1000, 
+        logoMoveDuration: 1000,
         targetLogoPosition: { x: 40, y: 53 },
         sizeLogo: { width: 200, height: 50 }
     };
     if (width <= 750) {
         CONFIG.squareSize = 20;
-        CONFIG.targetLogoPosition.x = 20;
-        CONFIG.targetLogoPosition.y = 20;
-        CONFIG.sizeLogo.width = 120;
-        CONFIG.sizeLogo.height = 30;
     }
     const preloadContainer = document.querySelector('.preload-container');
     const canvas = document.querySelector('.preload-canvas');
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     y: y * CONFIG.squareSize,
                     width: CONFIG.squareSize,
                     height: CONFIG.squareSize,
-                    state: 'black', 
+                    state: 'black',
                     alpha: 1
                 });
             }
@@ -109,24 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const progress = Math.min(elapsed / CONFIG.fadeDuration, 1);
         const logoProgress = Math.min(elapsed / CONFIG.logoMoveDuration, 1);
         const easeOut = easeOutCubic(logoProgress);
-        const currentX = initialLogoPosition.x + (CONFIG.targetLogoPosition.x - initialLogoPosition.x) * easeOut;
-        const currentY = initialLogoPosition.y + (CONFIG.targetLogoPosition.y - initialLogoPosition.y) * easeOut;
-        logo.style.left = `${currentX}rem`;
-        logo.style.top = `${currentY}rem`;
-        logo.style.width = `${CONFIG.sizeLogo.width}rem`;
-        logo.style.height = `${CONFIG.sizeLogo.height}rem`;
         setTimeout(() => {
-            logoHeader.style.opacity = '1';
-        }, 2000);
-        // setTimeout(() => {
-        //     $('.main__body .stroke div p').each(function () {
-        //         $(this).shuffleLetters({
-        //             step: 5,
-        //             fps: 120,
-        //             text: $(this).text()
-        //         });
-        //     })
-        // }, 500);
+            logo.animate({
+                opacity: 0
+            }, 1000)
+        }, 1500);
         setTimeout(() => {
             $('.main__body .stroke div').addClass('anim_stroke')
         }, 2000);
@@ -155,8 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function completeAnimation() {
-        logo.style.left = `${CONFIG.targetLogoPosition.x}rem`;
-        logo.style.top = `${CONFIG.targetLogoPosition.y}rem`;
         preloadContainer.style.transition = 'opacity 0.5s ease';
         preloadContainer.style.opacity = '0';
 
