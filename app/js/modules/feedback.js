@@ -76,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = false;
 
-        // Фон
         ctx.fillStyle = CONFIG.bgColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -86,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const size = square.width;
 
             ctx.fillStyle = square.filled ? CONFIG.fillColor : CONFIG.bgColor;
-            ctx.fillRect(x, y, size + 0.5, size + 0.5); // +0.5 перекрывает возможный зазор
+            ctx.fillRect(x, y, size + 0.5, size + 0.5);
         });
     }
 

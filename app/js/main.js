@@ -19,14 +19,13 @@ let lenis = new Lenis({
 if ($(window).width() > 750) {
     let lastScrollTop = 0;
     let isScrollingDown = false;
-    const scrollThreshold = 5; // Минимальное изменение для определения направления
-    const activationThreshold = 50; // Активация после 50px
+    const scrollThreshold = 5;
+    const activationThreshold = 50;
 
     lenis.on('scroll', ({ scroll }) => {
         const currentScroll = scroll;
         const header = document.querySelector('.header');
 
-        // Определяем направление с порогом
         if (Math.abs(currentScroll - lastScrollTop) > scrollThreshold) {
             isScrollingDown = currentScroll > lastScrollTop;
             lastScrollTop = currentScroll;
@@ -58,10 +57,9 @@ $('.header__mobile-menu ul li').on('click', function (e) {
 })
 window.addEventListener('load', () => {
     ScrollTrigger.refresh();
-    lenis.scrollTo(0); // Сброс позиции
-    lenis.emit(); // Принудительное обновление
-    lenis.resize(); // Пересчитываем размеры
-    lenis.raf(0); // Сбрасываем анимацию
+    lenis.emit();
+    lenis.resize();
+    lenis.raf(0);
     setTimeout(() => {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', (e) => {
@@ -79,6 +77,10 @@ window.addEventListener('load', () => {
             });
         });
     }, 500);
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+        lenis.scrollTo(0, { force: true });
+    }, 100);
 });
 window.addEventListener("resize load", () => controller.update(true));
 window.addEventListener("hashchange", () => {

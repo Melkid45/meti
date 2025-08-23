@@ -44,27 +44,23 @@ if (window.innerWidth > 750) {
         if (!showreel) return;
         const rect = showreel.getBoundingClientRect();
         
-        // Добавляем буферную зону в 2px по краям для предотвращения мерцания
         const buffer = 2;
         const isInside = mouseX >= rect.left - buffer && 
                         mouseX <= rect.right + buffer && 
                         mouseY >= rect.top - buffer && 
                         mouseY <= rect.bottom + buffer;
 
-        // Очищаем предыдущий таймаут
         if (showreelCheckTimeout) {
             clearTimeout(showreelCheckTimeout);
         }
 
         if (isInside && !insideShowreel) {
-            // Небольшая задержка для подтверждения нахождения внутри
             showreelCheckTimeout = setTimeout(() => {
                 insideShowreel = true;
                 updateVideoCursor();
             }, 50);
         }
         else if (!isInside && insideShowreel) {
-            // Небольшая задержка для подтверждения выхода
             showreelCheckTimeout = setTimeout(() => {
                 insideShowreel = false;
                 resetCursor();

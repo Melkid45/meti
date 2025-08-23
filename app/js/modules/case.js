@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loadedCount++;
       img.removeEventListener('load', onLoadCounter);
       if (loadedCount === items.length) {
-        initScrollAnimation(); // вызываем анимацию после загрузки всех картинок
+        initScrollAnimation(); 
       }
     };
 
@@ -451,7 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = container.querySelectorAll('.item');
     if (!items.length) return;
 
-    // Сохраняем ссылку на текущую временную шкалу
     const existingTl = gsap.getById('masterTimeline');
     const masterTl = existingTl || gsap.timeline({
       id: 'masterTimeline',
@@ -473,7 +472,6 @@ document.addEventListener('DOMContentLoaded', () => {
       },
 
     });
-    // Добавляем только новые элементы, которые еще не анимированы
     effects.forEach((effect, i) => {
       if (effect.isAnimated) return;
 
@@ -533,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const loadMoreBtn = document.querySelector('.load-more');
-  let page = 1; // счётчик "страниц"
+  let page = 1; 
 
   loadMoreBtn.addEventListener('click', () => {
     page++;
@@ -569,7 +567,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// Btn Rotate
 
 const GUI = dat.GUI;
 const VIEWBOX = 130;

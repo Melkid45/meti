@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // базовые настройки
     const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     const CONFIG = {
-        squareSize: 54,         // rem
-        gap: 0,                 // rem
+        squareSize: 54,   
+        gap: 0,       
         fillColor: 'rgba(244, 244, 244, 0.03)',
         bgColor: '#000000',
-        fillDuration: 0.45,     // часть таймлайна
+        fillDuration: 0.45, 
         delayDuration: 0.1,
         clearDuration: 0.45
     };
@@ -22,8 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function remToPx(rem) {
         return rem * remInPx;
     }
-
-    // если экран узкий — уменьшаем квадраты
     if ((window.innerWidth || document.documentElement.clientWidth) <= 750) {
         CONFIG.squareSize = 20;
     }
@@ -38,8 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const width = container.clientWidth;
         const height = container.clientHeight;
         const dpr = window.devicePixelRatio || 1;
-
-        // +1px по ширине и высоте в CSS px
         canvas.style.width = (width) + 'px';
         canvas.style.height = (height) + 'px';
         canvas.width = Math.ceil((width) * dpr);
@@ -89,13 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Основная, упрощённая и детерминированная функция обновления.
-    // progress: ScrollMagic progress (0..1)
     function updateAnimation(progress) {
-        // защитная обработка
         progress = clamp(progress, 0, 1);
-
-        // приводим прогресс к "временной" шкале (в тех же единицах, что и durations)
         const t = progress * totalTimeline;
 
         const fillEnd = CONFIG.fillDuration;
@@ -103,14 +93,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let targetCount = 0;
         if (t <= fillEnd) {
-            // стадия заполнения
             const fillProgress = fillEnd > 0 ? (t / fillEnd) : 1;
             targetCount = Math.round(fillProgress * grid.length);
         } else if (t <= clearStart) {
-            // пауза — всё заполнено
             targetCount = grid.length;
         } else {
-            // стадия очищения
             const clearProgress = CONFIG.clearDuration > 0 ? ((t - clearStart) / CONFIG.clearDuration) : 1;
             const remaining = 1 - clamp(clearProgress, 0, 1);
             targetCount = Math.round(remaining * grid.length);
@@ -118,8 +105,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         targetCount = clamp(targetCount, 0, grid.length);
 
-        // Устанавливаем filled детерминированно по shuffledIndices:
-        // первыми заполняются элементы с индексами shuffledIndices[0..targetCount-1]
         for (let i = 0; i < grid.length; i++) {
             const gridIndex = shuffledIndices[i];
             grid[gridIndex].filled = i < targetCount;
@@ -128,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
         draw();
     }
 
-    // Инициализация ScrollMagic (или любой другой скролл-логики).
     function initScrollMagic() {
         if (typeof ScrollMagic === 'undefined') {
             console.warn('ScrollMagic не найден — вызов updateAnimation(progress) можно сделать вручную.');
@@ -137,26 +121,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const controller = new ScrollMagic.Controller();
 
-        // продление сцены: оставляем процент от высоты в зависимости от totalTimeline,
-        // но чаще всего totalTimeline == 1, тогда duration можно выставлять как "200%" (как было у тебя).
-        // Оставим поведение похожим на твоё, но без прямой зависимости внутри updateAnimation.
-        const sceneDurationPercent = Math.max(100, totalTimeline * 200); // если totalTimeline=1 => 200%
+        const sceneDurationPercent = Math.max(100, totalTimeline * 200);
         new ScrollMagic.Scene({
             triggerElement: ".showreel",
             duration: `${sceneDurationPercent}%`,
             triggerHook: 1,
         })
             .on("progress", function (e) {
-                updateAnimation(e.progress); // e.progress ∈ [0..1]
+                updateAnimation(e.progress);
             })
             .addTo(controller);
     }
 
-    // Запуск
     initGrid();
     initScrollMagic();
-
-    // Реагируем на ресайз контейнера
     const resizeObserver = new ResizeObserver(entries => {
         for (let entry of entries) {
             if (entry.target === container) {

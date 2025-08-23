@@ -1,4 +1,3 @@
-// ===================== Shuffle Letters (jQuery плагин) =====================
 $.fn.shuffleLetters = function (options) {
   const settings = $.extend({
     step: 8,
@@ -136,11 +135,9 @@ $.fn.shuffleLetters = function (options) {
 };
 
 
-// ===================== Экранный скролл + ваша логика GSAP =====================
 (function () {
   gsap.registerPlugin(ScrollTrigger);
 
-  // --------- Константы для сетки / фигур (как у вас) ----------
   const GRID_SIZE = 14;
   const CELL_SIZE_REM = 54;
   const LINE_WIDTH_REM = 1;
@@ -163,13 +160,11 @@ $.fn.shuffleLetters = function (options) {
     arrow: [[1, 12], [1, 11], [1, 10], [2, 9], [3, 8], [4, 7], [5, 6], [6, 5], [7, 4], [8, 3], [9, 2], [10, 1], [12, 1], [11, 0], [13, 2], [12, 3], [11, 4], [10, 5], [9, 6], [8, 7], [7, 8], [6, 9], [5, 10], [4, 11], [3, 12], [2, 12], [3, 10], [10, 3]]
   };
 
-  // --------- DOM-ссылки ----------
   const items = Array.from(document.querySelectorAll('.items__line .item'));
   const $titles = $('.items__line .item h3');
   const wrapper = document.querySelector('.wrapper');
   const itemsLine = document.querySelector('.items__line');
 
-  // счётчик слайдов (как было)
   let total = $('.items__line .item').length;
   $('.items__line .item').each(function () {
     $(this).find('.total-slides').text(`0${total}`);
@@ -200,7 +195,6 @@ $.fn.shuffleLetters = function (options) {
       }
     }
 
-    // Вертикальные линии
     for (let x = 0; x <= GRID_SIZE; x++) {
       const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
       const pos = x * CELL_SIZE + offset;
@@ -213,7 +207,6 @@ $.fn.shuffleLetters = function (options) {
       svg.appendChild(line);
     }
 
-    // Горизонтальные линии
     for (let y = 0; y <= GRID_SIZE; y++) {
       const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
       const pos = y * CELL_SIZE + offset;
@@ -233,7 +226,6 @@ $.fn.shuffleLetters = function (options) {
     return { cellsGrid, allCells };
   }
 
-  // Создаём SVG для каждого блока
   const mainExisting = document.getElementById('interactive-grid');
   items.forEach((item, i) => {
     let svg;
@@ -290,7 +282,6 @@ $.fn.shuffleLetters = function (options) {
 
   drawShape(itemShapes[0], 0);
 
-  // ------------- ScrollTrigger (с вашим onUpdate) -------------
   let currentActiveIndex = -1;
   const st = ScrollTrigger.create({
     trigger: ".services__new",
@@ -300,7 +291,6 @@ $.fn.shuffleLetters = function (options) {
     scrub: false,
     onUpdate: self => {
       const progress = self.progress;
-      // только clipPath-анимации
       items.forEach((item, index) => {
         const img = wrapperImages[index];
         if (!img) return;
@@ -329,7 +319,6 @@ $.fn.shuffleLetters = function (options) {
 
 
 
-  // ------------- ПОЭКРАННЫЙ СКРОЛЛ (one wheel / one swipe) -------------
   const scroller = document.scrollingElement || document.documentElement;
   const pager = {
     index: 0,
@@ -350,7 +339,7 @@ $.fn.shuffleLetters = function (options) {
   }
 
   function goToIndex(i, opts = {}) {
-    if (pager.animating) return; // блокируем если анимация идёт
+    if (pager.animating) return;
     const targetIndex = Math.max(0, Math.min(i, pager.steps));
     pager.index = targetIndex;
     pager.animating = true;
@@ -376,7 +365,6 @@ $.fn.shuffleLetters = function (options) {
 
 
 
-  // Колесо мыши
   let wheelDelta = 0;
 
   function onWheel(e) {
@@ -386,7 +374,7 @@ $.fn.shuffleLetters = function (options) {
     e.stopPropagation();
     wheelDelta += e.deltaY;
 
-    const threshold = 50; // сколько пикселей скролла = 1 экран
+    const threshold = 50; 
     if (!pager.animating) {
       if (wheelDelta >= threshold) {
         goToIndex(pager.index + 1);
@@ -425,7 +413,6 @@ $.fn.shuffleLetters = function (options) {
 
 
 
-  // Клавиатура (опционально: стрелки/pgUp/pgDn/Space)
   function onKeyDown(e) {
     if (!sectionInView() || pager.animating) return;
     if (["ArrowDown", "PageDown", " "].includes(e.key)) goToIndex(pager.index + 1);
@@ -435,24 +422,18 @@ $.fn.shuffleLetters = function (options) {
 
 
 
-  // Наводим порядок при ресайзе/рефлоу
   function onResizeRecalc() {
-    // После пересчёта позиций у ScrollTrigger обновится start/end
-    // Сохраняем текущий индекс и переводим скролл в соответствующую точку
     if (!sectionInView()) return;
     goToIndex(pager.index, { duration: 0.001, ease: "none" });
   }
 
-  // Подписки
   window.addEventListener('wheel', onWheel, { passive: false });
   window.addEventListener('touchstart', onTouchStart, { passive: false });
   window.addEventListener('touchmove', onTouchMove, { passive: false });
   window.addEventListener('touchend', onTouchEnd, { passive: false });
 
 
-  // Когда ScrollTrigger обновляет лэйаут — подравниваемся
   ScrollTrigger.addEventListener("refreshInit", () => {
-    // чтобы при пересчёте не было резкого дёрганья
     if (pager.animating) gsap.killTweensOf(scroller);
   });
   ScrollTrigger.addEventListener("refresh", onResizeRecalc);
@@ -460,7 +441,6 @@ $.fn.shuffleLetters = function (options) {
     ScrollTrigger.refresh();
   });
 
-  // Если пользователь попал в секцию не с начала — выставим ближайший экран после небольшой задержки
   setTimeout(() => {
     if (sectionInView()) {
       const progress = st.progress;
