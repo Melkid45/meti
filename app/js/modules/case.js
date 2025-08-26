@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const controller = new ScrollMagic.Controller();
   const isFullEffect = window.innerWidth > 750;
-
+  const isMobile = window.innerWidth <= 750;
   function debounce(fn, wait = 150) {
     let t;
     return (...args) => {
@@ -421,20 +421,28 @@ document.addEventListener('DOMContentLoaded', () => {
   let visibleItemsCount = ITEMS_PER_PAGE;
 
   function initItemsVisibility() {
-    allItems.forEach((item, index) => {
-      if (index < visibleItemsCount) {
+    if (isMobile) {
+      allItems.forEach((item, index) => {
+        if (index < visibleItemsCount) {
+          item.classList.add('item--visible');
+          item.style.display = 'flex';
+        } else {
+          item.classList.remove('item--visible');
+          item.style.display = 'none';
+        }
+      });
+
+      if (visibleItemsCount >= allItems.length) {
+        loadMoreBtn.style.display = 'none';
+      } else {
+        loadMoreBtn.style.display = 'flex';
+      }
+    } else {
+      allItems.forEach((item, index) => {
         item.classList.add('item--visible');
         item.style.display = 'flex';
-      } else {
-        item.classList.remove('item--visible');
-        item.style.display = 'none';
-      }
-    });
-
-    if (visibleItemsCount >= allItems.length) {
+      });
       loadMoreBtn.style.display = 'none';
-    } else {
-      loadMoreBtn.style.display = 'flex';
     }
   }
 
@@ -498,7 +506,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
-
+    setTimeout(() => {
+        lenis.emit();
+        lenis.resize();
+        lenis.raf(0);
+      }, 500);
     visibleItems.forEach((item, i) => {
       const effect = effects.find(e => e.media === item.querySelector('.media'));
       // if (!effect || effect.isAnimated) return;
@@ -545,19 +557,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   loadMoreBtn.addEventListener('click', () => {
-    visibleItemsCount += ITEMS_PER_PAGE;
-    initItemsVisibility();
-    initAllEffects();
-    setTimeout(() => {
-      lenis.emit();
-      lenis.resize();
-      lenis.raf(0);
-    }, 500);
-
+    if (isMobile) {
+      visibleItemsCount += ITEMS_PER_PAGE;
+      initItemsVisibility();
+      initAllEffects();
+      setTimeout(() => {
+        lenis.emit();
+        lenis.resize();
+        lenis.raf(0);
+      }, 500);
+    }
   });
 
   window.addEventListener('resize', debounce(() => {
-    refreshScrollAnimation();
+    const newIsMobile = window.innerWidth <= 750;
+    if (newIsMobile !== isMobile) {
+      window.location.reload();
+    } else {
+      refreshScrollAnimation();
+    }
   }, 250));
 
   initAllEffects();
