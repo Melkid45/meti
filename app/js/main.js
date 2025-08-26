@@ -17,9 +17,9 @@ let lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     autoRaf: true,
-    smooth: 'true',
+    smooth: true,
     infinite: false,
-    syncTouch: true
+    touchMultiplier: 1.5,
 })
 if ($(window).width() > 750) {
     let lastScrollTop = 0;

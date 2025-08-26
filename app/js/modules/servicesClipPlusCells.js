@@ -316,14 +316,14 @@ $.fn.shuffleLetters = function (options) {
         });
       });
       if (!pager.animating && archorTime) {
-      const targetIndex = Math.min(Math.floor(progress * (pager.steps + 1)), pager.steps);
-      if (targetIndex == items.length - 1){
-        LeaveBack = true;
+        const targetIndex = Math.min(Math.floor(progress * (pager.steps + 1)), pager.steps);
+        if (targetIndex == items.length - 1) {
+          LeaveBack = true;
+        }
+        if (targetIndex !== pager.index) {
+          goToIndex(targetIndex, { duration: 0.2 });
+        }
       }
-      if (targetIndex !== pager.index) {
-        goToIndex(targetIndex, { duration: 0.2 });
-      }
-    }
     },
   });
 
@@ -398,9 +398,9 @@ $.fn.shuffleLetters = function (options) {
         }
       },
     });
-
-    drawShape(itemShapes[targetIndex], targetIndex);
-
+    setTimeout(() => {
+      drawShape(itemShapes[targetIndex], targetIndex);
+    }, 400);
     if ($titles && $titles.eq(targetIndex).length) {
       $titles.eq(targetIndex).shuffleLetters({
         step: 5,
