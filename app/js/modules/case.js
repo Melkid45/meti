@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       t = setTimeout(() => fn(...args), wait);
     };
   }
+
   function drawImageCover(ctx, img, canvasWidth, canvasHeight) {
     const imgRatio = img.naturalWidth / img.naturalHeight;
     const canvasRatio = canvasWidth / canvasHeight;
@@ -30,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
   }
-  class CombinedImageEffect {
 
+  class CombinedImageEffect {
     constructor(media) {
       this.media = media;
       this.img = media.querySelector('img');
@@ -110,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.addEventListener('resize', this._onResize);
     }
 
-
     resizeCanvas() {
       this.canvas.width = this.media.offsetWidth;
       this.canvas.height = this.media.offsetHeight;
@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
       this.originalCanvas.width = this.canvas.width;
       this.originalCanvas.height = this.canvas.height;
       drawImageCover(this.originalCtx, this.img, this.originalCanvas.width, this.originalCanvas.height);
-
 
       if (isFullEffect) {
         this.blurCanvas.width = this.canvas.width;
@@ -415,72 +414,96 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const container = document.querySelector('.case__soft');
-  const items = container.querySelectorAll('.item');
+  const allItems = Array.from(container.querySelectorAll('.item'));
+  const loadMoreBtn = document.querySelector('.load-more');
+
+  const ITEMS_PER_PAGE = 3;
+  let visibleItemsCount = ITEMS_PER_PAGE;
+
+  function initItemsVisibility() {
+    allItems.forEach((item, index) => {
+      if (index < visibleItemsCount) {
+        item.classList.add('item--visible');
+        item.style.display = 'flex';
+      } else {
+        item.classList.remove('item--visible');
+        item.style.display = 'none';
+      }
+    });
+
+    if (visibleItemsCount >= allItems.length) {
+      loadMoreBtn.style.display = 'none';
+    } else {
+      loadMoreBtn.style.display = 'flex';
+    }
+  }
+
+  initItemsVisibility();
+
   const effects = [];
   let loadedCount = 0;
-  function initItems() {
-    const items = container.querySelectorAll('.item');
-    items.forEach(item => {
+
+  function initAllEffects() {
+    const visibleItems = container.querySelectorAll('.item--visible');
+
+    visibleItems.forEach(item => {
       const media = item.querySelector('.media');
-      const effect = new CombinedImageEffect(media);
-      effects.push(effect);
+      if (!media._effectInitialized) {
+        const effect = new CombinedImageEffect(media);
+        effects.push(effect);
+        media._effectInitialized = true;
+
+        const img = effect.img;
+        const onLoadCounter = () => {
+          loadedCount++;
+          img.removeEventListener('load', onLoadCounter);
+          if (loadedCount === visibleItems.length) {
+            initScrollAnimation();
+          }
+        };
+
+        if (img.complete) {
+          setTimeout(() => onLoadCounter(), 0);
+        } else {
+          img.addEventListener('load', onLoadCounter);
+        }
+      }
     });
   }
-  items.forEach(item => {
-    const media = item.querySelector('.media');
-    const effect = new CombinedImageEffect(media);
-    effects.push(effect);
 
-    const img = effect.img;
-    const onLoadCounter = () => {
-      loadedCount++;
-      img.removeEventListener('load', onLoadCounter);
-      if (loadedCount === items.length) {
-        initScrollAnimation(); // вызываем анимацию после загрузки всех картинок
-      }
-    };
-
-    if (img.complete) {
-      setTimeout(() => onLoadCounter(), 0);
-    } else {
-      img.addEventListener('load', onLoadCounter);
-    }
-  });
+  let masterTl = null;
 
   function initScrollAnimation() {
-    const items = container.querySelectorAll('.item');
-    if (!items.length) return;
+    const visibleItems = container.querySelectorAll('.item--visible');
 
-    // Сохраняем ссылку на текущую временную шкалу
-    const existingTl = gsap.getById('masterTimeline');
-    const masterTl = existingTl || gsap.timeline({
-      id: 'masterTimeline',
+    if (masterTl) {
+      masterTl.scrollTrigger.kill();
+      masterTl.kill();
+      masterTl = null;
+    }
+
+    masterTl = gsap.timeline({
       scrollTrigger: {
         trigger: ".case",
         start: "top top",
-        end: () => "+=" + (window.innerHeight * (items.length - 1)),
+        end: () => `+=${window.innerHeight * (visibleItems.length - 1)}`,
         scrub: 0.5,
         pin: true,
-        invalidateOnRefresh: true,
         onUpdate: (self) => {
           if (self.progress >= 0.6 && self.progress < 0.9) {
-            document.querySelector('.load-more').classList.add('animate')
-          }
-          if (self.progress >= 0.9 || (self.progress < 0.6)) {
-            document.querySelector('.load-more').classList.remove('animate')
+            loadMoreBtn.classList.add('animate');
+          } else {
+            loadMoreBtn.classList.remove('animate');
           }
         }
-      },
-
+      }
     });
-    // Добавляем только новые элементы, которые еще не анимированы
-    effects.forEach((effect, i) => {
-      if (effect.isAnimated) return;
 
-      const item = items[i];
-      if (!item) return;
+    visibleItems.forEach((item, i) => {
+      const effect = effects.find(e => e.media === item.querySelector('.media'));
+      // if (!effect || effect.isAnimated) return;
 
-      effect.isAnimated = true;
+      // effect.isAnimated = true;
 
       const duration = 1.2;
       const pixelDur = 0.5;
@@ -514,113 +537,88 @@ document.addEventListener('DOMContentLoaded', () => {
       masterTl.add(tl, i * stagger);
     });
   }
-  let isUpdatingAnimation = false;
-  function initScrollAnimationDynamic() {
-    const currentScroll = window.scrollY || window.pageYOffset;
 
-    const masterTrigger = ScrollTrigger.getById('masterTrigger');
-    if (masterTrigger) masterTrigger.kill();
-
-    initScrollAnimation();
-    
+  function refreshScrollAnimation() {
+    if (masterTl && masterTl.scrollTrigger) {
+      masterTl.scrollTrigger.refresh();
+    }
   }
 
+  loadMoreBtn.addEventListener('click', () => {
+    visibleItemsCount += ITEMS_PER_PAGE;
+    initItemsVisibility();
+    initAllEffects();
+    setTimeout(() => {
+      lenis.emit();
+      lenis.resize();
+      lenis.raf(0);
+    }, 500);
 
+  });
 
+  window.addEventListener('resize', debounce(() => {
+    refreshScrollAnimation();
+  }, 250));
+
+  initAllEffects();
 
   window.addEventListener('beforeunload', () => {
     effects.forEach(e => e.stop && e.stop());
   });
 
-  const loadMoreBtn = document.querySelector('.load-more');
-  let page = 1; // счётчик "страниц"
+  const VIEWBOX = 130;
+  let TEXT_ELEMENTS = Array.from(document.querySelectorAll('[data-circular-text]'));
 
-  loadMoreBtn.addEventListener('click', () => {
-    page++;
-    fetch(`/components/case-more-${page}.html`)
-      .then(res => res.text())
-      .then(html => {
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        const newItems = temp.querySelectorAll('.item');
+  const OPTIONS = {
+    size: 12,
+    radius: 53,
+    showPath: true,
+    spread: true,
+    inside: false,
+    texts: []
+  };
 
-        newItems.forEach(item => {
-          container.insertBefore(item, loadMoreBtn);
-          item.classList.add(`initialization-${page}`)
-          const media = item.querySelector('.media');
-          const effect = new CombinedImageEffect(media);
-          effects.push(effect);
+  const updateAllElements = () => {
+    TEXT_ELEMENTS.forEach((el, index) => {
+      OPTIONS.texts[index] = el.dataset.circularText || 'Your text • ';
 
-          const img = effect.img;
-          if (img.complete) {
-            initScrollAnimationDynamic();
-          } else {
-            img.addEventListener('load', initScrollAnimationDynamic, { once: true });
-          }
-          TEXT_ELEMENTS = Array.from(document.querySelectorAll('[data-circular-text]'));
-          updateAllElements()
-        });
-      });
-  });
+      const path = el.querySelector('.circlePath');
+      if (path) {
+        path.id = `circlePath${index}`;
+
+        const textPath = el.querySelector('.textPath');
+        if (textPath) {
+          textPath.setAttribute('href', `#${path.id}`);
+          textPath.textContent = OPTIONS.texts[index];
+        }
+      }
+    });
+
+    TEXT_ELEMENTS.forEach((element, index) => {
+      const circlePath = element.querySelector('.circlePath');
+      const textPath = element.querySelector('.textPath');
+
+      if (!circlePath || !textPath) return;
+
+      const startX = VIEWBOX * 0.5 - OPTIONS.radius;
+      const startY = VIEWBOX * 0.5;
+      const path = `
+        M ${startX}, ${startY}
+        a ${OPTIONS.radius},${OPTIONS.radius} 0 1,${OPTIONS.inside ? 0 : 1} ${OPTIONS.radius * 2},0
+        a ${OPTIONS.radius},${OPTIONS.radius} 0 1,${OPTIONS.inside ? 0 : 1} -${OPTIONS.radius * 2},0
+      `;
+
+      circlePath.setAttribute('d', path);
+      textPath.textContent = OPTIONS.texts[index];
+      circlePath.style.setProperty('--show', OPTIONS.showPath ? 1 : 0);
+
+      if (OPTIONS.spread) {
+        textPath.setAttribute('textLength', Math.PI * 2 * OPTIONS.radius * 0.95);
+      } else {
+        textPath.removeAttribute('textLength');
+      }
+    });
+  };
+
+  updateAllElements();
 });
-
-
-
-
-
-
-// Btn Rotate
-
-const GUI = dat.GUI;
-const VIEWBOX = 130;
-let TEXT_ELEMENTS = Array.from(document.querySelectorAll('[data-circular-text]'));
-
-const OPTIONS = {
-  size: 12,
-  radius: 53,
-  showPath: true,
-  spread: true,
-  inside: false,
-  texts: []
-};
-
-
-
-
-const updateAllElements = () => {
-  TEXT_ELEMENTS.forEach((el, index) => {
-    OPTIONS.texts[index] = el.dataset.circularText || 'Your text • ';
-
-    const path = el.querySelector('.circlePath');
-    path.id = `circlePath${index}`;
-
-    const textPath = el.querySelector('.textPath');
-    textPath.setAttribute('href', `#${path.id}`);
-    textPath.textContent = OPTIONS.texts[index];
-  });
-  TEXT_ELEMENTS.forEach((element, index) => {
-    const circlePath = element.querySelector('.circlePath');
-    const textPath = element.querySelector('.textPath');
-    const textElement = element.querySelector('text');
-
-    const startX = VIEWBOX * 0.5 - OPTIONS.radius;
-    const startY = VIEWBOX * 0.5;
-    const path = `
-          M ${startX}, ${startY}
-          a ${OPTIONS.radius},${OPTIONS.radius} 0 1,${OPTIONS.inside ? 0 : 1} ${OPTIONS.radius * 2},0
-          a ${OPTIONS.radius},${OPTIONS.radius} 0 1,${OPTIONS.inside ? 0 : 1} -${OPTIONS.radius * 2},0
-        `;
-
-    circlePath.setAttribute('d', path);
-    textPath.textContent = OPTIONS.texts[index];
-    circlePath.style.setProperty('--show', OPTIONS.showPath ? 1 : 0);
-
-    if (OPTIONS.spread) {
-      textPath.setAttribute('textLength', Math.PI * 2 * OPTIONS.radius * 0.95);
-    } else {
-      textPath.removeAttribute('textLength');
-    }
-  });
-};
-
-updateAllElements();

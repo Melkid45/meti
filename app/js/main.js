@@ -14,19 +14,24 @@ function onEntry(entry) {
 let lenis = new Lenis({
     lerp: 0.1,
     smoothWheel: true,
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     autoRaf: true,
+    smooth: 'true',
+    infinite: false,
+    syncTouch: true
 })
 if ($(window).width() > 750) {
     let lastScrollTop = 0;
     let isScrollingDown = false;
-    const scrollThreshold = 5; // Минимальное изменение для определения направления
-    const activationThreshold = 50; // Активация после 50px
+    const scrollThreshold = 5;
+    const activationThreshold = 50;
 
     lenis.on('scroll', ({ scroll }) => {
+        ScrollTrigger.update()
         const currentScroll = scroll;
         const header = document.querySelector('.header');
 
-        // Определяем направление с порогом
         if (Math.abs(currentScroll - lastScrollTop) > scrollThreshold) {
             isScrollingDown = currentScroll > lastScrollTop;
             lastScrollTop = currentScroll;
@@ -56,15 +61,20 @@ $('.header__mobile-menu ul li').on('click', function (e) {
     $('.header__mobile').removeClass('show')
     $('.burger').find('.current').removeClass('show')
 })
+let archorTime = false;
 window.addEventListener('load', () => {
     ScrollTrigger.refresh();
-    lenis.scrollTo(0); // Сброс позиции
-    lenis.emit(); // Принудительное обновление
-    lenis.resize(); // Пересчитываем размеры
-    lenis.raf(0); // Сбрасываем анимацию
+    lenis.scrollTo(0);
+    lenis.emit();
+    lenis.resize(); 
+    lenis.raf(0); 
     setTimeout(() => {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', (e) => {
+                archorTime = true;
+                setTimeout(() => {
+                    archorTime = false;
+                }, 1000);
                 e.preventDefault();
                 const target = document.querySelector(anchor.getAttribute('href'));
                 let parent = target.parentNode

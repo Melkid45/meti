@@ -1,7 +1,12 @@
 #gridCanvas {
     pointer-events: none;
 }
-
+.pin-spacer:has(.services__new){
+    padding: 0px !important;
+}
+.jsgif{
+    display: none;
+}
 .preload-container {
     position: fixed;
     top: 0;
