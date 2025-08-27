@@ -1,12 +1,15 @@
 #gridCanvas {
     pointer-events: none;
 }
-.pin-spacer:has(.services__new){
+
+.pin-spacer:has(.services__new) {
     padding: 0px !important;
 }
-.jsgif{
+
+.jsgif {
     display: none;
 }
+
 .preload-container {
     position: fixed;
     top: 0;
@@ -353,6 +356,9 @@
                     background: #000;
                     image-rendering: crisp-edges;
                     shape-rendering: crispEdges;
+                    will-change: clip-path;
+                    backface-visibility: hidden;
+                    transform: translateZ(0);
                 }
 
                 img {
@@ -541,6 +547,7 @@
     justify-content: center;
     overflow: hidden;
     margin-top: 400px;
+
     video {
         width: 100%;
         height: 100%;
@@ -1142,6 +1149,7 @@
             gap: 40px;
             flex-wrap: nowrap;
             width: 100%;
+
             .item {
                 width: 488px;
                 height: 271px;
@@ -1220,9 +1228,11 @@
             .item:hover .wrap {
                 opacity: 1;
             }
-            .item:hover{
+
+            .item:hover {
                 z-index: 3;
             }
+
             .item {
                 width: 100%;
                 border-bottom: 1px solid #F4F4F429;
@@ -1233,6 +1243,7 @@
                 cursor: pointer;
                 overflow: visible;
                 z-index: 0;
+
                 .wrap {
                     display: flex;
                     align-items: center;
@@ -1245,6 +1256,7 @@
                     opacity: 0;
                     transition: all 0.3s ease;
                     z-index: 4;
+
                     img {
                         width: 220px;
                         height: 220px;
@@ -1702,4 +1714,3 @@
         }
     }
 }
-

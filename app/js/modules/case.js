@@ -510,7 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     setTimeout(() => {
       Position = masterTl.scrollTrigger.end;
-      console.log(Position)
     }, 100);
     visibleItems.forEach((item, i) => {
       const effect = effects.find(e => e.media === item.querySelector('.media'));
