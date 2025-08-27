@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+
   const controller = new ScrollMagic.Controller();
   const isFullEffect = window.innerWidth > 750;
   const isMobile = window.innerWidth <= 750;
@@ -508,23 +509,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     setTimeout(() => {
-      lenis.emit();
-      lenis.resize();
-      lenis.raf(0);
-    }, 500);
+      Position = masterTl.scrollTrigger.end;
+      console.log(Position)
+    }, 100);
     visibleItems.forEach((item, i) => {
       const effect = effects.find(e => e.media === item.querySelector('.media'));
       // if (!effect || effect.isAnimated) return;
 
       // effect.isAnimated = true;
-
-      const duration = 1.2;
+      let moveY = 0;
+      if (item.classList.contains('small_case')) {
+        moveY = -260;
+      }else {
+        moveY = -220;
+      }
+      const duration = 1;
       const pixelDur = 0.5;
       const stagger = isFullEffect ? 0.2 : 0.3;
 
-      let moveY = -270;
-      if (!isFullEffect) moveY = -370;
-      if (window.innerWidth < 500) moveY = -280;
+      if (!isFullEffect) moveY = -240;
+      if (window.innerWidth < 500) moveY = -250;
 
       let lastSize = null;
 
@@ -556,17 +560,33 @@ document.addEventListener('DOMContentLoaded', () => {
       masterTl.scrollTrigger.refresh();
     }
   }
-
+  let lastScrollPosition = 0;
+  let Position = 0;
+  let count = 0;
   loadMoreBtn.addEventListener('click', () => {
+    count++;
     if (isMobile) {
+      // Сохраняем текущую позицию скролла ДО добавления элементов
+      const currentScroll = lenis.scroll;
+
       visibleItemsCount += ITEMS_PER_PAGE;
       initItemsVisibility();
       initAllEffects();
-      setTimeout(() => {
-        lenis.emit();
-        lenis.resize();
-        lenis.raf(0);
-      }, 500);
+
+      lenis.emit();
+      lenis.resize();
+      lenis.raf(0);
+      const visibleItems = container.querySelectorAll('.item--visible');
+      const firstNewItemIndex = visibleItemsCount - ITEMS_PER_PAGE;
+      const firstNewItem = visibleItems[firstNewItemIndex];
+      if (firstNewItem) {
+        const itemRect = firstNewItem.getBoundingClientRect();
+        const scrollToPosition = currentScroll + itemRect.top - 100;
+        lenis.scrollTo(scrollToPosition, {
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        });
+      }
     }
   });
 

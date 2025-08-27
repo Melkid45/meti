@@ -12,6 +12,22 @@ function onEntry(entry) {
         }
     });
 }
+
+
+let currentTime = new Date();
+// Format the time as HH:MM
+let formattedTime = currentTime.getHours().toString().padStart(2, '0') + ':' +
+    currentTime.getMinutes().toString().padStart(2, '0');
+
+// Update the element with class 'currentTime'
+document.addEventListener('DOMContentLoaded', function () {
+    const timeElements = document.querySelectorAll('.currentTime');
+    timeElements.forEach(element => {
+        element.textContent = formattedTime;
+    });
+});
+
+
 let lenis = new Lenis({
     lerp: 0.1,
     smoothWheel: true,

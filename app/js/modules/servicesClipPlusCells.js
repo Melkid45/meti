@@ -134,7 +134,8 @@ $.fn.shuffleLetters = function (options) {
   });
 };
 
-
+const isFullEffect = window.innerWidth > 750;
+const timeOutShape = isFullEffect ? 400 : 0;
 (function () {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -400,7 +401,7 @@ $.fn.shuffleLetters = function (options) {
     });
     setTimeout(() => {
       drawShape(itemShapes[targetIndex], targetIndex);
-    }, 400);
+    }, timeOutShape);
     if ($titles && $titles.eq(targetIndex).length) {
       $titles.eq(targetIndex).shuffleLetters({
         step: 5,
