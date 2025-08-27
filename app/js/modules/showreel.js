@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const CONFIG = {
         squareSize: 54,   
         gap: 0,              
-        fillColor: 'rgba(244, 244, 244, 0.03)',
+        fillColor: 'rgba(244, 244, 244, 0.00)',
         bgColor: '#000000',
         fillDuration: 0.45,   
         delayDuration: 0.1,
