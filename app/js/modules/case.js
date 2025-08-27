@@ -450,10 +450,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const effects = [];
   let loadedCount = 0;
-
+  let ShadowItems;
   function initAllEffects() {
     const visibleItems = container.querySelectorAll('.item--visible');
-
+    ShadowItems = allItems.length - visibleItemsCount
+    $('.case-count').text(`[${ShadowItems}]`)
     visibleItems.forEach(item => {
       const media = item.querySelector('.media');
       if (!media._effectInitialized) {
@@ -507,10 +508,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     setTimeout(() => {
-        lenis.emit();
-        lenis.resize();
-        lenis.raf(0);
-      }, 500);
+      lenis.emit();
+      lenis.resize();
+      lenis.raf(0);
+    }, 500);
     visibleItems.forEach((item, i) => {
       const effect = effects.find(e => e.media === item.querySelector('.media'));
       // if (!effect || effect.isAnimated) return;

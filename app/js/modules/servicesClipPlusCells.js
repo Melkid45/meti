@@ -279,7 +279,12 @@ $.fn.shuffleLetters = function (options) {
       stagger: { each: 0.03, from: 'center', grid: [GRID_SIZE, GRID_SIZE] }
     });
   }
-
+  const scroller = document.scrollingElement || document.documentElement;
+  const pager = {
+    index: 0,
+    animating: false,
+    steps: itemShapes.length - 1
+  };
   let animationComplete = false;
   let ActiveIndex;
   drawShape(itemShapes[0], 0);
@@ -329,12 +334,7 @@ $.fn.shuffleLetters = function (options) {
 
 
 
-  const scroller = document.scrollingElement || document.documentElement;
-  const pager = {
-    index: 0,
-    animating: false,
-    steps: itemShapes.length - 1
-  };
+
 
   let touchStartY = 0;
   let touchDeltaY = 0;

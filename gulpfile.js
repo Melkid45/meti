@@ -64,7 +64,6 @@ function sprite(){
 }
 function scripts() {
     return src([
-        'app/js/libs/**/*.js',
         'app/js/main.js',
         'app/js/modules/**/*.js'
     ])
@@ -73,7 +72,15 @@ function scripts() {
     .pipe(dest('app/js'))
     .pipe(browserSync.stream())
 }
-
+function scriptsLibs() {
+    return src([
+        'app/js/libs/**/*.js',
+    ])
+    .pipe(concat('libs.min.js'))
+    .pipe(uglify())
+    .pipe(dest('app/js'))
+    .pipe(browserSync.stream())
+}
 function styles(){
     return src(['app/scss/style.scss','app/scss/*.scss'])
     .pipe(autoprefixer({overrideBrowserslist:['last 10 version']}))
@@ -106,12 +113,14 @@ function building(){
         'app/images/dist/*.*',
         'app/fonts/*.*',
         'app/js/main.min.js',
+        'app/js/libs.min.js',
         'app/index.html'
     ],{base:'app'})
     .pipe(dest('dist'))
 }
 exports.styles = styles;
 exports.scripts = scripts;
+exports.scriptsLibs = scriptsLibs;
 exports.images = images;
 exports.fonts = fonts;
 exports.pages = pages;
@@ -119,4 +128,4 @@ exports.sprite = sprite;
 exports.watching = watching;
 exports.building = building;
 exports.build = series( cleanDist ,building);
-exports.default = parallel(styles, images, scripts, pages, watching);
+exports.default = parallel(styles, images, scripts,scriptsLibs, pages, watching);

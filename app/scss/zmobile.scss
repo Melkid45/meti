@@ -1095,8 +1095,21 @@
                 background: var(--white);
                 background-size: 100% 100%;
                 bottom: 150rem;
-                span{
+
+                span {
                     color: var(--black) !important;
+                }
+
+                p {
+                    font-weight: 300;
+                    font-size: 12rem;
+                    line-height: 16rem;
+                    letter-spacing: 0%;
+                    text-transform: uppercase;
+                    color: var(--black);
+                    position: absolute;
+                    top: 18rem;
+                    right: 46.5rem;
                 }
             }
         }
@@ -2029,6 +2042,7 @@
             transform: translate(-332.3%);
         }
     }
+
     .tippy-box[data-theme='custom'] {
         background: var(--black);
         color: var(--white);
