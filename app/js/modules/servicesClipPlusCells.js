@@ -334,7 +334,21 @@ const timeOutShape = isFullEffect ? 400 : 200;
   });
 
 
+  function blockTouchEvents(block) {
+    if (block) {
+      document.addEventListener('touchmove', preventDefault, { passive: false });
+      document.addEventListener('touchstart', preventDefault, { passive: false });
+    } else {
+      document.removeEventListener('touchmove', preventDefault);
+      document.removeEventListener('touchstart', preventDefault);
+    }
+  }
 
+  function preventDefault(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
 
 
   let touchStartY = 0;
@@ -368,10 +382,19 @@ const timeOutShape = isFullEffect ? 400 : 200;
           duration: 0,
           lerp: 1,
           immediate: true
-        })
+        });
+
         lenis.emit();
         lenis.resize();
         lenis.raf(0);
+
+        lenis.stop();
+        blockTouchEvents(true);
+
+        setTimeout(() => {
+          lenis.start();
+          blockTouchEvents(false);
+        }, 100);
       }, 1000);
 
       LeaveBack = true;
@@ -383,10 +406,19 @@ const timeOutShape = isFullEffect ? 400 : 200;
           duration: 0,
           lerp: 1,
           immediate: true
-        })
+        });
+
         lenis.emit();
         lenis.resize();
         lenis.raf(0);
+
+        lenis.stop();
+        blockTouchEvents(true);
+
+        setTimeout(() => {
+          lenis.start();
+          blockTouchEvents(false);
+        }, 100);
       }, 1000);
       LeaveBack = false;
     }

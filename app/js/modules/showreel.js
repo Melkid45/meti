@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 grid.push({
                     x: x * (squareSizePx + gapPx),
                     y: y * (squareSizePx + gapPx),
-                    width: squareSizePx,
-                    height: squareSizePx,
+                    width: squareSizePx + 1,
+                    height: squareSizePx + 1,
                     filled: false
                 });
             }
