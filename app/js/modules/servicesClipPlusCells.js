@@ -394,7 +394,7 @@ const timeOutShape = isFullEffect ? 400 : 200;
         setTimeout(() => {
           lenis.start();
           blockTouchEvents(false);
-        }, 100);
+        }, 300);
       }, 1000);
 
       LeaveBack = true;
@@ -418,7 +418,7 @@ const timeOutShape = isFullEffect ? 400 : 200;
         setTimeout(() => {
           lenis.start();
           blockTouchEvents(false);
-        }, 100);
+        }, 300);
       }, 1000);
       LeaveBack = false;
     }
