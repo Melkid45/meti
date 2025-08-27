@@ -379,8 +379,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
       let end = st.end
       setTimeout(() => {
         lenis.scrollTo(end, {
-          duration: 0,
-          lerp: 1,
           immediate: true
         });
 
@@ -403,8 +401,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
       let start = st.start
       setTimeout(() => {
         lenis.scrollTo(start, {
-          duration: 0,
-          lerp: 1,
           immediate: true
         });
 
