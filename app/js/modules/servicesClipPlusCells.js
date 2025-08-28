@@ -472,28 +472,22 @@ const timeOutShape = isFullEffect ? 400 : 200;
       });
     }
 
-    // *** Если переходим на последний слайд — докручиваем pin LENIS'ом (параллельно)
     if (i === items.length - 1 && !archorTime) {
-      setTimeout(() => {
-        lenis.scrollTo(st.end, { immediate: true });
-      }, 1000);
+      lenis.scrollTo(st.end - 300, { immediate: true });
       LeaveBack = true;
 
       setTimeout(() => {
         st.scroll(st.end);
-      }, 1100);
+      }, 1000);
     }
 
-    // *** Если уезжаем с конца обратно на 0 — докручиваем начало
     if (i === 0 && LeaveBack && !archorTime && typeof lenis !== 'undefined') {
       LeaveBack = false;
-      setTimeout(() => {
-        lenis.scrollTo(st.start, { immediate: true });
-      }, 1000);
+        lenis.scrollTo(st.start + 300, { immediate: true });
 
       setTimeout(() => {
         st.scroll(st.start);
-      }, 1100);
+      }, 1000);
     }
   }
 
