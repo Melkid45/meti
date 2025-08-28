@@ -472,22 +472,61 @@ const timeOutShape = isFullEffect ? 400 : 200;
       });
     }
 
+    // *** Если переходим на последний слайд — докручиваем pin LENIS'ом (параллельно)
     if (i === items.length - 1 && !archorTime) {
-      lenis.scrollTo(st.end - 300, { immediate: true });
+      // Временно отключаем Lenis для этой секции
+      if (typeof lenis !== 'undefined') {
+        lenis.options.gestureOrientation = 'vertical';
+        lenis.options.wheelMultiplier = 0; // Отключаем колесо
+        lenis.options.touchMultiplier = 0; // Отключаем тач
+      }
+
+      setTimeout(() => {
+        if (typeof lenis !== 'undefined') {
+          lenis.scrollTo(st.end, {
+            immediate: true,
+            lock: true // Блокируем дальнейшую прокрутку
+          });
+        }
+      }, 1000);
+
       LeaveBack = true;
 
       setTimeout(() => {
         st.scroll(st.end);
-      }, 1000);
+        // Восстанавливаем Lenis после завершения
+        if (typeof lenis !== 'undefined') {
+          setTimeout(() => {
+            lenis.options.wheelMultiplier = 1;
+            lenis.options.touchMultiplier = 1;
+          }, 1200);
+        }
+      }, 1100);
     }
 
+    // *** Если уезжаем с конца обратно на 0 — докручиваем начало
     if (i === 0 && LeaveBack && !archorTime && typeof lenis !== 'undefined') {
       LeaveBack = false;
-        lenis.scrollTo(st.start + 300, { immediate: true });
+
+      // Временно отключаем Lenis
+      lenis.options.wheelMultiplier = 0;
+      lenis.options.touchMultiplier = 0;
+
+      setTimeout(() => {
+        lenis.scrollTo(st.start, {
+          immediate: true,
+          lock: true
+        });
+      }, 1000);
 
       setTimeout(() => {
         st.scroll(st.start);
-      }, 1000);
+        // Восстанавливаем Lenis
+        setTimeout(() => {
+          lenis.options.wheelMultiplier = 1;
+          lenis.options.touchMultiplier = 1;
+        }, 1200);
+      }, 1100);
     }
   }
 
