@@ -1,3 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === shuffleLetters === */
 $.fn.shuffleLetters = function (options) {
   const settings = $.extend({
     step: 8,
@@ -134,8 +148,10 @@ $.fn.shuffleLetters = function (options) {
   });
 };
 
+/* === main carousel/grid script === */
 const isFullEffect = window.innerWidth > 750;
 const timeOutShape = isFullEffect ? 400 : 200;
+
 (function () {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -161,16 +177,18 @@ const timeOutShape = isFullEffect ? 400 : 200;
     arrow: [[1, 12], [1, 11], [1, 10], [2, 9], [3, 8], [4, 7], [5, 6], [6, 5], [7, 4], [8, 3], [9, 2], [10, 1], [12, 1], [11, 0], [13, 2], [12, 3], [11, 4], [10, 5], [9, 6], [8, 7], [7, 8], [6, 9], [5, 10], [4, 11], [3, 12], [2, 12], [3, 10], [10, 3]]
   };
 
+  // ---------- элементы ----------
   const items = Array.from(document.querySelectorAll('.items__line .item'));
   const $titles = $('.items__line .item h3');
   const wrapper = document.querySelector('.wrapper');
   const itemsLine = document.querySelector('.items__line');
 
-  let total = $('.items__line .item').length;
+  if (!items || items.length === 0) return;
+
+  let total = items.length;
   $('.items__line .item').each(function () {
     $(this).find('.total-slides').text(`0${total}`);
   });
-  if (!items || items.length === 0) return;
 
   const itemShapes = items.map(item => item.dataset.item);
   const svgGrids = [];
@@ -280,47 +298,100 @@ const timeOutShape = isFullEffect ? 400 : 200;
       stagger: { each: 0.03, from: 'center', grid: [GRID_SIZE, GRID_SIZE] }
     });
   }
+
   const scroller = document.scrollingElement || document.documentElement;
   const pager = {
     index: 0,
     animating: false,
     steps: itemShapes.length - 1
   };
-  let animationComplete = false;
   let ActiveIndex;
+  let LeaveBack = false;
+
   drawShape(itemShapes[0], 0);
   let currentActiveIndex = -1;
+
+  // ---------- helpers ----------
+  function blockTouchEvents(block) {
+    if (block) {
+      document.addEventListener('touchmove', preventDefault, { passive: false });
+      document.addEventListener('touchstart', preventDefault, { passive: false });
+    } else {
+      document.removeEventListener('touchmove', preventDefault);
+      document.removeEventListener('touchstart', preventDefault);
+    }
+  }
+  function preventDefault(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+
+  // *** Section presence check — более надёжно для тач/lenis
+  function sectionInView() {
+    const section = document.querySelector('.services__new');
+    if (!section) return false;
+    const r = section.getBoundingClientRect();
+    return (r.top < window.innerHeight && r.bottom > 0);
+  }
+
+  // get numeric current scroll (lenis or window)
+  function getCurrentScroll() {
+    if (typeof lenis !== 'undefined' && typeof lenis.scroll === 'number') return lenis.scroll;
+    return window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+  }
+
+  // wait for automatic scrolling to finish (non-blocking in UI)
+  function waitForScrollFinish(target, maxTime = 2000) {
+    const start = performance.now();
+    return new Promise(resolve => {
+      function check() {
+        const cur = getCurrentScroll();
+        if (Math.abs(cur - target) < 2) return resolve();
+        if (performance.now() - start > maxTime) return resolve();
+        requestAnimationFrame(check);
+      }
+      requestAnimationFrame(check);
+    });
+  }
+
+  // ---------- ScrollTrigger (scrub true) ----------
   const st = ScrollTrigger.create({
     trigger: ".services__new",
     start: "top -5.5%",
     end: `+=${(itemShapes.length) * wrapper.clientHeight * 10}`,
     pin: true,
-    scrub: false,
-    PinType: "transform",
-    paused: true,
+    scrub: true,
+    pinType: "transform",
     onUpdate: self => {
       const progress = self.progress;
+
+      // *** CLIP-PATH: instant set (no tween) — убирает задержку
       items.forEach((item, index) => {
         const img = wrapperImages[index];
         if (!img) return;
         const itemRect = item.getBoundingClientRect();
         const wrapperRect = wrapper.getBoundingClientRect();
+
         const intersectionStart = wrapperRect.bottom - itemRect.top;
         const intersectionEnd = wrapperRect.top - itemRect.bottom;
 
         let animProgress = 0;
         if (intersectionStart > 0 && intersectionEnd < 0) {
-          const visibleHeight = wrapperRect.height * ANIMATION_SETTINGS.endOffset -
+          const visibleHeight =
+            wrapperRect.height * ANIMATION_SETTINGS.endOffset -
             wrapperRect.height * ANIMATION_SETTINGS.startOffset;
-          animProgress = (intersectionStart - wrapperRect.height * ANIMATION_SETTINGS.startOffset) / (visibleHeight || 1);
+          animProgress =
+            (intersectionStart - wrapperRect.height * ANIMATION_SETTINGS.startOffset) /
+            (visibleHeight || 1);
           animProgress = Math.min(1, Math.max(0, animProgress));
         }
-        gsap.to(img, {
-          clipPath: `inset(${100 - animProgress * 100}% 0 0 0)`,
-          duration: 0.12,
-          overwrite: true
-        });
+
+        // *** FIX: устанавливаем мгновенно, без создания tween'ов
+        img.style.clipPath = `inset(${100 - animProgress * 100}% 0 0 0)`;
       });
+
+      // оставляем твою логику автомата по прогрессу (archorTime — у тебя глобально)
       if (!pager.animating && archorTime) {
         const targetIndex = Math.min(Math.floor(progress * (pager.steps + 1)), pager.steps);
         if (targetIndex == items.length - 1) {
@@ -333,91 +404,44 @@ const timeOutShape = isFullEffect ? 400 : 200;
     },
   });
 
-
-  function blockTouchEvents(block) {
-    if (block) {
-      document.addEventListener('touchmove', preventDefault, { passive: false });
-      document.addEventListener('touchstart', preventDefault, { passive: false });
-    } else {
-      document.removeEventListener('touchmove', preventDefault);
-      document.removeEventListener('touchstart', preventDefault);
+  // общий RAF для lenis + GSAP (синхронизация)
+  function raf(time) {
+    if (typeof lenis !== 'undefined' && typeof lenis.raf === 'function') {
+      lenis.raf(time);
     }
+    ScrollTrigger.update();
+    requestAnimationFrame(raf);
   }
+  requestAnimationFrame(raf);
 
-  function preventDefault(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  }
-
-
+  // ---------- navigation / goToIndex ----------
   let touchStartY = 0;
   let touchDeltaY = 0;
   let wheelDelta = 0;
 
-  function sectionInView() {
-    const y = scroller.scrollTop;
-    return y >= st.start && y <= st.end;
-  }
-
   function indexToScrollTop(i) {
     const clamped = Math.max(0, Math.min(pager.steps, i));
     const progress = clamped / pager.steps;
-    return st.start + progress * (st.end - st.start);
+    // корректно получить числовые значения start/end если доступны
+    const numericStart = (typeof st.start === 'number') ? st.start : window.scrollY;
+    const numericEnd = (typeof st.end === 'number') ? st.end : (numericStart + (itemShapes.length) * wrapper.clientHeight * 10);
+    return numericStart + progress * (numericEnd - numericStart);
   }
-  let LeaveBack = false;
-  function goToIndex(i, opts = {}) {
+
+  async function goToIndex(i, opts = {}) {
     if (pager.animating) return;
+
     const targetIndex = Math.max(0, Math.min(i, pager.steps));
     pager.index = targetIndex;
     pager.animating = true;
     wheelDelta = 0;
+
     const wrapperH = wrapper.clientHeight;
     const targetY = -targetIndex * wrapperH;
     ActiveIndex = i;
-    if (i == items.length - 1 && !archorTime) {
-      let end = st.end
-      setTimeout(() => {
-        lenis.scrollTo(end, {
-          immediate: true
-        });
 
-        lenis.emit();
-        lenis.resize();
-        lenis.raf(0);
-
-        lenis.stop();
-        blockTouchEvents(true);
-
-        setTimeout(() => {
-          lenis.start();
-          blockTouchEvents(false);
-        }, 300);
-      }, 1000);
-
-      LeaveBack = true;
-    }
-    if (i == 0 && LeaveBack && !archorTime) {
-      let start = st.start
-      setTimeout(() => {
-        lenis.scrollTo(start, {
-          immediate: true
-        });
-
-        lenis.emit();
-        lenis.resize();
-        lenis.raf(0);
-
-        lenis.stop();
-        blockTouchEvents(true);
-
-        setTimeout(() => {
-          lenis.start();
-          blockTouchEvents(false);
-        }, 300);
-      }, 1000);
-      LeaveBack = false;
-    }
+    // *** ВАЖНО: сначала анимируем визуально itemsLine (быстро и сразу),
+    // затем запускаем Lenis прокрутку параллельно — это убирает "зависание"
     gsap.to(itemsLine, {
       y: targetY,
       duration: opts.duration ?? 0.8,
@@ -433,9 +457,12 @@ const timeOutShape = isFullEffect ? 400 : 200;
         }
       },
     });
+
+    // запускаем отрисовку фигуры и эффекты
     setTimeout(() => {
       drawShape(itemShapes[targetIndex], targetIndex);
     }, timeOutShape);
+
     if ($titles && $titles.eq(targetIndex).length) {
       $titles.eq(targetIndex).shuffleLetters({
         step: 5,
@@ -444,10 +471,38 @@ const timeOutShape = isFullEffect ? 400 : 200;
         duration: 700
       });
     }
+
+    // *** Если переходим на последний слайд — докручиваем pin LENIS'ом (параллельно)
+    if (i === items.length - 1 && !archorTime) {
+      setTimeout(() => {
+        lenis.scrollTo(st.end, { immediate: true });
+      }, 1000);
+      LeaveBack = true;
+
+      setTimeout(() => {
+        st.scroll(st.end);
+      }, 1100);
+    }
+
+    // *** Если уезжаем с конца обратно на 0 — докручиваем начало
+    if (i === 0 && LeaveBack && !archorTime && typeof lenis !== 'undefined') {
+      LeaveBack = false;
+      setTimeout(() => {
+        lenis.scrollTo(st.start, { immediate: true });
+      }, 1000);
+
+      setTimeout(() => {
+        st.scroll(st.start);
+      }, 1100);
+    }
   }
 
+  // ---------- input handlers ----------
   function onWheel(e) {
     if (!sectionInView() || pager.animating) return;
+
+    // новая проверка: pin активен?
+    if (!st.isActive) return;
 
     const atStart = pager.index === 0;
     const atEnd = pager.index === pager.steps;
@@ -462,19 +517,24 @@ const timeOutShape = isFullEffect ? 400 : 200;
     if (wheelDelta >= threshold) goToIndex(pager.index + 1);
     else if (wheelDelta <= -threshold) goToIndex(pager.index - 1);
   }
-
   function onTouchStart(e) {
+    if (!st.isActive) return;
+
     touchStartY = e.touches[0].clientY;
     touchDeltaY = 0;
   }
-
   function onTouchMove(e) {
+    if (!st.isActive) return; // секция не закреплена — игнорируем
+
     touchDeltaY = e.touches[0].clientY - touchStartY;
-    e.preventDefault();
+    e.preventDefault(); // чтобы не дергало страницу
   }
 
   function onTouchEnd() {
     if (!sectionInView() || pager.animating) return;
+
+    // новая проверка: pin активен?
+    if (!st.isActive) return;
 
     const atStart = pager.index === 0;
     const atEnd = pager.index === pager.steps;
@@ -489,6 +549,9 @@ const timeOutShape = isFullEffect ? 400 : 200;
   function onKeyDown(e) {
     if (!sectionInView() || pager.animating) return;
 
+    // новая проверка: pin активен?
+    if (!st.isActive) return;
+
     const atStart = pager.index === 0;
     const atEnd = pager.index === pager.steps;
 
@@ -501,22 +564,27 @@ const timeOutShape = isFullEffect ? 400 : 200;
     e.preventDefault();
   }
 
+
   function onResizeRecalc() {
     if (!sectionInView()) return;
     goToIndex(pager.index, { duration: 0.001, ease: "none" });
   }
 
-  window.addEventListener('wheel', onWheel, { passive: false });
-  window.addEventListener('touchstart', onTouchStart, { passive: false });
-  window.addEventListener('touchmove', onTouchMove, { passive: false });
-  window.addEventListener('touchend', onTouchEnd, { passive: false });
-  window.addEventListener('keydown', onKeyDown);
+  // ---------- listeners ----------
+  const section = document.querySelector(".services__new");
+
+  section.addEventListener('wheel', onWheel, { passive: false });
+  section.addEventListener('touchstart', onTouchStart, { passive: false });
+  section.addEventListener('touchmove', onTouchMove, { passive: false });
+  section.addEventListener('touchend', onTouchEnd, { passive: false });
+  section.addEventListener('keydown', onKeyDown);
   window.addEventListener('resize', () => ScrollTrigger.refresh());
   ScrollTrigger.addEventListener("refreshInit", () => {
     if (pager.animating) gsap.killTweensOf(scroller);
   });
   ScrollTrigger.addEventListener("refresh", onResizeRecalc);
 
+  // стартовая инициализация прогресса
   setTimeout(() => {
     if (sectionInView()) {
       const progress = st.progress;
@@ -526,11 +594,4 @@ const timeOutShape = isFullEffect ? 400 : 200;
     }
   }, 0);
 
-
 })();
-
-
-
-
-
-
