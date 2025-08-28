@@ -491,12 +491,17 @@ document.addEventListener('DOMContentLoaded', () => {
       masterTl.kill();
       masterTl = null;
     }
-
+    let formula;
+    if (isFullEffect) {
+      formula = (window.innerHeight * (visibleItems.length - 1)) / 2;
+    } else {
+      formula = (window.innerHeight * (visibleItems.length - 1)) * 3;
+    }
     masterTl = gsap.timeline({
       scrollTrigger: {
         trigger: ".case",
         start: "top top",
-        end: () => `+=${window.innerHeight * (visibleItems.length - 1)}`,
+        end: () => `+=${formula}`,
         scrub: 0.5,
         pin: true,
         onUpdate: (self) => {
@@ -509,8 +514,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     setTimeout(() => {
-      Position = masterTl.scrollTrigger.end;
-    }, 100);
+      lenis.emit();
+      lenis.resize();
+      lenis.raf(0);
+    }, 300);
     visibleItems.forEach((item, i) => {
       const effect = effects.find(e => e.media === item.querySelector('.media'));
       // if (!effect || effect.isAnimated) return;
@@ -519,12 +526,12 @@ document.addEventListener('DOMContentLoaded', () => {
       let moveY = 0;
       if (item.classList.contains('small_case')) {
         moveY = -260;
-      }else {
+      } else {
         moveY = -220;
       }
       const duration = 1;
       const pixelDur = 0.5;
-      const stagger = isFullEffect ? 0.2 : 0.3;
+      const stagger = isFullEffect ? 0.2 : 0.4;
 
       if (!isFullEffect) moveY = -240;
       if (window.innerWidth < 500) moveY = -250;
@@ -562,30 +569,38 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastScrollPosition = 0;
   let Position = 0;
   let count = 0;
+
   loadMoreBtn.addEventListener('click', () => {
     count++;
     if (isMobile) {
       // Сохраняем текущую позицию скролла ДО добавления элементов
       const currentScroll = lenis.scroll;
-
       visibleItemsCount += ITEMS_PER_PAGE;
       initItemsVisibility();
       initAllEffects();
 
-      lenis.emit();
-      lenis.resize();
-      lenis.raf(0);
-      const visibleItems = container.querySelectorAll('.item--visible');
-      const firstNewItemIndex = visibleItemsCount - ITEMS_PER_PAGE;
-      const firstNewItem = visibleItems[firstNewItemIndex];
-      if (firstNewItem) {
-        const itemRect = firstNewItem.getBoundingClientRect();
-        const scrollToPosition = currentScroll + itemRect.top - 100;
-        lenis.scrollTo(scrollToPosition, {
-          duration: 1.2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        });
-      }
+      // Ждем обновления DOM и пересчета позиций
+      setTimeout(() => {
+        const visibleItems = container.querySelectorAll('.item--visible');
+        const firstNewItemIndex = visibleItemsCount - ITEMS_PER_PAGE;
+        const firstNewItem = visibleItems[firstNewItemIndex];
+
+        if (firstNewItem) {
+          // Получаем позицию элемента относительно документа
+          const itemRect = firstNewItem.getBoundingClientRect();
+          const itemTop = itemRect.top + window.pageYOffset + 4000;
+
+          // Скроллим к элементу с небольшим отступом сверху
+          lenis.scrollTo(itemTop, {
+            immimmediate: true
+          });
+        }
+
+        // Обновляем счетчик
+        const ShadowItems = allItems.length - visibleItemsCount;
+        $('.case-count').text(`[${ShadowItems}]`);
+
+      }, 0);
     }
   });
 

@@ -1,5 +1,5 @@
 let width = $(window).width()
-if (width <= 750){
+if (width <= 820){
     $('.header__body-menu').remove()
     $('.about-p1').remove()
     $('.difference-desk').remove()

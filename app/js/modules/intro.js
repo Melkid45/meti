@@ -106,11 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .on("progress", (e) => {
             const filledCount = Math.floor(e.progress * grid.length);
             updateGrid(filledCount);
-            if (e.progress >= 0.90) {
-                canvas.style.background = '#000'
-            } else {
-                canvas.style.background = 'transparent'
-            }
         })
         .addTo(controller);
     initGrid();

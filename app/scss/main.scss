@@ -294,7 +294,8 @@
 
 .services__new {
     width: 100%;
-
+    touch-action: none;
+    overscroll-behavior: contain;
     &__body {
         display: flex;
         flex-direction: column;

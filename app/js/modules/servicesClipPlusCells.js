@@ -361,8 +361,8 @@ const timeOutShape = isFullEffect ? 400 : 200;
     start: "top -5.5%",
     end: `+=${(itemShapes.length) * wrapper.clientHeight * 10}`,
     pin: true,
-    scrub: true,
-    pinType: "transform",
+    scrub: false,
+    pinType: "fixed",
     onUpdate: self => {
       const progress = self.progress;
 
@@ -532,19 +532,17 @@ const timeOutShape = isFullEffect ? 400 : 200;
 
   function onTouchEnd() {
     if (!sectionInView() || pager.animating) return;
-
-    // новая проверка: pin активен?
     if (!st.isActive) return;
 
-    const atStart = pager.index === 0;
-    const atEnd = pager.index === pager.steps;
     const threshold = 40;
-
-    if ((atStart && touchDeltaY > threshold) || (atEnd && touchDeltaY < -threshold)) return;
 
     if (touchDeltaY < -threshold) goToIndex(pager.index + 1);
     else if (touchDeltaY > threshold) goToIndex(pager.index - 1);
+    else {
+      goToIndex(pager.index);
+    }
   }
+
 
   function onKeyDown(e) {
     if (!sectionInView() || pager.animating) return;
