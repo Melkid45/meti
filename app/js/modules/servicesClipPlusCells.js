@@ -472,20 +472,42 @@ const timeOutShape = isFullEffect ? 400 : 200;
       });
     }
 
-    // *** Если переходим на последний слайд — докручиваем pin LENIS'ом (параллельно)
-    if (i === items.length - 1 && !archorTime) {
-      // Временно отключаем Lenis для этой секции
-      if (typeof lenis !== 'undefined') {
-        lenis.options.gestureOrientation = 'vertical';
-        lenis.options.wheelMultiplier = 0; // Отключаем колесо
-        lenis.options.touchMultiplier = 0; // Отключаем тач
+    // Добавьте глобальную переменную для отслеживания состояния
+    let isLenisPaused = false;
+
+    // Функция для безопасного управления Lenis
+    function manageLenis(action) {
+      if (typeof lenis === 'undefined') return;
+
+      switch (action) {
+        case 'pause':
+          if (!isLenisPaused) {
+            lenis.stop();
+            lenis.options.wheelMultiplier = 0;
+            lenis.options.touchMultiplier = 0;
+            isLenisPaused = true;
+          }
+          break;
+        case 'resume':
+          if (isLenisPaused) {
+            lenis.start();
+            lenis.options.wheelMultiplier = 1;
+            lenis.options.touchMultiplier = 1;
+            isLenisPaused = false;
+          }
+          break;
       }
+    }
+
+    // Обновите логику скролла
+    if (i === items.length - 1 && !archorTime) {
+      manageLenis('pause');
 
       setTimeout(() => {
         if (typeof lenis !== 'undefined') {
           lenis.scrollTo(st.end, {
             immediate: true,
-            lock: true // Блокируем дальнейшую прокрутку
+            lock: true
           });
         }
       }, 1000);
@@ -494,38 +516,27 @@ const timeOutShape = isFullEffect ? 400 : 200;
 
       setTimeout(() => {
         st.scroll(st.end);
-        // Восстанавливаем Lenis после завершения
-        if (typeof lenis !== 'undefined') {
-          setTimeout(() => {
-            lenis.options.wheelMultiplier = 1;
-            lenis.options.touchMultiplier = 1;
-          }, 1200);
-        }
+        // Возобновляем через короткое время
+        setTimeout(() => manageLenis('resume'), 500);
       }, 1100);
     }
-
-    // *** Если уезжаем с конца обратно на 0 — докручиваем начало
-    if (i === 0 && LeaveBack && !archorTime && typeof lenis !== 'undefined') {
+    if (i === 0 && LeaveBack && !archorTime) {
+      manageLenis('pause');
       LeaveBack = false;
-
-      // Временно отключаем Lenis
-      lenis.options.wheelMultiplier = 0;
-      lenis.options.touchMultiplier = 0;
-
       setTimeout(() => {
-        lenis.scrollTo(st.start, {
-          immediate: true,
-          lock: true
-        });
+        if (typeof lenis !== 'undefined') {
+          lenis.scrollTo(st.start, {
+            immediate: true,
+            lock: true
+          });
+        }
       }, 1000);
+
 
       setTimeout(() => {
         st.scroll(st.start);
-        // Восстанавливаем Lenis
-        setTimeout(() => {
-          lenis.options.wheelMultiplier = 1;
-          lenis.options.touchMultiplier = 1;
-        }, 1200);
+        // Возобновляем через короткое время
+        setTimeout(() => manageLenis('resume'), 500);
       }, 1100);
     }
   }
