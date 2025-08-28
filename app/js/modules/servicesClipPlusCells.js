@@ -429,8 +429,7 @@ const timeOutShape = isFullEffect ? 400 : 200;
   }
 
   async function goToIndex(i, opts = {}) {
-    if (pager.animating) return;
-
+    if (pager.animating || ActiveIndex == i) return;
     const targetIndex = Math.max(0, Math.min(i, pager.steps));
     pager.index = targetIndex;
     pager.animating = true;
@@ -439,7 +438,7 @@ const timeOutShape = isFullEffect ? 400 : 200;
     const wrapperH = wrapper.clientHeight;
     const targetY = -targetIndex * wrapperH;
     ActiveIndex = i;
-
+    console.log(i)
     // *** ВАЖНО: сначала анимируем визуально itemsLine (быстро и сразу),
     // затем запускаем Lenis прокрутку параллельно — это убирает "зависание"
     gsap.to(itemsLine, {
@@ -472,71 +471,27 @@ const timeOutShape = isFullEffect ? 400 : 200;
       });
     }
 
-    // Добавьте глобальную переменную для отслеживания состояния
-    let isLenisPaused = false;
-
-    // Функция для безопасного управления Lenis
-    function manageLenis(action) {
-      if (typeof lenis === 'undefined') return;
-
-      switch (action) {
-        case 'pause':
-          if (!isLenisPaused) {
-            lenis.stop();
-            lenis.options.wheelMultiplier = 0;
-            lenis.options.touchMultiplier = 0;
-            isLenisPaused = true;
-          }
-          break;
-        case 'resume':
-          if (isLenisPaused) {
-            lenis.start();
-            lenis.options.wheelMultiplier = 1;
-            lenis.options.touchMultiplier = 1;
-            isLenisPaused = false;
-          }
-          break;
-      }
-    }
-
-    // Обновите логику скролла
+    // *** Если переходим на последний слайд — докручиваем pin LENIS'ом (параллельно)
     if (i === items.length - 1 && !archorTime) {
-      manageLenis('pause');
-
       setTimeout(() => {
-        if (typeof lenis !== 'undefined') {
-          lenis.scrollTo(st.end, {
-            immediate: true,
-            lock: true
-          });
-        }
+        lenis.scrollTo(st.end, { immediate: true });
       }, 1000);
-
       LeaveBack = true;
 
       setTimeout(() => {
         st.scroll(st.end);
-        // Возобновляем через короткое время
-        setTimeout(() => manageLenis('resume'), 500);
       }, 1100);
     }
-    if (i === 0 && LeaveBack && !archorTime) {
-      manageLenis('pause');
+
+    // *** Если уезжаем с конца обратно на 0 — докручиваем начало
+    if (i === 0 && LeaveBack && !archorTime && typeof lenis !== 'undefined') {
       LeaveBack = false;
       setTimeout(() => {
-        if (typeof lenis !== 'undefined') {
-          lenis.scrollTo(st.start, {
-            immediate: true,
-            lock: true
-          });
-        }
+        lenis.scrollTo(st.start, { immediate: true });
       }, 1000);
-
 
       setTimeout(() => {
         st.scroll(st.start);
-        // Возобновляем через короткое время
-        setTimeout(() => manageLenis('resume'), 500);
       }, 1100);
     }
   }
