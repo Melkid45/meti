@@ -127,17 +127,4 @@ if (document.querySelector('.splide')) {
     splide.mount();
 }
 
-let allowInstantScroll = true
 
-lenis.on('scroll', () => {
-    allowInstantScroll = false
-})
-
-if (window.location.hash && allowInstantScroll) {
-    const target = document.querySelector(window.location.hash)
-    if (target) {
-        lenis.stop()
-        window.scrollTo(0, target.offsetTop)
-        setTimeout(() => lenis.start(), 3000)
-    }
-}

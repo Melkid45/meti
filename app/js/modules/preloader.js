@@ -21,13 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
     const logo = preloadContainer.querySelector('img');
     const progressText = document.querySelector('#js-cursor-progress span');
-    const body = document.body;
-    const logoHeader = document.querySelector('.header__body-logo');
     let grid = [];
     let animationFrame;
     let startTime;
     let initialLogoPosition = { x: 0, y: 0 };
-    let isPageFullyLoaded = false;
+    let isPriorityVideoLoaded = false;
 
     function initGrid() {
         canvas.width = window.innerWidth;
@@ -157,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startAnimation() {
-        if (!isPageFullyLoaded) return;
+        if (!isPriorityVideoLoaded) return;
 
         const centerX = (window.innerWidth - logo.offsetWidth) / 2;
         const centerY = (window.innerHeight - logo.offsetHeight) / 2;
@@ -172,43 +170,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }, CONFIG.animationDelay);
     }
 
-    function checkPageLoadStatus() {
-        if (document.readyState === 'complete') {
-            const images = document.querySelectorAll('img');
-            const videos = document.querySelectorAll('video');
-            const iframes = document.querySelectorAll('iframe');
-
-            let allResourcesLoaded = true;
-
-            images.forEach(img => {
-                if (!img.complete) allResourcesLoaded = false;
-            });
-
-            const MainVideo = document.querySelector('.priority-video');
-            if (MainVideo && MainVideo.readyState !== 4) {
-                allResourcesLoaded = false;
-            }
-
-            videos.forEach(video => {
-                if (video.readyState !== 4) allResourcesLoaded = false;
-            });
-
-            if (allResourcesLoaded) {
-                isPageFullyLoaded = true;
+    function checkPriorityVideoLoad() {
+        const priorityVideo = document.querySelector('.priority-video');
+        
+        if (priorityVideo) {
+            if (priorityVideo.readyState === 4) {
+                isPriorityVideoLoaded = true;
                 startAnimation();
             } else {
-                setTimeout(checkPageLoadStatus, 100);
+                priorityVideo.addEventListener('loadeddata', () => {
+                    isPriorityVideoLoaded = true;
+                    startAnimation();
+                });
+                
+                priorityVideo.addEventListener('error', () => {
+                    console.warn('Priority video failed to load, starting animation anyway');
+                    isPriorityVideoLoaded = true;
+                    startAnimation();
+                });
+                
+                setTimeout(() => {
+                    if (!isPriorityVideoLoaded) {
+                        console.warn('Priority video loading timeout, starting animation');
+                        isPriorityVideoLoaded = true;
+                        startAnimation();
+                    }
+                }, 5000);
             }
+        } else {
+            console.warn('Priority video not found, starting animation');
+            isPriorityVideoLoaded = true;
+            startAnimation();
         }
     }
 
     initGrid();
 
-    if (document.readyState === 'complete') {
-        checkPageLoadStatus();
-    } else {
-        window.addEventListener('load', checkPageLoadStatus);
-    }
+    checkPriorityVideoLoad();
 
     window.addEventListener('resize', () => {
         if (animationFrame) {
