@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
+let currentScroll;
 let lenis = new Lenis({
     lerp: 0.1,
     smoothWheel: true,
@@ -46,7 +46,7 @@ if ($(window).width() > 750) {
 
     lenis.on('scroll', ({ scroll }) => {
         ScrollTrigger.update()
-        const currentScroll = scroll;
+        currentScroll = scroll;
         const header = document.querySelector('.header');
 
         if (Math.abs(currentScroll - lastScrollTop) > scrollThreshold) {
@@ -59,6 +59,11 @@ if ($(window).width() > 750) {
         } else {
             header.classList.remove('back');
         }
+    });
+} else {
+    lenis.on('scroll', ({ scroll }) => {
+        ScrollTrigger.update()
+        currentScroll = scroll;
     });
 }
 
@@ -83,8 +88,8 @@ window.addEventListener('load', () => {
     ScrollTrigger.refresh();
     lenis.scrollTo(0);
     lenis.emit();
-    lenis.resize(); 
-    lenis.raf(0); 
+    lenis.resize();
+    lenis.raf(0);
     setTimeout(() => {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', (e) => {

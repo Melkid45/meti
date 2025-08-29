@@ -1,7 +1,3 @@
-let MainVideo = document.querySelector('.priority-video')
-if (MainVideo.readyState === 4){
-    console.log('ready')
-}
 document.addEventListener('DOMContentLoaded', () => {
     const CONFIG = {
         squareSize: 54,
@@ -14,9 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
         targetLogoPosition: { x: 40, y: 53 },
         sizeLogo: { width: 200, height: 50 }
     };
+
+    const width = window.innerWidth;
     if (width <= 750) {
         CONFIG.squareSize = 20;
     }
+
     const preloadContainer = document.querySelector('.preload-container');
     const canvas = document.querySelector('.preload-canvas');
     const ctx = canvas.getContext('2d');
@@ -28,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let animationFrame;
     let startTime;
     let initialLogoPosition = { x: 0, y: 0 };
+    let isPageFullyLoaded = false;
+
     function initGrid() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             [grid[i], grid[j]] = [grid[j], grid[i]];
         }
     }
+
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -109,14 +111,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const progress = Math.min(elapsed / CONFIG.fadeDuration, 1);
         const logoProgress = Math.min(elapsed / CONFIG.logoMoveDuration, 1);
         const easeOut = easeOutCubic(logoProgress);
+
         setTimeout(() => {
             logo.animate({
                 opacity: 0
             }, 1000)
         }, 1500);
+
         setTimeout(() => {
             $('.main__body .stroke div').addClass('anim_stroke')
         }, 2000);
+
         const squaresToFade = Math.floor(progress * grid.length);
         for (let i = 0; i < squaresToFade; i++) {
             if (i < grid.length) {
@@ -124,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 grid[i].alpha = 1 - progress;
             }
         }
+
         if (progressText.parentElement) {
             progressText.parentElement.style.opacity = 1 - progress;
         }
@@ -151,23 +157,63 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startAnimation() {
+        if (!isPageFullyLoaded) return;
+
         const centerX = (window.innerWidth - logo.offsetWidth) / 2;
         const centerY = (window.innerHeight - logo.offsetHeight) / 2;
         initialLogoPosition = {
             x: centerX / parseFloat(getComputedStyle(document.documentElement).fontSize),
             y: centerY / parseFloat(getComputedStyle(document.documentElement).fontSize)
         };
+
         setTimeout(() => {
             startTime = null;
             animationFrame = requestAnimationFrame(animateFill);
         }, CONFIG.animationDelay);
     }
 
+    function checkPageLoadStatus() {
+        if (document.readyState === 'complete') {
+            const images = document.querySelectorAll('img');
+            const videos = document.querySelectorAll('video');
+            const iframes = document.querySelectorAll('iframe');
+
+            let allResourcesLoaded = true;
+
+            images.forEach(img => {
+                if (!img.complete) allResourcesLoaded = false;
+            });
+
+            const MainVideo = document.querySelector('.priority-video');
+            if (MainVideo && MainVideo.readyState !== 4) {
+                allResourcesLoaded = false;
+            }
+
+            videos.forEach(video => {
+                if (video.readyState !== 4) allResourcesLoaded = false;
+            });
+
+            if (allResourcesLoaded) {
+                isPageFullyLoaded = true;
+                startAnimation();
+            } else {
+                setTimeout(checkPageLoadStatus, 100);
+            }
+        }
+    }
+
     initGrid();
-    startAnimation();
+
+    if (document.readyState === 'complete') {
+        checkPageLoadStatus();
+    } else {
+        window.addEventListener('load', checkPageLoadStatus);
+    }
 
     window.addEventListener('resize', () => {
-        cancelAnimationFrame(animationFrame);
+        if (animationFrame) {
+            cancelAnimationFrame(animationFrame);
+        }
         initGrid();
         draw();
     });

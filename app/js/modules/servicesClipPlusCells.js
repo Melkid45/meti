@@ -177,7 +177,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
     arrow: [[1, 12], [1, 11], [1, 10], [2, 9], [3, 8], [4, 7], [5, 6], [6, 5], [7, 4], [8, 3], [9, 2], [10, 1], [12, 1], [11, 0], [13, 2], [12, 3], [11, 4], [10, 5], [9, 6], [8, 7], [7, 8], [6, 9], [5, 10], [4, 11], [3, 12], [2, 12], [3, 10], [10, 3]]
   };
 
-  // ---------- элементы ----------
   const items = Array.from(document.querySelectorAll('.items__line .item'));
   const $titles = $('.items__line .item h3');
   const wrapper = document.querySelector('.wrapper');
@@ -311,7 +310,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
   drawShape(itemShapes[0], 0);
   let currentActiveIndex = -1;
 
-  // ---------- helpers ----------
   function blockTouchEvents(block) {
     if (block) {
       document.addEventListener('touchmove', preventDefault, { passive: false });
@@ -327,7 +325,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
     return false;
   }
 
-  // *** Section presence check — более надёжно для тач/lenis
   function sectionInView() {
     const section = document.querySelector('.services__new');
     if (!section) return false;
@@ -335,13 +332,11 @@ const timeOutShape = isFullEffect ? 400 : 200;
     return (r.top < window.innerHeight && r.bottom > 0);
   }
 
-  // get numeric current scroll (lenis or window)
   function getCurrentScroll() {
     if (typeof lenis !== 'undefined' && typeof lenis.scroll === 'number') return lenis.scroll;
     return window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
   }
 
-  // wait for automatic scrolling to finish (non-blocking in UI)
   function waitForScrollFinish(target, maxTime = 2000) {
     const start = performance.now();
     return new Promise(resolve => {
@@ -355,7 +350,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
     });
   }
 
-  // ---------- ScrollTrigger (scrub true) ----------
   const st = ScrollTrigger.create({
     trigger: ".services__new",
     start: "top -5.5%",
@@ -366,7 +360,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
     onUpdate: self => {
       const progress = self.progress;
 
-      // *** CLIP-PATH: instant set (no tween) — убирает задержку
       items.forEach((item, index) => {
         const img = wrapperImages[index];
         if (!img) return;
@@ -387,11 +380,9 @@ const timeOutShape = isFullEffect ? 400 : 200;
           animProgress = Math.min(1, Math.max(0, animProgress));
         }
 
-        // *** FIX: устанавливаем мгновенно, без создания tween'ов
         img.style.clipPath = `inset(${100 - animProgress * 100}% 0 0 0)`;
       });
 
-      // оставляем твою логику автомата по прогрессу (archorTime — у тебя глобально)
       if (!pager.animating && archorTime) {
         const targetIndex = Math.min(Math.floor(progress * (pager.steps + 1)), pager.steps);
         if (targetIndex == items.length - 1) {
@@ -404,7 +395,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
     },
   });
 
-  // общий RAF для lenis + GSAP (синхронизация)
   function raf(time) {
     if (typeof lenis !== 'undefined' && typeof lenis.raf === 'function') {
       lenis.raf(time);
@@ -414,7 +404,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
   }
   requestAnimationFrame(raf);
 
-  // ---------- navigation / goToIndex ----------
   let touchStartY = 0;
   let touchDeltaY = 0;
   let wheelDelta = 0;
@@ -422,7 +411,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
   function indexToScrollTop(i) {
     const clamped = Math.max(0, Math.min(pager.steps, i));
     const progress = clamped / pager.steps;
-    // корректно получить числовые значения start/end если доступны
     const numericStart = (typeof st.start === 'number') ? st.start : window.scrollY;
     const numericEnd = (typeof st.end === 'number') ? st.end : (numericStart + (itemShapes.length) * wrapper.clientHeight * 10);
     return numericStart + progress * (numericEnd - numericStart);
@@ -439,8 +427,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
     const targetY = -targetIndex * wrapperH;
     ActiveIndex = i;
     console.log(i)
-    // *** ВАЖНО: сначала анимируем визуально itemsLine (быстро и сразу),
-    // затем запускаем Lenis прокрутку параллельно — это убирает "зависание"
     gsap.to(itemsLine, {
       y: targetY,
       duration: opts.duration ?? 0.8,
@@ -456,8 +442,7 @@ const timeOutShape = isFullEffect ? 400 : 200;
         }
       },
     });
-
-    // запускаем отрисовку фигуры и эффекты
+    console.log(currentScroll)
     setTimeout(() => {
       drawShape(itemShapes[targetIndex], targetIndex);
     }, timeOutShape);
@@ -471,36 +456,40 @@ const timeOutShape = isFullEffect ? 400 : 200;
       });
     }
 
-    // *** Если переходим на последний слайд — докручиваем pin LENIS'ом (параллельно)
     if (i === items.length - 1 && !archorTime) {
       setTimeout(() => {
-        lenis.scrollTo(st.end, { immediate: true });
+        if (currentScroll <= st.end) {
+          lenis.scrollTo(st.end, { immediate: true });
+        }
       }, 1000);
       LeaveBack = true;
 
       setTimeout(() => {
-        st.scroll(st.end);
+        if (currentScroll <= st.end) {
+          st.scroll(st.end);
+        }
       }, 1100);
     }
 
-    // *** Если уезжаем с конца обратно на 0 — докручиваем начало
     if (i === 0 && LeaveBack && !archorTime && typeof lenis !== 'undefined') {
       LeaveBack = false;
       setTimeout(() => {
-        lenis.scrollTo(st.start, { immediate: true });
+        if (currentScroll >= st.start) {
+          lenis.scrollTo(st.start, { immediate: true });
+        }
       }, 1000);
 
       setTimeout(() => {
-        st.scroll(st.start);
+        if (currentScroll >= st.start) {
+          st.scroll(st.start);
+        }
       }, 1100);
     }
   }
 
-  // ---------- input handlers ----------
   function onWheel(e) {
     if (!sectionInView() || pager.animating) return;
 
-    // новая проверка: pin активен?
     if (!st.isActive) return;
 
     const atStart = pager.index === 0;
@@ -523,10 +512,10 @@ const timeOutShape = isFullEffect ? 400 : 200;
     touchDeltaY = 0;
   }
   function onTouchMove(e) {
-    if (!st.isActive) return; // секция не закреплена — игнорируем
+    if (!st.isActive) return;
 
     touchDeltaY = e.touches[0].clientY - touchStartY;
-    e.preventDefault(); // чтобы не дергало страницу
+    e.preventDefault();
   }
 
   function onTouchEnd() {
@@ -546,7 +535,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
   function onKeyDown(e) {
     if (!sectionInView() || pager.animating) return;
 
-    // новая проверка: pin активен?
     if (!st.isActive) return;
 
     const atStart = pager.index === 0;
@@ -567,7 +555,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
     goToIndex(pager.index, { duration: 0.001, ease: "none" });
   }
 
-  // ---------- listeners ----------
   const section = document.querySelector(".services__new");
 
   section.addEventListener('wheel', onWheel, { passive: false });
@@ -581,7 +568,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
   });
   ScrollTrigger.addEventListener("refresh", onResizeRecalc);
 
-  // стартовая инициализация прогресса
   setTimeout(() => {
     if (sectionInView()) {
       const progress = st.progress;

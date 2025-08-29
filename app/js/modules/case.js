@@ -531,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const duration = 1;
       const pixelDur = 0.5;
-      const stagger = isFullEffect ? 0.2 : 0.4;
+      const stagger = isFullEffect ? 0.2 : 0.6;
 
       if (!isFullEffect) moveY = -240;
       if (window.innerWidth < 500) moveY = -250;
@@ -540,7 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const tl = gsap.timeline()
         .fromTo(item,
-          { yPercent: 0, opacity: 1 },
+          { yPercent: 0, opacity: 1,  },
           { yPercent: moveY, opacity: 1, duration }
         )
         .to({ size: 40 }, {
@@ -573,30 +573,25 @@ document.addEventListener('DOMContentLoaded', () => {
   loadMoreBtn.addEventListener('click', () => {
     count++;
     if (isMobile) {
-      // Сохраняем текущую позицию скролла ДО добавления элементов
       const currentScroll = lenis.scroll;
       visibleItemsCount += ITEMS_PER_PAGE;
       initItemsVisibility();
       initAllEffects();
 
-      // Ждем обновления DOM и пересчета позиций
       setTimeout(() => {
         const visibleItems = container.querySelectorAll('.item--visible');
         const firstNewItemIndex = visibleItemsCount - ITEMS_PER_PAGE;
         const firstNewItem = visibleItems[firstNewItemIndex];
 
         if (firstNewItem) {
-          // Получаем позицию элемента относительно документа
           const itemRect = firstNewItem.getBoundingClientRect();
-          const itemTop = itemRect.top + window.pageYOffset + 4000;
+          const itemTop = itemRect.top + window.pageYOffset;
 
-          // Скроллим к элементу с небольшим отступом сверху
           lenis.scrollTo(itemTop, {
             immimmediate: true
           });
         }
 
-        // Обновляем счетчик
         const ShadowItems = allItems.length - visibleItemsCount;
         $('.case-count').text(`[${ShadowItems}]`);
 
