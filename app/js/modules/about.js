@@ -1,3 +1,26 @@
+let isGifLoaded = false;
+let isPageLoaded = false;
+
+function loadGifWhenReady() {
+    if (isPageLoaded && !isGifLoaded) {
+        const gifImages = document.querySelectorAll('img[src*=".gif"], img[src*=".GIF"]');
+        gifImages.forEach(img => {
+            const src = img.src;
+            img.src = '';
+            setTimeout(() => {
+                img.src = src;
+                isGifLoaded = true;
+            }, 100);
+        });
+    }
+}
+
+window.addEventListener('load', () => {
+    isPageLoaded = true;
+    setTimeout(loadGifWhenReady, 1000);
+});
+
+
 const ABOUTCONFIG = {
   animCanvas: -250,
   StartAnim: "top top",
@@ -88,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.img = mediaElement.querySelector('img');
       this.canvas = mediaElement.querySelector('.grid-canvas-case');
       this.ctx = this.canvas.getContext('2d');
-      
+
       this.isGif = this.img.src.toLowerCase().endsWith('.gif');
       this.superGif = null;
       this.currentGifFrame = null;
@@ -123,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.isInitialized = false;
       this.isBlurWorking = false;
       this.isBlurDone = false;
-      
+
       this.lastGifUpdate = 0;
       this.gifFrameRate = 1000 / 10;
 
@@ -154,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       this.superGif = new SuperGif({ gif: this.img });
-      
+
       this.superGif.load(() => {
         console.log('GIF загружен');
         this.currentGifFrame = 0;
@@ -165,10 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateGifFrame() {
       if (!this.superGif || !this.superGif.get_canvas()) return;
-      
+
       const frame = this.superGif.get_canvas();
       this.drawImageCover(this.originalCtx, frame, this.originalCanvas.width, this.originalCanvas.height);
-      
+
       if (isFullEffect && this.isBlurDone && !isTouchDevice) {
         this.blurCtx.drawImage(this.originalCanvas, 0, 0);
         this.applyBlur();
@@ -217,22 +240,22 @@ document.addEventListener('DOMContentLoaded', () => {
       this.setupScrollAnimation();
       this.render();
     }
-    
+
     startGifAnimation() {
       if (!this.isGif || !this.superGif) return;
 
       const animate = (timestamp) => {
         if (timestamp - this.lastGifUpdate > this.gifFrameRate) {
           this.lastGifUpdate = timestamp;
-          
+
           this.superGif.move_to((this.currentGifFrame + 1) % this.superGif.get_length());
           this.currentGifFrame = (this.currentGifFrame + 1) % this.superGif.get_length();
-          
+
           this.updateGifFrame();
         }
         requestAnimationFrame(animate);
       };
-      
+
       requestAnimationFrame(animate);
     }
 
@@ -527,10 +550,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  setTimeout(() => {
-    const mediaElements = document.querySelectorAll('.about_canva');
-    mediaElements.forEach(media => {
-      new PixelationEffect(media);
-    });
-  }, 200);
+  function initHeavyElements() {
+    if (document.readyState === 'complete') {
+      const mediaElements = document.querySelectorAll('.about_canva');
+      mediaElements.forEach(media => {
+        new PixelationEffect(media);
+      });
+    } else {
+      window.addEventListener('load', initHeavyElements, { once: true });
+    }
+  }
+
+  setTimeout(initHeavyElements, 1000);
 });
