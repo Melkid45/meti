@@ -1,3 +1,40 @@
+let isVideoLoaded = false;
+let isPageLoaded = false;
+
+function loadVideoWhenReady() {
+    if (isPageLoaded && !isVideoLoaded) {
+        const videos = document.querySelectorAll('.showreel__video');
+        videos.forEach(video => {
+            const sources = [];
+            video.querySelectorAll('source').forEach(source => {
+                sources.push({
+                    src: source.src,
+                    type: source.type
+                });
+            });
+            
+            video.innerHTML = '';
+            
+            setTimeout(() => {
+                sources.forEach(source => {
+                    const newSource = document.createElement('source');
+                    newSource.src = source.src;
+                    newSource.type = source.type;
+                    video.appendChild(newSource);
+                });
+                
+                // Перезагружаем видео
+                video.load();
+                isVideoLoaded = true;
+            }, 100);
+        });
+    }
+}
+window.addEventListener('load', () => {
+    isPageLoaded = true;
+    setTimeout(loadVideoWhenReady, 1000);
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     const CONFIG = {

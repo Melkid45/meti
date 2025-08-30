@@ -1,24 +1,4 @@
-let isGifLoaded = false;
-let isPageLoaded = false;
 
-function loadGifWhenReady() {
-    if (isPageLoaded && !isGifLoaded) {
-        const gifImages = document.querySelectorAll('img[src*=".gif"], img[src*=".GIF"]');
-        gifImages.forEach(img => {
-            const src = img.src;
-            img.src = '';
-            setTimeout(() => {
-                img.src = src;
-                isGifLoaded = true;
-            }, 100);
-        });
-    }
-}
-
-window.addEventListener('load', () => {
-    isPageLoaded = true;
-    setTimeout(loadGifWhenReady, 1000);
-});
 
 
 const ABOUTCONFIG = {

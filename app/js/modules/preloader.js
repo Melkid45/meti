@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let startTime;
     let initialLogoPosition = { x: 0, y: 0 };
     let isPriorityVideoLoaded = false;
+    let isGifLoaded = false;
 
     function initGrid() {
         canvas.width = window.innerWidth;
@@ -157,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startAnimation() {
-        if (!isPriorityVideoLoaded) return;
+        if (!isPriorityVideoLoaded || !isGifLoaded) return;
 
         const centerX = (window.innerWidth - logo.offsetWidth) / 2;
         const centerY = (window.innerHeight - logo.offsetHeight) / 2;
@@ -171,41 +172,65 @@ document.addEventListener('DOMContentLoaded', () => {
             animationFrame = requestAnimationFrame(animateFill);
         }, CONFIG.animationDelay);
     }
-
     function checkPriorityVideoLoad() {
         const priorityVideo = document.querySelector('.priority-video');
-
+        const gifImage = document.querySelector('.about-parallax img[src*="about-gif.gif"]');
         if (priorityVideo) {
             if (priorityVideo.readyState === 4) {
                 isPriorityVideoLoaded = true;
-                startAnimation();
+                tryStartAnimation();
             } else {
                 priorityVideo.addEventListener('loadeddata', () => {
                     isPriorityVideoLoaded = true;
-                    startAnimation();
+                    tryStartAnimation();
                 });
 
                 priorityVideo.addEventListener('error', () => {
-                    console.warn('Priority video failed to load, starting animation anyway');
+                    console.warn('Priority video failed to load, continuing anyway');
                     isPriorityVideoLoaded = true;
-                    startAnimation();
+                    tryStartAnimation();
                 });
-
-                setTimeout(() => {
-                    if (!isPriorityVideoLoaded) {
-                        console.warn('Priority video loading timeout, starting animation');
-                        isPriorityVideoLoaded = true;
-                        startAnimation();
-                    }
-                }, 5000);
             }
         } else {
-            console.warn('Priority video not found, starting animation');
+            console.warn('Priority video not found, continuing');
             isPriorityVideoLoaded = true;
+            tryStartAnimation();
+        }
+        if (gifImage) {
+            if (gifImage.complete && gifImage.naturalHeight !== 0) {
+                isGifLoaded = true;
+                tryStartAnimation();
+            } else {
+                gifImage.addEventListener('load', () => {
+                    isGifLoaded = true;
+                    tryStartAnimation();
+                });
+
+                gifImage.addEventListener('error', () => {
+                    console.warn('Gif image failed to load, continuing anyway');
+                    isGifLoaded = true;
+                    tryStartAnimation();
+                });
+            }
+        } else {
+            console.warn('Gif image not found, continuing');
+            isGifLoaded = true;
+            tryStartAnimation();
+        }
+        setTimeout(() => {
+            if (!isPriorityVideoLoaded || !isGifLoaded) {
+                console.warn('Assets loading timeout, starting animation anyway');
+                isPriorityVideoLoaded = true;
+                isGifLoaded = true;
+                tryStartAnimation();
+            }
+        }, 5000);
+    }
+    function tryStartAnimation() {
+        if (isPriorityVideoLoaded && isGifLoaded && isPageLoaded) {
             startAnimation();
         }
     }
-
     initGrid();
 
     checkPriorityVideoLoad();
