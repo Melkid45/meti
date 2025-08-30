@@ -173,8 +173,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }, CONFIG.animationDelay);
     }
     function checkPriorityVideoLoad() {
+        // Ждем полной загрузки страницы перед проверкой элементов
+        if (document.readyState !== 'complete') {
+            window.addEventListener('load', checkPriorityVideoLoad);
+            return;
+        }
+
         const priorityVideo = document.querySelector('.priority-video');
         const gifImage = document.querySelector('.about-parallax img[src*="about-gif.gif"]');
+
         if (priorityVideo) {
             if (priorityVideo.readyState === 4) {
                 isPriorityVideoLoaded = true;
@@ -196,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isPriorityVideoLoaded = true;
             tryStartAnimation();
         }
+
         if (gifImage) {
             if (gifImage.complete && gifImage.naturalHeight !== 0) {
                 isGifLoaded = true;
@@ -217,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isGifLoaded = true;
             tryStartAnimation();
         }
+
         setTimeout(() => {
             if (!isPriorityVideoLoaded || !isGifLoaded) {
                 console.warn('Assets loading timeout, starting animation anyway');
@@ -228,7 +237,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function tryStartAnimation() {
         if (isPriorityVideoLoaded && isGifLoaded) {
-            startAnimation();
+            // Дополнительная проверка - убедимся, что страница полностью загружена
+            if (document.readyState === 'complete') {
+                startAnimation();
+            } else {
+                // Если страница еще не полностью загружена, ждем события load
+                window.addEventListener('load', startAnimation);
+            }
         }
     }
     initGrid();
