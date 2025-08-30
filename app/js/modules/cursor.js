@@ -1,5 +1,5 @@
 const video = document.querySelector('.showreel__video');
-if (window.innerWidth > 750) {
+if (window.innerWidth > 1024 && document.querySelector('.cursor')) {
     gsap.set('.cursor', { xPercent: -50, yPercent: -50 });
 
     let insideShowreel = false;

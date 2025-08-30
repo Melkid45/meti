@@ -1,4 +1,5 @@
 import Splide from 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.esm.js';
+const isTouchDevice = !!('ontouchstart' in window || navigator.maxTouchPoints);
 ScrollTrigger.normalizeScroll(true);
 gsap.ticker.lagSmoothing(0);
 ScrollTrigger.config({
@@ -38,7 +39,7 @@ let lenis = new Lenis({
     infinite: false,
     touchMultiplier: 1.5,
 })
-if ($(window).width() > 750) {
+if ($(window).width() > 1024 && !isTouchDevice) {
     let lastScrollTop = 0;
     let isScrollingDown = false;
     const scrollThreshold = 5;

@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const controller = new ScrollMagic.Controller();
-  const isFullEffect = window.innerWidth > 750;
-  const isMobile = window.innerWidth <= 750;
+  const isFullEffect = window.innerWidth > 820;
+  const isMobile = window.innerWidth <= 820;
   function debounce(fn, wait = 150) {
     let t;
     return (...args) => {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         this.originalCanvas.height = this.canvas.height;
         drawImageCover(this.originalCtx, this.img, this.originalCanvas.width, this.originalCanvas.height);
 
-        if (isFullEffect) {
+        if (isFullEffect && !isTouchDevice) {
           this.blurCanvas.width = this.canvas.width;
           this.blurCanvas.height = this.canvas.height;
           this.zoomCanvas.width = this.canvas.width;
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.originalCanvas.height = this.canvas.height;
       drawImageCover(this.originalCtx, this.img, this.originalCanvas.width, this.originalCanvas.height);
 
-      if (isFullEffect) {
+      if (isFullEffect && !isTouchDevice) {
         this.blurCanvas.width = this.canvas.width;
         this.blurCanvas.height = this.canvas.height;
         this.zoomCanvas.width = this.canvas.width;
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setupEvents() {
-      if (!isFullEffect) return;
+      if (!isFullEffect && isTouchDevice) return;
 
       this._onMouseMove = (e) => {
         const rect = this.canvas.getBoundingClientRect();
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     drawGrid() {
-      if (!isFullEffect) return;
+      if (!isFullEffect && isTouchDevice) return;
       if (!this.blurCanvas || !this.isBlurDone) return;
 
       const { cellSize, effectRadius, zoomFactor, zoomRadius, zoomTransition } = this.settings;
@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (this.rafId) return;
       this.rafId = requestAnimationFrame(() => {
         this.renderPixelated(this.pixelSize);
-        if (isFullEffect && this.isGridActive) {
+        if (isFullEffect && !isTouchDevice && this.isGridActive) {
           this.drawGrid();
         }
         this.rafId = null;
@@ -524,10 +524,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // effect.isAnimated = true;
       let moveY = 0;
+      let outMoveY;
       if (item.classList.contains('small_case')) {
         moveY = -260;
       } else {
         moveY = -220;
+      }
+      if (isTouchDevice && !isMobile) {
+        outMoveY = 20
+      } else {
+        outMoveY = 0
       }
       const duration = 1;
       const pixelDur = 0.5;
@@ -535,12 +541,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!isFullEffect) moveY = -240;
       if (window.innerWidth < 500) moveY = -250;
-
-      let lastSize = null;
+      if (window.innerWidth < 821 && window.innerWidth >= 750) moveY = -250;
+        let lastSize = null;
 
       const tl = gsap.timeline()
         .fromTo(item,
-          { yPercent: 0, opacity: 1,  },
+          { yPercent: outMoveY, opacity: 1, },
           { yPercent: moveY, opacity: 1, duration }
         )
         .to({ size: 40 }, {
@@ -600,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   window.addEventListener('resize', debounce(() => {
-    const newIsMobile = window.innerWidth <= 750;
+    const newIsMobile = window.innerWidth <= 820;
     if (newIsMobile !== isMobile) {
       window.location.reload();
     } else {

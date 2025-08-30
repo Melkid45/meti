@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return rem * remInPx;
     }
 
-    if ((window.innerWidth || document.documentElement.clientWidth) <= 750) {
+    if ((window.innerWidth || document.documentElement.clientWidth) <= 820) {
         CONFIG.squareSize = 20;
     }
 

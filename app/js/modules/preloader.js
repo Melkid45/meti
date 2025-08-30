@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const width = window.innerWidth;
-    if (width <= 750) {
+    if (width <= 820) {
         CONFIG.squareSize = 20;
     }
 
@@ -87,10 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 grid[i].state = 'color';
             }
         }
-
-        const percent = Math.floor(progress * 99);
-        progressText.textContent = `${percent.toString().padStart(2, '0')}%`;
-
+        if (document.querySelector('.cursor')) {
+            const percent = Math.floor(progress * 99);
+            progressText.textContent = `${percent.toString().padStart(2, '0')}%`;
+        }
         draw();
 
         if (progress < 1) {
@@ -127,10 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 grid[i].alpha = 1 - progress;
             }
         }
-
-        if (progressText.parentElement) {
-            progressText.parentElement.style.opacity = 1 - progress;
+        if (document.querySelector('.cursor')) {
+            if (progressText.parentElement) {
+                progressText.parentElement.style.opacity = 1 - progress;
+            }
         }
+
 
         draw();
 
@@ -172,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkPriorityVideoLoad() {
         const priorityVideo = document.querySelector('.priority-video');
-        
+
         if (priorityVideo) {
             if (priorityVideo.readyState === 4) {
                 isPriorityVideoLoaded = true;
@@ -182,13 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     isPriorityVideoLoaded = true;
                     startAnimation();
                 });
-                
+
                 priorityVideo.addEventListener('error', () => {
                     console.warn('Priority video failed to load, starting animation anyway');
                     isPriorityVideoLoaded = true;
                     startAnimation();
                 });
-                
+
                 setTimeout(() => {
                     if (!isPriorityVideoLoaded) {
                         console.warn('Priority video loading timeout, starting animation');

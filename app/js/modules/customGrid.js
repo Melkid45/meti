@@ -254,7 +254,7 @@ class BodyGrid {
   }
 }
 
-if (window.innerWidth > 750) {
+if (window.innerWidth > 1024 && !isTouchDevice) {
   document.addEventListener("DOMContentLoaded", () => {
     new BodyGrid({
       zonesSelector: '.feedback, footer'

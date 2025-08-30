@@ -149,7 +149,7 @@ $.fn.shuffleLetters = function (options) {
 };
 
 /* === main carousel/grid script === */
-const isFullEffect = window.innerWidth > 750;
+const isFullEffect = window.innerWidth > 820;
 const timeOutShape = isFullEffect ? 400 : 200;
 
 (function () {

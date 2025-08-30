@@ -5,7 +5,7 @@ const ABOUTCONFIG = {
   endAnim: "+=30%"
 };
 
-if (window.innerWidth <= 750) {
+if (window.innerWidth <= 820) {
   ABOUTCONFIG.animCanvas = -50;
   ABOUTCONFIG.StartAnim = "top center";
   ABOUTCONFIG.StartAnimPixel = "+=30%";
@@ -72,7 +72,7 @@ gsap.to('.benefits__decor--1', {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  const isFullEffect = window.innerWidth > 750;
+  const isFullEffect = window.innerWidth > 820;
 
   function debounce(fn, wait = 150) {
     let t;
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!this.isInitialized) return;
         this.resizeAll();
         this.updateOriginalCanvas();
-        if (isFullEffect) {
+        if (isFullEffect && !isTouchDevice) {
           this.blurCtx.drawImage(this.originalCanvas, 0, 0);
           this.applyBlur();
         }
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const frame = this.superGif.get_canvas();
       this.drawImageCover(this.originalCtx, frame, this.originalCanvas.width, this.originalCanvas.height);
       
-      if (isFullEffect && this.isBlurDone) {
+      if (isFullEffect && this.isBlurDone && !isTouchDevice) {
         this.blurCtx.drawImage(this.originalCanvas, 0, 0);
         this.applyBlur();
       }
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.resizeAll();
       this.updateOriginalCanvas();
 
-      if (isFullEffect) {
+      if (isFullEffect && !isTouchDevice) {
         this.blurCtx.drawImage(this.originalCanvas, 0, 0);
         this.applyBlur();
       }
@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     drawGrid() {
-      if (!isFullEffect) return;
+      if (!isFullEffect && isTouchDevice) return;
       if (!this.blurCanvas || !this.isBlurDone) return;
 
       const { cellSize, effectRadius, zoomFactor, zoomRadius, zoomTransition } = this.settings;
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
         this.renderPixelated(this.pixelSize.value);
       }
 
-      if (isFullEffect && this.isGridActive) {
+      if (isFullEffect && !isTouchDevice && this.isGridActive) {
         this.drawGrid();
       }
 
@@ -512,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setupEvents() {
-      if (!isFullEffect) return;
+      if (!isFullEffect && isTouchDevice) return;
 
       this.media.addEventListener('mousemove', (e) => {
         const rect = this.canvas.getBoundingClientRect();
