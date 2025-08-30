@@ -530,8 +530,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         moveY = -220;
       }
-      if (isTouchDevice && !isMobile) {
-        outMoveY = 20
+      if (isTouchDevice && !isMobile && window.innerWidth > 1024) {
+        outMoveY = 30
+      } else if (isTouchDevice && !isMobile && window.innerWidth <= 1024 && window.innerHeight >= 1000) {
+        outMoveY = 130
       } else {
         outMoveY = 0
       }
@@ -542,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isFullEffect) moveY = -240;
       if (window.innerWidth < 500) moveY = -250;
       if (window.innerWidth < 821 && window.innerWidth >= 750) moveY = -250;
-        let lastSize = null;
+      let lastSize = null;
 
       const tl = gsap.timeline()
         .fromTo(item,

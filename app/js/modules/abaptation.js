@@ -5,9 +5,10 @@ if (width <= 820) {
     $('.difference-desk').remove()
     $('.brand').attr('placeholder', 'Имя бренда')
     $('.awards__desk').remove()
-} else if (width > 820 && isTouchDevice) {
+} else if (width >= 1024 && isTouchDevice) {
     $('.cursor').remove()
     $('.header__body-menu').remove()
+    $('.difference-mobile').remove()
     $('.muteor').remove()
     $('.splide').remove()
     $('.about-p2').remove()
