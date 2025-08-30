@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
     function tryStartAnimation() {
-        if (isPriorityVideoLoaded && isGifLoaded && isPageLoaded) {
+        if (isPriorityVideoLoaded && isGifLoaded) {
             startAnimation();
         }
     }
