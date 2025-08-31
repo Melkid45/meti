@@ -426,7 +426,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
     const wrapperH = wrapper.clientHeight;
     const targetY = -targetIndex * wrapperH;
     ActiveIndex = i;
-    console.log(i)
     gsap.to(itemsLine, {
       y: targetY,
       duration: opts.duration ?? 0.8,
@@ -442,7 +441,6 @@ const timeOutShape = isFullEffect ? 400 : 200;
         }
       },
     });
-    console.log(currentScroll)
     setTimeout(() => {
       drawShape(itemShapes[targetIndex], targetIndex);
     }, timeOutShape);

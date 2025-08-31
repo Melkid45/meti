@@ -1,6 +1,3 @@
-
-
-
 const ABOUTCONFIG = {
   animCanvas: -250,
   StartAnim: "top top",
@@ -76,6 +73,7 @@ gsap.to('.benefits__decor--1', {
 
 document.addEventListener('DOMContentLoaded', () => {
   const isFullEffect = window.innerWidth > 820;
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   function debounce(fn, wait = 150) {
     let t;
@@ -85,16 +83,60 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
+  // Функция для принудительного запуска видео
+  async function forceVideoPlay(video) {
+    try {
+      video.muted = true;
+      video.playsInline = true;
+      video.loop = true;
+      
+      // Сначала ставим на паузу и сбрасываем
+      video.pause();
+      video.currentTime = 0;
+      
+      // Ждем немного и пытаемся запустить
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const playPromise = video.play();
+      
+      if (playPromise !== undefined) {
+        await playPromise;
+        return true;
+      }
+      return true;
+    } catch (error) {
+      
+      // Создаем фиктивное событие клика для обхода ограничений
+      const clickEvent = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true
+      });
+      
+      document.dispatchEvent(clickEvent);
+      
+      // Пробуем еще раз после симуляции события
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      try {
+        await video.play();
+        return true;
+      } catch (e) {
+        console.error('Final video play error:', e);
+        return false;
+      }
+    }
+  }
+
   class PixelationEffect {
     constructor(mediaElement) {
       this.media = mediaElement;
-      this.img = mediaElement.querySelector('img');
+      this.video = mediaElement.querySelector('video');
       this.canvas = mediaElement.querySelector('.grid-canvas-case');
       this.ctx = this.canvas.getContext('2d');
 
-      this.isGif = this.img.src.toLowerCase().endsWith('.gif');
-      this.superGif = null;
-      this.currentGifFrame = null;
+      this.isVideo = this.video && this.video.src.toLowerCase().match(/\.(mp4|webm|ogg)$/);
+      this.currentVideoFrame = null;
 
       this.pixelSize = { value: 40 };
       this.isPixelationComplete = false;
@@ -127,15 +169,14 @@ document.addEventListener('DOMContentLoaded', () => {
       this.isBlurWorking = false;
       this.isBlurDone = false;
 
-      this.lastGifUpdate = 0;
-      this.gifFrameRate = 1000 / 10;
+      this.lastVideoUpdate = 0;
+      this.videoFrameRate = 1000 / 30;
+      this.isVideoPlaying = false;
 
-      if (this.isGif) {
-        this.initGif();
-      } else if (this.img.complete) {
-        this.init();
+      if (this.isVideo) {
+        this.initVideo();
       } else {
-        this.img.addEventListener('load', () => this.init(), { once: true });
+        console.error('Video element not found');
       }
 
       this._onResize = debounce(() => {
@@ -150,40 +191,72 @@ document.addEventListener('DOMContentLoaded', () => {
       window.addEventListener('resize', this._onResize);
     }
 
-    initGif() {
-      if (typeof SuperGif === 'undefined') {
-        console.error('libgif-js не загружен');
-        return;
-      }
-
-      this.superGif = new SuperGif({ gif: this.img });
-
-      this.superGif.load(() => {
-        console.log('GIF загружен');
-        this.currentGifFrame = 0;
-        this.init();
-        this.startGifAnimation();
+    async initVideo() {
+      this.video.muted = true;
+      this.video.loop = true;
+      this.video.playsInline = true;
+      this.video.setAttribute('preload', 'auto');
+      this.video.setAttribute('autoplay', 'true');
+      
+      // Ждем когда видео будет готово к воспроизведению
+      this.video.addEventListener('loadeddata', () => {
+        this.startVideoPlayback();
       });
+
+      this.video.addEventListener('canplay', () => {
+        this.startVideoPlayback();
+      });
+
+      this.video.addEventListener('play', () => {
+        this.isVideoPlaying = true;
+        this.init();
+        this.startVideoAnimation();
+      });
+
+      this.video.addEventListener('error', (e) => {
+        console.error('Video loading error:', e);
+      });
+
+      // Предзагрузка видео
+      this.video.load();
+      
+      // Принудительно пытаемся запустить сразу
+      await this.startVideoPlayback();
     }
 
-    updateGifFrame() {
-      if (!this.superGif || !this.superGif.get_canvas()) return;
+    async startVideoPlayback() {
+      if (this.isVideoPlaying) return;
+      
+      const success = await forceVideoPlay(this.video);
+      if (success) {
+        this.isVideoPlaying = true;
+        this.init();
+        this.startVideoAnimation();
+      }
+    }
 
-      const frame = this.superGif.get_canvas();
-      this.drawImageCover(this.originalCtx, frame, this.originalCanvas.width, this.originalCanvas.height);
+    updateVideoFrame() {
+      if (!this.video || this.video.readyState < 2) return;
+      
+      try {
+        this.drawImageCover(this.originalCtx, this.video, this.originalCanvas.width, this.originalCanvas.height);
 
-      if (isFullEffect && this.isBlurDone && !isTouchDevice) {
-        this.blurCtx.drawImage(this.originalCanvas, 0, 0);
-        this.applyBlur();
+        if (isFullEffect && this.isBlurDone && !isTouchDevice) {
+          this.blurCtx.drawImage(this.originalCanvas, 0, 0);
+          this.applyBlur();
+        }
+      } catch (error) {
+        console.log('Error drawing video frame:', error);
       }
     }
 
     updateOriginalCanvas() {
-      if (this.isGif && this.superGif && this.superGif.get_canvas()) {
-        const frame = this.superGif.get_canvas();
-        this.drawImageCover(this.originalCtx, frame, this.originalCanvas.width, this.originalCanvas.height);
+      if (this.isVideo && this.video.readyState >= 2) {
+        this.drawImageCover(this.originalCtx, this.video, this.originalCanvas.width, this.originalCanvas.height);
       } else {
-        this.drawImageCover(this.originalCtx, this.img, this.originalCanvas.width, this.originalCanvas.height);
+        // Fallback: черный фон
+        this.originalCtx.fillStyle = '#000000';
+        this.originalCtx.fillRect(0, 0, this.originalCanvas.width, this.originalCanvas.height);
       }
     }
 
@@ -221,17 +294,13 @@ document.addEventListener('DOMContentLoaded', () => {
       this.render();
     }
 
-    startGifAnimation() {
-      if (!this.isGif || !this.superGif) return;
+    startVideoAnimation() {
+      if (!this.isVideo) return;
 
       const animate = (timestamp) => {
-        if (timestamp - this.lastGifUpdate > this.gifFrameRate) {
-          this.lastGifUpdate = timestamp;
-
-          this.superGif.move_to((this.currentGifFrame + 1) % this.superGif.get_length());
-          this.currentGifFrame = (this.currentGifFrame + 1) % this.superGif.get_length();
-
-          this.updateGifFrame();
+        if (this.isVideoPlaying && timestamp - this.lastVideoUpdate > this.videoFrameRate) {
+          this.lastVideoUpdate = timestamp;
+          this.updateVideoFrame();
         }
         requestAnimationFrame(animate);
       };
@@ -239,28 +308,27 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(animate);
     }
 
-    drawImageCover(ctx, img, canvasWidth, canvasHeight) {
-      const imgRatio = img.width / img.height;
+    drawImageCover(ctx, media, canvasWidth, canvasHeight) {
+      const mediaRatio = media.videoWidth / media.videoHeight;
       const canvasRatio = canvasWidth / canvasHeight;
 
       let drawWidth, drawHeight, offsetX, offsetY;
 
-      if (canvasRatio > imgRatio) {
+      if (canvasRatio > mediaRatio) {
         drawWidth = canvasWidth;
-        drawHeight = canvasWidth / imgRatio;
+        drawHeight = canvasWidth / mediaRatio;
         offsetX = 0;
         offsetY = (canvasHeight - drawHeight) / 2;
       } else {
         drawHeight = canvasHeight;
-        drawWidth = canvasHeight * imgRatio;
+        drawWidth = canvasHeight * mediaRatio;
         offsetX = (canvasWidth - drawWidth) / 2;
         offsetY = 0;
       }
 
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+      ctx.drawImage(media, offsetX, offsetY, drawWidth, drawHeight);
     }
-
 
     applyBlur() {
       if (!this.blurCtx || !this.originalCtx) return;
@@ -531,15 +599,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function initHeavyElements() {
-    if (document.readyState === 'complete') {
-      const mediaElements = document.querySelectorAll('.about_canva');
-      mediaElements.forEach(media => {
-        new PixelationEffect(media);
-      });
-    } else {
-      window.addEventListener('load', initHeavyElements, { once: true });
-    }
+    const mediaElements = document.querySelectorAll('.about_canva');
+    mediaElements.forEach(media => {
+      new PixelationEffect(media);
+    });
   }
 
-  setTimeout(initHeavyElements, 1000);
+  // Запускаем сразу
+  setTimeout(initHeavyElements, 500);
 });

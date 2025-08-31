@@ -296,6 +296,7 @@
     width: 100%;
     touch-action: none;
     overscroll-behavior: contain;
+
     &__body {
         display: flex;
         flex-direction: column;
@@ -1713,5 +1714,31 @@
                 color: #F4F4F44D;
             }
         }
+    }
+}
+
+.lazy-img {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.lazy-img.loaded {
+    opacity: 1;
+}
+
+.lazy-placeholder {
+    background: #f5f5f5 linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    display: inline-block;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
     }
 }

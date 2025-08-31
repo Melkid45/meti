@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const priorityVideo = document.querySelector('.priority-video');
-        const gifImage = document.querySelector('.about-parallax img[src*="about-gif.gif"]');
+        const AboutVideo = document.querySelector('.about-parallax video');
 
         if (priorityVideo) {
             if (priorityVideo.readyState === 4) {
@@ -203,25 +203,24 @@ document.addEventListener('DOMContentLoaded', () => {
             isPriorityVideoLoaded = true;
             tryStartAnimation();
         }
-
-        if (gifImage) {
-            if (gifImage.complete && gifImage.naturalHeight !== 0) {
+        if (AboutVideo) {
+            if (AboutVideo.readyState === 4) {
                 isGifLoaded = true;
                 tryStartAnimation();
             } else {
-                gifImage.addEventListener('load', () => {
+                AboutVideo.addEventListener('loadeddata', () => {
                     isGifLoaded = true;
                     tryStartAnimation();
                 });
 
-                gifImage.addEventListener('error', () => {
-                    console.warn('Gif image failed to load, continuing anyway');
+                AboutVideo.addEventListener('error', () => {
+                    console.warn('Priority video failed to load, continuing anyway');
                     isGifLoaded = true;
                     tryStartAnimation();
                 });
             }
         } else {
-            console.warn('Gif image not found, continuing');
+            console.warn('Priority video not found, continuing');
             isGifLoaded = true;
             tryStartAnimation();
         }
