@@ -173,77 +173,128 @@ document.addEventListener('DOMContentLoaded', () => {
         }, CONFIG.animationDelay);
     }
     function checkPriorityVideoLoad() {
-        // Ждем полной загрузки страницы перед проверкой элементов
+        // Проверяем, полностью ли загружена страница
         if (document.readyState !== 'complete') {
             window.addEventListener('load', checkPriorityVideoLoad);
             return;
         }
 
         const priorityVideo = document.querySelector('.priority-video');
-        const AboutVideo = document.querySelector('.about-parallax video');
+        const aboutVideo = document.querySelector('.about-parallax video');
 
+        // Флаг для отслеживания таймаута
+        let timeoutReached = false;
+
+        // Обработчик для принудительного запуска после таймаута
+        const forceStart = () => {
+            if (!timeoutReached) return;
+            isPriorityVideoLoaded = true;
+            isGifLoaded = true;
+            tryStartAnimation();
+        };
+
+        // Устанавливаем таймаут
+        setTimeout(() => {
+            timeoutReached = true;
+            if (!isPriorityVideoLoaded || !isGifLoaded) {
+                console.warn('Assets loading timeout, starting animation anyway');
+                forceStart();
+            }
+        }, 5000);
+
+        // Проверка priority video
         if (priorityVideo) {
+            // На мобильных устройствах может потребоваться явно запустить загрузку
             if (priorityVideo.readyState === 4) {
                 isPriorityVideoLoaded = true;
                 tryStartAnimation();
             } else {
-                priorityVideo.addEventListener('loadeddata', () => {
-                    isPriorityVideoLoaded = true;
-                    tryStartAnimation();
-                });
+                // Для мобильных устройств: попробовать запустить загрузку вручную
+                try {
+                    priorityVideo.load();
+                } catch (e) {
+                    console.log('Cannot manually load video:', e);
+                }
 
-                priorityVideo.addEventListener('error', () => {
-                    console.warn('Priority video failed to load, continuing anyway');
+                const videoHandler = () => {
                     isPriorityVideoLoaded = true;
                     tryStartAnimation();
-                });
+                    priorityVideo.removeEventListener('loadeddata', videoHandler);
+                    priorityVideo.removeEventListener('error', videoHandler);
+                };
+
+                priorityVideo.addEventListener('loadeddata', videoHandler);
+                priorityVideo.addEventListener('error', videoHandler);
+
+                // Дополнительная проверка для мобильных устройств
+                if (isMobileDevice() && priorityVideo.readyState === 0) {
+                    console.log('Mobile device detected, video not started loading');
+                    // На мобильных устройствах видео может не загружаться до взаимодействия пользователя
+                    setTimeout(() => {
+                        if (!isPriorityVideoLoaded) {
+                            console.warn('Video not loading on mobile, continuing');
+                            isPriorityVideoLoaded = true;
+                            tryStartAnimation();
+                        }
+                    }, 2000);
+                }
             }
         } else {
             console.warn('Priority video not found, continuing');
             isPriorityVideoLoaded = true;
             tryStartAnimation();
         }
-        if (AboutVideo) {
-            if (AboutVideo.readyState === 4) {
+
+        // Проверка about video
+        if (aboutVideo) {
+            if (aboutVideo.readyState === 4) {
                 isGifLoaded = true;
                 tryStartAnimation();
             } else {
-                AboutVideo.addEventListener('loadeddata', () => {
-                    isGifLoaded = true;
-                    tryStartAnimation();
-                });
+                // Для мобильных устройств: попробовать запустить загрузку вручную
+                try {
+                    aboutVideo.load();
+                } catch (e) {
+                    console.log('Cannot manually load about video:', e);
+                }
 
-                AboutVideo.addEventListener('error', () => {
-                    console.warn('Priority video failed to load, continuing anyway');
+                const aboutVideoHandler = () => {
                     isGifLoaded = true;
                     tryStartAnimation();
-                });
+                    aboutVideo.removeEventListener('loadeddata', aboutVideoHandler);
+                    aboutVideo.removeEventListener('error', aboutVideoHandler);
+                };
+
+                aboutVideo.addEventListener('loadeddata', aboutVideoHandler);
+                aboutVideo.addEventListener('error', aboutVideoHandler);
+
+                // Дополнительная проверка для мобильных устройств
+                if (isMobileDevice() && aboutVideo.readyState === 0) {
+                    setTimeout(() => {
+                        if (!isGifLoaded) {
+                            console.warn('About video not loading on mobile, continuing');
+                            isGifLoaded = true;
+                            tryStartAnimation();
+                        }
+                    }, 2000);
+                }
             }
         } else {
-            console.warn('Priority video not found, continuing');
+            console.warn('About video not found, continuing');
             isGifLoaded = true;
             tryStartAnimation();
         }
-
-        setTimeout(() => {
-            if (!isPriorityVideoLoaded || !isGifLoaded) {
-                console.warn('Assets loading timeout, starting animation anyway');
-                isPriorityVideoLoaded = true;
-                isGifLoaded = true;
-                tryStartAnimation();
-            }
-        }, 5000);
     }
     function tryStartAnimation() {
         if (isPriorityVideoLoaded && isGifLoaded) {
-            // Дополнительная проверка - убедимся, что страница полностью загружена
-            if (document.readyState === 'complete') {
+            // Небольшая задержка для гарантии, что все готово
+            setTimeout(() => {
                 startAnimation();
-            } else {
-                // Если страница еще не полностью загружена, ждем события load
-                window.addEventListener('load', startAnimation);
-            }
+            }, 100);
         }
+    }
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
     initGrid();
 

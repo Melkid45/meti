@@ -148,7 +148,7 @@
                     <h3>[Привет, это meti]</h3>
                     <div class="about-parallax about-p1 about_canva">
                         <canvas class="grid-canvas-case" id="pixelCanvas"></canvas>
-                        <video style="display: none;" src="images/dist/about-video.mp4" muted loop playsinline>
+                        <video style="display: none;" src="images/dist/about-video.mp4" preload="metadata" muted loop playsinline>
                     </div>
                 </div>
                 <div class="about__body-right">
@@ -178,7 +178,7 @@
                     </div>
                     <div class="about-parallax about-p2 about_canva">
                         <canvas class="grid-canvas-case" id="pixelCanvas"></canvas>
-                        <video style="display: none;" src="images/dist/about-video.mp4" muted loop playsinline>
+                        <video style="display: none;" src="images/dist/about-video.mp4" preload="metadata" muted loop playsinline>
                     </div>
                 </div>
             </div>
@@ -1358,6 +1358,7 @@
             email: 'Написать',
         }
     </script>
+    <script src="js/polyfills.min.js"></script>
     <script src="js/libs.min.js"></script>
     <script type="module" src="js/main.min.js"></script>
 </body>
