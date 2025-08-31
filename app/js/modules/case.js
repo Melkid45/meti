@@ -604,6 +604,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const visibleItems = container.querySelectorAll('.item--visible');
         const firstNewItemIndex = visibleItemsCount - ITEMS_PER_PAGE;
         const firstNewItem = visibleItems[firstNewItemIndex];
+        console.log(firstNewItem)
         if (firstNewItem) {
           setTimeout(() => {
             scrollToCenter(firstNewItem, 1.2);
