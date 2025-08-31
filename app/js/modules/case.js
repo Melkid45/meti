@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const ShadowItems = allItems.length - visibleItemsCount;
         $('.case-count').text(`[${ShadowItems}]`);
 
-      }, 0);
+      }, 100);
     }
   });
 
