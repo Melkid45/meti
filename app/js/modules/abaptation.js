@@ -20,3 +20,4 @@ if (width <= 820) {
     $('.muteor').remove()
     $('.splide').remove()
 }
+

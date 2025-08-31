@@ -112,7 +112,8 @@ function watching() {
     watch(['app/scss/style.scss'], styles);
     watch(['app/scss/*.scss'], styles);
     watch(['app/images/src'], images);
-    watch(['app/js/main.js', 'app/js/modules/**/*.js', 'app/js/libs/**/*.js',], scripts);
+    watch(['app/js/main.js', 'app/js/modules/**/*.js',], scripts);
+    watch(['app/js/libs/**/*.js'], scriptsLibs);
     watch(['app/components/*', 'app/pages/*'], pages);
     watch(['app/*.html']).on('change', browserSync.reload);
 }

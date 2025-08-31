@@ -577,6 +577,20 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastScrollPosition = 0;
   let Position = 0;
   let count = 0;
+  function scrollToCenter(element, duration = 1.2) {
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    const targetY = rect.top + window.pageYOffset + window.innerHeight * 2.3 - (window.innerHeight / 2) + (element.offsetHeight / 2);
+
+    gsap.to({}, {
+      duration,
+      ease: "power3.out",
+      onUpdate: function () {
+        lenis.scrollTo(targetY, { immediate: true });
+      }
+    });
+  }
 
   loadMoreBtn.addEventListener('click', () => {
     count++;
@@ -590,14 +604,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const visibleItems = container.querySelectorAll('.item--visible');
         const firstNewItemIndex = visibleItemsCount - ITEMS_PER_PAGE;
         const firstNewItem = visibleItems[firstNewItemIndex];
-
         if (firstNewItem) {
-          const itemRect = firstNewItem.getBoundingClientRect();
-          const itemTop = itemRect.top + window.pageYOffset;
-
-          lenis.scrollTo(itemTop, {
-            immimmediate: true
-          });
+          setTimeout(() => {
+            scrollToCenter(firstNewItem, 1.2);
+          }, 100);
         }
 
         const ShadowItems = allItems.length - visibleItemsCount;
