@@ -738,7 +738,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: 160rem;
+        margin-top: 80rem;
 
         video {
             width: 100%;
@@ -2096,11 +2096,11 @@
 
 @media (max-width: 820px) and (min-width: 751px) {
     .services__new__body .items .item p {
-        bottom: 16rem;
+        bottom: 8rem;
     }
 
     .services__new__body .items .item .number {
         left: 0;
-        top: 64rem;
+        top: 32rem;
     }
 }
