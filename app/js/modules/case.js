@@ -453,6 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let loadedCount = 0;
   let ShadowItems;
   function initAllEffects() {
+    if (isMobile) return;
     const visibleItems = container.querySelectorAll('.item--visible');
     ShadowItems = allItems.length - visibleItemsCount
     $('.case-count').text(`[${ShadowItems}]`)
@@ -484,6 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let masterTl = null;
 
   function initScrollAnimation() {
+    if (isMobile) return;
     const visibleItems = container.querySelectorAll('.item--visible');
 
     if (masterTl) {
@@ -513,11 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
-    setTimeout(() => {
-      lenis.emit();
-      lenis.resize();
-      lenis.raf(0);
-    }, 300);
+
     visibleItems.forEach((item, i) => {
       const effect = effects.find(e => e.media === item.querySelector('.media'));
       // if (!effect || effect.isAnimated) return;
@@ -599,25 +597,19 @@ document.addEventListener('DOMContentLoaded', () => {
       visibleItemsCount += ITEMS_PER_PAGE;
       initItemsVisibility();
       initAllEffects();
+      lenis.emit();
+      lenis.resize();
+      lenis.raf(0);
+      const ShadowItems = allItems.length - visibleItemsCount;
+      $('.case-count').text(`[${ShadowItems}]`);
 
-      setTimeout(() => {
-        const visibleItems = container.querySelectorAll('.item--visible');
-        const firstNewItemIndex = visibleItemsCount - ITEMS_PER_PAGE;
-        const firstNewItem = visibleItems[firstNewItemIndex];
-        console.log(firstNewItem)
-        if (firstNewItem) {
-          setTimeout(() => {
-            scrollToCenter(firstNewItem, 1.2);
-          }, 100);
-        }
-
-        const ShadowItems = allItems.length - visibleItemsCount;
-        $('.case-count').text(`[${ShadowItems}]`);
-
-      }, 100);
     }
   });
-
+  $(window).on('load', function () {
+    visibleItemsCount += ITEMS_PER_PAGE;
+    const ShadowItems = allItems.length - visibleItemsCount;
+    $('.case-count').text(`[${ShadowItems}]`);
+  })
   window.addEventListener('resize', debounce(() => {
     const newIsMobile = window.innerWidth <= 820;
     if (newIsMobile !== isMobile) {
