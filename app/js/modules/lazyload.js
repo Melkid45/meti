@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
       }, {
-        rootMargin: '100px 0px',
+        rootMargin: '300px 0px',
         threshold: 0.01
       });
 
@@ -104,7 +104,7 @@ class BackgroundLazyLoader {
         }
       });
     }, {
-      rootMargin: '150px 0px',
+      rootMargin: '350px 0px',
       threshold: 0.01
     });
 
