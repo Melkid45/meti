@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     let formula;
     if (isFullEffect) {
-      formula = (window.innerHeight * (visibleItems.length - 1)) / 2;
+      formula = (window.innerHeight * (visibleItems.length - 1));
     } else {
       formula = (window.innerHeight * (visibleItems.length - 1)) * 3;
     }
@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const duration = 1;
       const pixelDur = 0.5;
-      const stagger = isFullEffect ? 0.4 : 0.6;
+      const stagger = isFullEffect ? 0.3 : 0.6;
 
       if (!isFullEffect) moveY = -240;
       if (window.innerWidth < 500) moveY = -250;
