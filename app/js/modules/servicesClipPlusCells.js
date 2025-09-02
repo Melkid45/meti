@@ -352,12 +352,11 @@ const timeOutShape = isFullEffect ? 400 : 200;
 
   const st = ScrollTrigger.create({
     trigger: ".wrapper",
-    start: "top top",
+    start: "top -5.5%",
     end: `+=${(itemShapes.length) * wrapper.clientHeight * 10}`,
     pin: ".services__new",
     scrub: false,
     pinType: "fixed",
-    markers: true,
     onUpdate: self => {
       const progress = self.progress;
 
