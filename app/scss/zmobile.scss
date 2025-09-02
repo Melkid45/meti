@@ -554,6 +554,7 @@
                         width: 278rem;
                         height: 281rem;
                         position: absolute;
+                        margin-top: -10%;
                     }
 
                     img {
@@ -581,7 +582,7 @@
                     .number {
                         position: absolute;
                         left: 0rem;
-                        top: 96rem;
+                        top: 15%;
                         font-size: 11rem;
                         line-height: 16rem;
                         color: #fff;
@@ -597,7 +598,7 @@
                         color: var(--white);
                         max-width: 335rem;
                         position: absolute;
-                        bottom: 96rem;
+                        bottom: 15%;
                         right: 0;
                     }
 
@@ -615,7 +616,7 @@
                         font-variant-ligatures: none;
                         font-kerning: none;
                         position: absolute;
-
+                        margin-top: -10%;
                         span {
                             font-family: "Chava";
                             font-weight: 400;
@@ -2114,13 +2115,13 @@
 
 
     .services__new__body .items .item p {
-        bottom: 16rem;
+        bottom: 10%;
         font-size: 12rem;
         line-height: 16rem;
     }
 
     .services__new__body .items .item .number {
         left: 0;
-        top: 64rem;
+        top: 10%;
     }
 }
