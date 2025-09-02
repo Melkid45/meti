@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const duration = 1;
       const pixelDur = 0.5;
-      const stagger = isFullEffect ? 0.2 : 0.6;
+      const stagger = isFullEffect ? 0.4 : 0.6;
 
       if (!isFullEffect) moveY = -240;
       if (window.innerWidth < 500) moveY = -250;
