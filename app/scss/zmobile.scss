@@ -1090,7 +1090,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-family: "Onest";
+                font-family: var(--onest);
                 font-weight: 570;
                 font-size: 24rem;
                 line-height: 28rem;
@@ -1896,7 +1896,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-family: "Onest";
+                    font-family: var(--onest);
                     font-weight: 570;
                     font-size: 24rem;
                     line-height: 28rem;
