@@ -89,35 +89,35 @@ document.addEventListener('DOMContentLoaded', () => {
       video.muted = true;
       video.playsInline = true;
       video.loop = true;
-      
+
       // Сначала ставим на паузу и сбрасываем
       video.pause();
       video.currentTime = 0;
-      
+
       // Ждем немного и пытаемся запустить
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       const playPromise = video.play();
-      
+
       if (playPromise !== undefined) {
         await playPromise;
         return true;
       }
       return true;
     } catch (error) {
-      
+
       // Создаем фиктивное событие клика для обхода ограничений
       const clickEvent = new MouseEvent('click', {
         view: window,
         bubbles: true,
         cancelable: true
       });
-      
+
       document.dispatchEvent(clickEvent);
-      
+
       // Пробуем еще раз после симуляции события
       await new Promise(resolve => setTimeout(resolve, 200));
-      
+
       try {
         await video.play();
         return true;
@@ -154,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       this.isGridActive = false;
       this.mouse = { x: -1000, y: -1000 };
-
       this.settings = {
         cellSize: 54,
         effectRadius: 120,
@@ -197,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.video.playsInline = true;
       this.video.setAttribute('preload', 'auto');
       this.video.setAttribute('autoplay', 'true');
-      
+
       // Ждем когда видео будет готово к воспроизведению
       this.video.addEventListener('loadeddata', () => {
         this.startVideoPlayback();
@@ -219,14 +218,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Предзагрузка видео
       this.video.load();
-      
+
       // Принудительно пытаемся запустить сразу
       await this.startVideoPlayback();
     }
 
     async startVideoPlayback() {
       if (this.isVideoPlaying) return;
-      
+
       const success = await forceVideoPlay(this.video);
       if (success) {
         this.isVideoPlaying = true;
@@ -237,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateVideoFrame() {
       if (!this.video || this.video.readyState < 2) return;
-      
+
       try {
         this.drawImageCover(this.originalCtx, this.video, this.originalCanvas.width, this.originalCanvas.height);
 
@@ -470,9 +469,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isFullEffect && isTouchDevice) return;
       if (!this.blurCanvas || !this.isBlurDone) return;
 
-      const { cellSize, effectRadius, zoomFactor, zoomRadius, zoomTransition } = this.settings;
+      const { cellSize, effectRadius, zoomFactor, zoomRadius } = this.settings;
       const cx = this.mouse.x;
       const cy = this.mouse.y;
+
+      // Полностью очищаем canvas перед каждой отрисовкой
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      // Сначала рисуем основное пикселизированное изображение
+      this.renderPixelated(this.pixelSize.value);
 
       const startCol = Math.max(0, Math.floor((cx - effectRadius) / cellSize));
       const endCol = Math.min(Math.ceil(this.canvas.width / cellSize), Math.ceil((cx + effectRadius) / cellSize));
@@ -482,6 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const effectRadiusSq = effectRadius * effectRadius;
       const zoomRadiusSq = zoomRadius * zoomRadius;
 
+      // Рисуем размытые области
       for (let y = startRow; y < endRow; y++) {
         for (let x = startCol; x < endCol; x++) {
           const cellX = x * cellSize;
@@ -491,20 +497,29 @@ document.addEventListener('DOMContentLoaded', () => {
           const distSq = (centreX - cx) * (centreX - cx) + (centreY - cy) * (centreY - cy);
 
           if (distSq < effectRadiusSq) {
+            // Рисуем размытую область
+            this.ctx.save();
+            this.ctx.globalCompositeOperation = 'source-over';
             this.ctx.drawImage(
               this.blurCanvas,
               cellX, cellY, cellSize, cellSize,
               cellX, cellY, cellSize, cellSize
             );
+            this.ctx.restore();
 
+            // Добавляем свечение
             const dist = Math.sqrt(distSq);
-            const alpha = 0.01 * (1 - dist / effectRadius);
-            this.ctx.fillStyle = `rgba(244,244,244,${alpha.toFixed(3)})`;
+            const alpha = 0.05 * (1 - dist / effectRadius);
+            this.ctx.save();
+            this.ctx.globalCompositeOperation = 'lighten';
+            this.ctx.fillStyle = `rgba(244,244,244,${Math.max(0.02, alpha)})`;
             this.ctx.fillRect(cellX, cellY, cellSize, cellSize);
+            this.ctx.restore();
           }
         }
       }
 
+      // Рисуем zoom области поверх всего
       for (let y = startRow; y < endRow; y++) {
         for (let x = startCol; x < endCol; x++) {
           const cellX = x * cellSize;
@@ -515,7 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (distSq < zoomRadiusSq) {
             const dist = Math.sqrt(distSq);
-            const zoomStrength = 1 - dist / zoomRadius;
+            const zoomStrength = Math.max(0, 1 - dist / zoomRadius);
             const currentZoom = 1 + (zoomFactor - 1) * zoomStrength;
 
             const srcSize = cellSize / currentZoom;
@@ -530,19 +545,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const safeSrcX = Math.max(0, Math.min(this.originalCanvas.width - srcSize, srcX));
             const safeSrcY = Math.max(0, Math.min(this.originalCanvas.height - srcSize, srcY));
 
-            this.zoomCtx.clearRect(0, 0, this.zoomCanvas.width, this.zoomCanvas.height);
-            this.zoomCtx.drawImage(
+            // Рисуем увеличенную область
+            this.ctx.save();
+            this.ctx.globalCompositeOperation = 'source-over';
+            this.ctx.drawImage(
               this.originalCanvas,
               safeSrcX, safeSrcY, srcSize, srcSize,
-              cellX, cellY, destSize, destSize
-            );
-
-            const transitionAlpha = Math.min(1, zoomStrength / zoomTransition);
-            this.ctx.save();
-            this.ctx.globalAlpha = transitionAlpha;
-            this.ctx.drawImage(
-              this.zoomCanvas,
-              cellX, cellY, destSize, destSize,
               cellX, cellY, destSize, destSize
             );
             this.ctx.restore();
@@ -552,15 +560,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     render() {
+      if (!this.isInitialized) return;
+
       if (this.isPixelationComplete) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.originalCanvas, 0, 0);
+
+        // Если пикселизация завершена, рисуем сетку поверх
+        if (isFullEffect && !isTouchDevice && this.isGridActive) {
+          this.drawGrid();
+        }
       } else {
         this.renderPixelated(this.pixelSize.value);
-      }
 
-      if (isFullEffect && !isTouchDevice && this.isGridActive) {
-        this.drawGrid();
+        // Если еще пикселизируется, рисуем сетку поверх пикселей
+        if (isFullEffect && !isTouchDevice && this.isGridActive) {
+          this.drawGrid();
+        }
       }
 
       requestAnimationFrame(() => this.render());
