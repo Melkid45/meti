@@ -6,7 +6,6 @@ if (width <= 820) {
     $('.brand').attr('placeholder', 'Имя бренда')
     $('.awards__desk').remove()
 } else if (width >= 1024 && isTouchDevice) {
-    $('.cursor').remove()
     $('.header__body-menu').remove()
     $('.difference-mobile').remove()
     $('.muteor').remove()

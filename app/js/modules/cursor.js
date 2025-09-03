@@ -1,7 +1,14 @@
 const video = document.querySelector('.showreel__video');
-if (window.innerWidth > 1024 && document.querySelector('.cursor')) {
+if (!isTouchDevice && document.querySelector('.cursor')) {
     gsap.set('.cursor', { xPercent: -50, yPercent: -50 });
-
+    let Size, standartSize;
+    if (window.innerWidth > 820){
+        Size = 40;
+        standartSize = 20
+    }else{
+        Size = 20;
+        standartSize = 10
+    }
     let insideShowreel = false;
     let lastMouseX = 0;
     let lastMouseY = 0;
@@ -27,7 +34,7 @@ if (window.innerWidth > 1024 && document.querySelector('.cursor')) {
     function updateVideoCursor() {
         if (!video) return;
         const isPlaying = !video.paused && !video.ended;
-        $cursor.stop(true).animate({ width: '40rem', height: '40rem' }, 200);
+        $cursor.stop(true).animate({ width: `${Size}rem`, height: `${Size}rem` }, 200);
         $cursor.find('.arrow').css('scale', '0');
         $cursor.find('.pause').css('scale', isPlaying ? '1' : '0');
         $cursor.find('.play').css('scale', isPlaying ? '0' : '1');
@@ -37,7 +44,7 @@ if (window.innerWidth > 1024 && document.querySelector('.cursor')) {
     function resetCursor() {
         $cursor.find('svg').css('scale', '0');
         $defaultText.stop(true, true).fadeOut(200);
-        $cursor.stop(true).animate({ width: '20rem', height: '20rem' }, 200);
+        $cursor.stop(true).animate({ width: `${standartSize}rem`, height: `${standartSize}rem` }, 200);
     }
 
     function checkCursorPosition(mouseX, mouseY) {
@@ -69,11 +76,11 @@ if (window.innerWidth > 1024 && document.querySelector('.cursor')) {
     }
 
     $('button').on('mouseover', function (e) {
-        $cursor.stop(true).animate({ width: '40rem', height: '40rem' }, 200);
+        $cursor.stop(true).animate({ width: `${Size}rem`, height: `${Size}rem` }, 200);
     })
     
     $('button').on('mouseout', function (e) {
-        $cursor.stop(true).animate({ width: '20rem', height: '20rem' }, 200);
+        $cursor.stop(true).animate({ width: `${standartSize}rem`, height: `${standartSize}rem` }, 200);
         $cursor.find('svg').css('scale', '0');
     })
     
@@ -87,7 +94,7 @@ if (window.innerWidth > 1024 && document.querySelector('.cursor')) {
         .on('mouseenter', 'a', function () {
             const href = $(this).attr('href') || '';
             $defaultText.stop(true, true).fadeIn(200);
-            $cursor.stop(true).animate({ width: '40rem', height: '40rem' }, 200);
+            $cursor.stop(true).animate({ width: `${Size}rem`, height: `${Size}rem` }, 200);
 
             if (href.includes('tel')) {
                 $defaultText.text(ConFigNames.phone);
@@ -136,7 +143,7 @@ if (window.innerWidth > 1024 && document.querySelector('.cursor')) {
     });
 
     $(window).on('resize', function () {
-        if (window.innerWidth <= 750) {
+        if (isTouchDevice) {
             $(document).off('mousemove mouseenter mouseleave');
             $(window).off('scroll resize');
             if (showreelCheckTimeout) {

@@ -1463,7 +1463,7 @@
                 position: absolute;
                 left: -108rem;
                 top: 120rem;
-                z-index: 2;
+                z-index: 0;
             }
 
             .soft_img {
@@ -1834,15 +1834,7 @@
         }
     }
 
-    @keyframes animFooter {
-        from {
-            transform: translateX(0%);
-        }
 
-        to {
-            transform: translate(-150.1%);
-        }
-    }
 
     .tippy-box[data-theme='custom'] {
         background: var(--black);
