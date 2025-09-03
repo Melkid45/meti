@@ -85,7 +85,6 @@ function scripts() {
 function scriptsLibs() {
     return src([
         'app/js/libs/**/*.js',
-        '!app/js/libs/**/*.min.js'
     ])
     .pipe(concat('libs.min.js'))
     .pipe(uglify())
