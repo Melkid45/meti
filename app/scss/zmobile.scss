@@ -1997,16 +1997,14 @@
                 text-transform: uppercase;
                 color: var(--white);
                 white-space: nowrap;
-                animation: linear infinite 15s animFooter;
+                animation: linear infinite 20s animFooter;
                 display: flex;
-                flex-wrap: nowrap;
                 gap: 20rem;
-                perspective: 1000rem;
+                white-space: nowrap;
                 will-change: transform;
-                transform: translateZ(0);
+                perspective: 1000rem;
                 -webkit-backface-visibility: hidden;
-                backface-visibility: hidden;
-                -webkit-font-smoothing: antialiased;
+                -webkit-transform-style: preserve-3d;
                 span {
                     font-family: var(--chava);
                     font-weight: 400;
