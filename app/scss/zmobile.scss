@@ -2002,9 +2002,24 @@
                 gap: 20rem;
                 white-space: nowrap;
                 will-change: transform;
-                perspective: 1000rem;
+                transform: translate3d(0, 0, 0);
+                -webkit-transform: translate3d(0, 0, 0);
+                backface-visibility: hidden;
                 -webkit-backface-visibility: hidden;
+                perspective: 1000px;
+                -webkit-perspective: 1000px;
+                transform-style: preserve-3d;
                 -webkit-transform-style: preserve-3d;
+
+                transition: opacity 0.3s ease;
+                opacity: 1;
+
+                .stroke__item {
+                    flex-shrink: 0;
+                    transform: translateZ(0);
+                    -webkit-transform: translateZ(0);
+                }
+
                 span {
                     font-family: var(--chava);
                     font-weight: 400;
@@ -2012,6 +2027,7 @@
                     line-height: 106rem;
                     letter-spacing: 0%;
                     text-transform: uppercase;
+                    display: inline-block;
                 }
             }
 
